@@ -1,0 +1,84 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "0.1.0",
+    "title": "GrovePI+",
+    "description": "API to interact with GrovePI+ generated from the TD"
+  },
+  "paths": {
+    "leds/red/status": {
+      "get": {
+        "description": "read status property",
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Property"
+        ]
+      },
+      "put": {
+        "description": "write status property",
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Property"
+        ]
+      }
+    },
+    "leds/red/in": {
+      "post": {
+        "description": "invoke fadeIn action",
+        "responses": {
+          "200": {
+            "description": "success"
+          }
+        },
+        "tags": [
+          "Action"
+        ]
+      }
+    },
+    "leds/red/out": {
+      "post": {
+        "description": "invoke fadeOut action",
+        "responses": {
+          "200": {
+            "description": "success"
+          }
+        },
+        "tags": [
+          "Action"
+        ]
+      }
+    }
+  }
+}
