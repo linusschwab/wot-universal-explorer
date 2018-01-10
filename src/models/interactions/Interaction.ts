@@ -1,10 +1,12 @@
 import {Link} from "../links";
+import {OutputData} from "../data";
 
 export class Interaction {
 
     public name: string;
     public base: string;
     public links: Link[];
+    public outputData: OutputData;
 
     constructor(name: string) {
         this.name = name;

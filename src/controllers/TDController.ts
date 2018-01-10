@@ -1,6 +1,7 @@
 import {NextFunction, Request, Response, Router} from "express";
 import * as fs from "fs";
 import {TDParser} from "../TDParser";
+import {OpenAPIEncoder} from "../OpenAPIEncoder";
 
 
 export class TDController {
@@ -22,9 +23,16 @@ export class TDController {
         let td = fs.readFileSync('../public/td/' + name + '.jsonld', 'utf8');
 
         let thing = TDParser.parse(td);
+        let json = OpenAPIEncoder.encode(thing);
+
+        fs.writeFile('../public/swagger-ui/openapi.json', json, 'utf8', (err) => {
+            if (err) {
+                console.log(err.message);
+            }
+        });
 
         res.setHeader('Content-Type', 'application/json');
         res.status(200);
-        res.send(td);
+        res.send(json);
     }
 }

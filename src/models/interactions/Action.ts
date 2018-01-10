@@ -4,7 +4,6 @@ import {InputData, OutputData} from "../data";
 
 export class Action extends Interaction {
 
-    public outputData: OutputData;
     public inputData: InputData;
 
     constructor(name: string, outputData: OutputData, inputData: InputData) {
