@@ -1,6 +1,6 @@
 import {Thing} from "./models/thing/Thing";
 import {HTTPLink, Link, Operation} from "./models/links";
-import {Data} from "./models/data";
+import {Data, InputData} from "./models/data";
 import {isArray} from "util";
 import {Action} from "./models/interactions";
 
@@ -12,11 +12,7 @@ export class OpenAPIEncoder {
             if (value instanceof Thing) {
                 return {
                     "openapi": "3.0.0",
-                    "info": {
-                        "version": "0.1.0",
-                        "title": value.name,
-                        "description": "API to interact with " + value.name + " generated from the TD",
-                    },
+                    "info": this.info(value.name),
                     "paths": this.paths(value.links),
                 }
             }
@@ -25,46 +21,19 @@ export class OpenAPIEncoder {
                 return this.operations(value);
             }
             if (value instanceof Operation) {
-                let operation: any = {
-                    "description": value.description,
-                    "responses": {
-                        "200": {
-                            "description": "success"
-                        }
-                    },
-                    "tags": [
-                        (<any>value.link.interaction).constructor.name
-                    ]
-                };
-
-                let requestBodyData = [];
-                if (value.link.interaction instanceof Action) {
-                    let inputData = value.link.interaction.inputData;
-                    if (inputData) {
-                        requestBodyData.push(inputData);
-                    }
-                }
-
-                let outputData = value.link.interaction.outputData;
-                if (outputData) {
-                    operation['responses']['200']['content'] = {
-                        [value.link.mediaType]: {
-                            "schema": this.schema(outputData)
-                        }
-                    };
-
-                    if (outputData.writable) {
-                        requestBodyData.push(outputData);
-                    }
-                }
-
-                // TODO: Add request body
-
-                return operation;
+                return this.operation(value);
             }
 
             return value;
         }, 4);
+    }
+
+    private static info(name: string) {
+        return {
+            "version": "1.0",
+            "title": name,
+            "description": "API to interact with " + name + " generated from the TD",
+        };
     }
 
     private static paths(links: Link[]) {
@@ -87,6 +56,47 @@ export class OpenAPIEncoder {
         return obj;
     }
 
+    private static operation(o: Operation) {
+        let operation: any = {
+            "description": o.description,
+            "responses": {
+                "200": {
+                    "description": "success"
+                }
+            },
+            "tags": [
+                (<any>o.link.interaction).constructor.name
+            ]
+        };
+
+        let requestBodyData = [];
+        if (o.link.interaction instanceof Action) {
+            let inputData = o.link.interaction.inputData;
+            if (inputData) {
+                requestBodyData.push(inputData);
+            }
+        }
+
+        let outputData = o.link.interaction.outputData;
+        if (outputData) {
+            operation['responses']['200']['content'] = {
+                [o.link.mediaType]: {
+                    "schema": this.schema(outputData)
+                }
+            };
+
+            if (outputData.writable) {
+                requestBodyData.push(outputData);
+            }
+        }
+
+        if (requestBodyData.length > 0) {
+            operation['requestBody'] = this.requestBody(o.link.interaction.toString(), o.link.mediaType, requestBodyData);
+        }
+
+        return operation;
+    }
+
     private static schema(data: Data | Data[]) {
         if (!isArray(data)) {
             data = [data];
@@ -94,28 +104,37 @@ export class OpenAPIEncoder {
 
         // TODO: Check if same name multiple times
         let properties: any = {};
+        let required: string[] = [];
+
         for (let d of data) {
             properties[d.name] = {
                 "type": d.type
             };
+
+            if (d instanceof InputData) {
+                required.push(d.name);
+            }
         }
 
-        // TODO: Add "required" parameter
-        return {
+        let schema: any = {
             "type": "object",
             "properties": properties
+        };
+
+        if (required.length > 0) {
+            schema['required'] = required;
         }
+
+        return schema;
     }
 
-    private static requestBody() {
+    private static requestBody(description: string, mediaType: string, data: Data | Data[]) {
         return {
-            "description": "user to add to the system",
+            "description": description + " parameters",
             "required": "true",
             "content": {
-                "application/json": {
-                    "schema": {
-
-                    }
+                [mediaType]: {
+                    "schema": this.schema(data)
                 }
             }
         }
