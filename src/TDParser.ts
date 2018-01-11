@@ -60,7 +60,7 @@ export class TDParser {
 
     private static parseEvent(iobj: any) {
         let name = iobj.name;
-        let outputData = new InputData('data', iobj.inputData.valueType.type, false);
+        let outputData = new InputData('data', iobj.outputData.valueType.type, false);
 
         return new Event(name, outputData);
     }
