@@ -12,6 +12,11 @@ export class Action extends Interaction {
         this.inputData = inputData;
     }
 
+    public invoke() {
+        // TODO: Implement
+        return true;
+    }
+
     public toString() {
         return this.name + ' action';
     }

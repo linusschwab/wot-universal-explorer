@@ -30,7 +30,6 @@ export class ThingsManager {
                 return thing;
             }
         }
-
         return null;
     }
 }

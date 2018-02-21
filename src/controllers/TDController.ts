@@ -29,6 +29,19 @@ export class TDController {
         let thing = TDParser.parse(td);
         this.things.addThing(thing);
 
+        // TODO: Remove
+        try {
+            let test = thing.invokeAction('fadeIn');
+            test = thing.readProperty('status');
+            //thing.invokeAction('status');
+        } catch(e) {
+            if (e instanceof TypeError) {
+                console.log(e.message);
+            } else {
+                throw e;
+            }
+        }
+
         let json = OpenAPIEncoder.encode(thing);
 
         fs.writeFile('../public/swagger-ui/openapi.json', json, 'utf8', (err) => {

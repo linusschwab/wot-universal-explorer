@@ -12,6 +12,19 @@ export class Property extends Interaction {
         this.writable = writable;
     }
 
+    public read(): any {
+        // TODO: Implement
+        return "test";
+    }
+
+    public write(value: any) {
+        if (this.writable) {
+            // TODO: Implement
+            return true;
+        }
+        return false;
+    }
+
     public toString() {
         return this.name + ' property';
     }
