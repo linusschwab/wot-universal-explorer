@@ -4,10 +4,12 @@ import * as express from "express";
 import * as logger from "morgan";
 
 import {IndexController, TDController} from "./controllers";
+import {ThingsManager} from "./models/thing/ThingsManager";
 
 export class App {
 
     public express: express.Application;
+    public things: ThingsManager;
 
     public static run(): express.Application {
         let instance = new App();
@@ -16,6 +18,7 @@ export class App {
 
     constructor() {
         this.express = express();
+        this.things = new ThingsManager();
 
         // Add static paths
         this.express.use(express.static("../public"));
@@ -68,7 +71,7 @@ export class App {
         this.express.use('/', router);
 
         new IndexController(router);
-        new TDController(router);
+        new TDController(router, this.things);
     }
 
 }
