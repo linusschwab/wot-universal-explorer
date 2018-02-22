@@ -25,6 +25,13 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 /**
+ * Throw error on unhandled Promise rejection
+ */
+process.on('unhandledRejection', error => {
+    throw error;
+});
+
+/**
  * Normalize a port into a number, string, or false
  */
 function normalizePort(val: string) {

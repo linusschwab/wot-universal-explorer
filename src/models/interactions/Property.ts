@@ -19,7 +19,8 @@ export class Property extends Interaction {
 
     public async write(value: any) {
         if (this.writable) {
-            // TODO: Implement
+            // TODO: Choose correct link
+            this.links[0].execute(value);
             return true;
         }
         return false;

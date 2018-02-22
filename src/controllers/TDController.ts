@@ -31,7 +31,10 @@ export class TDController {
 
         // TODO: Remove
         try {
-            let test = await thing.invokeAction('increment');
+            let test;
+            test = await thing.invokeAction('increment');
+            await thing.writeProperty('count', 10);
+
             test = await thing.readProperty('count');
             //thing.invokeAction('status');
 

@@ -13,11 +13,6 @@ export class Thing {
         this.interactions = [];
     }
 
-    public registerInteraction(interaction: Interaction) {
-        interaction.base = this.base;
-        this.interactions.push(interaction);
-    }
-
     public async invokeAction(name: string) {
         let interaction = this.getInteraction(name);
 
@@ -47,6 +42,11 @@ export class Thing {
             return interaction.write(value);
         }
         throw new TypeError('No property with name ' + name);
+    }
+
+    public registerInteraction(interaction: Interaction) {
+        interaction.base = this.base;
+        this.interactions.push(interaction);
     }
 
     public getInteraction(name: string): Interaction {

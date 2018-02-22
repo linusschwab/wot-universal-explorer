@@ -18,7 +18,8 @@
          ],
          "pattern":"Property",
          "name":"count",
-         "outputData":{"type":"integer"}
+         "outputData":{"type":"integer"},
+         "writable": true
       },
       {
          "@type":[
