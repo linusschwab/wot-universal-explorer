@@ -18,7 +18,7 @@ export class Thing {
         this.interactions.push(interaction);
     }
 
-    public invokeAction(name: string) {
+    public async invokeAction(name: string) {
         let interaction = this.getInteraction(name);
 
         if (interaction instanceof Action) {
@@ -27,11 +27,11 @@ export class Thing {
         throw new TypeError('No action with name ' + name);
     }
 
-    public subcribeToEvent(name: string) {
+    public async subcribeToEvent(name: string) {
         // TODO: Implement
     }
 
-    public readProperty(name: string) {
+    public async readProperty(name: string) {
         let interaction = this.getInteraction(name);
 
         if (interaction instanceof Property) {
@@ -40,7 +40,7 @@ export class Thing {
         throw new TypeError('No property with name ' + name);
     }
 
-    public writeProperty(name: string, value: any) {
+    public async writeProperty(name: string, value: any) {
         let interaction = this.getInteraction(name);
 
         if (interaction instanceof Property) {

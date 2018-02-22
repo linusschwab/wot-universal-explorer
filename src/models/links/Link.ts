@@ -13,6 +13,10 @@ export class Link {
         this.mediaType = mediaType;
     }
 
+    public async execute(data: any = null) {
+
+    }
+
     public toString() {
         if (this.host) {
             return this.host + this.href;

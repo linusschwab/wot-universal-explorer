@@ -11,10 +11,10 @@ export class TDParser {
 
         let thing = new Thing(obj.name, obj.base);
 
-        for (let iobj of obj.interactions) {
+        for (let iobj of obj.interaction) {
             let interaction = this.parseInteraction(iobj);
 
-            for (let lobj of iobj.links) {
+            for (let lobj of iobj.link) {
                 let link = this.parseLink(lobj, thing.base);
                 interaction.registerLink(link);
             }
@@ -46,13 +46,13 @@ export class TDParser {
         let name = iobj.name;
 
         let outputData = null;
-        if ('outputData' in iobj) {
-            outputData = new OutputData('data', iobj.outputData.valueType.type, false, false);
+        if ('outputData' in iobj && iobj.outputData) {
+            outputData = new OutputData('data', iobj.outputData.type, false, false);
         }
 
         let inputData = null;
-        if ('inputData' in iobj) {
-            inputData = new InputData('data', iobj.inputData.valueType.type, true);
+        if ('inputData' in iobj && iobj.inputData) {
+            inputData = new InputData('data', iobj.inputData.type, true);
         }
 
         return new Action(name, outputData, inputData);
@@ -60,7 +60,7 @@ export class TDParser {
 
     private static parseEvent(iobj: any) {
         let name = iobj.name;
-        let outputData = new InputData('data', iobj.outputData.valueType.type, false);
+        let outputData = new InputData('data', iobj.outputData.type, false);
 
         return new Event(name, outputData);
     }
@@ -73,7 +73,7 @@ export class TDParser {
             writable = iobj.writable;
         }
 
-        let outputData = new OutputData('data', iobj.outputData.valueType.type, writable, false);
+        let outputData = new OutputData('data', iobj.outputData.type, writable, false);
 
         return new Property(name, outputData, writable);
     }

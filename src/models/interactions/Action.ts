@@ -12,9 +12,9 @@ export class Action extends Interaction {
         this.inputData = inputData;
     }
 
-    public invoke() {
-        // TODO: Implement
-        return true;
+    public async invoke() {
+        // TODO: Choose correct link
+        return this.links[0].execute();
     }
 
     public toString() {

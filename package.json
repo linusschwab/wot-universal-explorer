@@ -11,9 +11,12 @@
     "@types/errorhandler": "0.0.32",
     "@types/express": "4.11.0",
     "@types/morgan": "1.7.35",
+    "@types/request": "2.47.0",
+    "@types/request-promise-native": "1.0.13",
     "typescript": "2.6.2"
   },
   "dependencies": {
+    "@types/es6-promise": "3.3.0",
     "body-parser": "latest",
     "cookie-parser": "latest",
     "errorhandler": "latest",

@@ -12,12 +12,12 @@ export class Property extends Interaction {
         this.writable = writable;
     }
 
-    public read(): any {
-        // TODO: Implement
-        return "test";
+    public async read() {
+        // TODO: Choose correct link
+        return this.links[0].execute();
     }
 
-    public write(value: any) {
+    public async write(value: any) {
         if (this.writable) {
             // TODO: Implement
             return true;

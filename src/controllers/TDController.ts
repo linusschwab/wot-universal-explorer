@@ -22,7 +22,7 @@ export class TDController {
     }
 
     // TODO: Change to post with TD in body
-    public getTD(req: Request, res: Response, next: NextFunction) {
+    public async getTD(req: Request, res: Response, next: NextFunction) {
         let name = req.params['name'];
         let td = fs.readFileSync('../public/td/' + name + '.jsonld', 'utf8');
 
@@ -31,9 +31,13 @@ export class TDController {
 
         // TODO: Remove
         try {
-            let test = thing.invokeAction('fadeIn');
-            test = thing.readProperty('status');
+            let test = await thing.invokeAction('increment');
+            test = await thing.readProperty('count');
             //thing.invokeAction('status');
+
+            res.setHeader('Content-Type', 'application/json');
+            res.status(200);
+            res.send(test);
         } catch(e) {
             if (e instanceof TypeError) {
                 console.log(e.message);
@@ -42,16 +46,16 @@ export class TDController {
             }
         }
 
-        let json = OpenAPIEncoder.encode(thing);
+        //let json = OpenAPIEncoder.encode(thing);
 
-        fs.writeFile('../public/swagger-ui/openapi.json', json, 'utf8', (err) => {
+        /*fs.writeFile('../public/swagger-ui/openapi.json', json, 'utf8', (err) => {
             if (err) {
                 console.log(err.message);
             }
-        });
+        });*/
 
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200);
-        res.send(json);
+        //res.setHeader('Content-Type', 'application/json');
+        //res.status(200);
+        //res.send(json);
     }
 }
