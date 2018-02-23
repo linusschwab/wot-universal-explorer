@@ -1,56 +1,44 @@
 {
-   "@context":[
-      "http://w3c.github.io/wot/w3c-wot-td-context.jsonld"
-   ],
-   "@type":[
-      "Thing"
-   ],
-   "interaction":[
-      {
-         "@type":[
-            "Property"
-         ],
-         "link":[
-            {
-               "href":"http://127.0.0.1:8070/counter/properties/count",
-               "mediaType":"application/json"
-            }
-         ],
-         "pattern":"Property",
-         "name":"count",
-         "outputData":{"type":"integer"},
-         "writable": true
+  "@context": ["https://w3c.github.io/wot/w3c-wot-td-context.jsonld",
+               "https://w3c.github.io/wot/w3c-wot-common-context.jsonld"],
+  "@type": ["Thing"],
+  "name": "counter",
+  "interaction": [
+    {
+      "@type": ["Property"],
+      "name": "count",
+      "schema": {
+        "type" : "integer"
       },
-      {
-         "@type":[
-            "Action"
-         ],
-         "link":[
-            {
-               "href":"http://127.0.0.1:8070/counter/actions/increment",
-               "mediaType":"application/json"
-            }
-         ],
-         "pattern":"Action",
-         "name":"increment",
-         "inputData":null,
-         "outputData":null
-      },
-      {
-         "@type":[
-            "Action"
-         ],
-         "link":[
-            {
-               "href":"http://127.0.0.1:8070/counter/actions/decrement",
-               "mediaType":"application/json"
-            }
-         ],
-         "pattern":"Action",
-         "name":"decrement",
-         "inputData":null,
-         "outputData":null
-      }
-   ],
-   "name":"counter"
+      "writable": true,
+      "form": [
+        {
+           "href":"http://127.0.0.1:8070/counter/properties/count",
+           "mediaType":"application/json"
+        }
+      ]
+    },
+    {
+      "@type": ["Action"],
+      "name": "increment",
+      "inputSchema": null,
+      "form": [
+        {
+           "href":"http://127.0.0.1:8070/counter/actions/increment",
+           "mediaType":"application/json"
+        }
+      ]
+    },
+    {
+      "@type": ["Action"],
+      "name": "decrement",
+      "inputSchema": null,
+      "form": [
+        {
+           "href":"http://127.0.0.1:8070/counter/actions/decrement",
+           "mediaType":"application/json"
+        }
+      ]
+    }
+  ]
 }

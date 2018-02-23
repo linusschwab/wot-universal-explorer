@@ -1,16 +1,16 @@
-import {Action, Interaction, Property} from "../interactions";
+import {Action, InteractionPattern, Property} from "../interaction";
 
 
 export class Thing {
 
     public name: string;
     public base: string;
-    public interactions: Interaction[];
+    public interaction: InteractionPattern[];
 
     constructor(name: string, base = '') {
         this.name = name;
         this.base = base;
-        this.interactions = [];
+        this.interaction = [];
     }
 
     public async invokeAction(name: string) {
@@ -44,13 +44,13 @@ export class Thing {
         throw new TypeError('No property with name ' + name);
     }
 
-    public registerInteraction(interaction: Interaction) {
+    public registerInteraction(interaction: InteractionPattern) {
         interaction.base = this.base;
-        this.interactions.push(interaction);
+        this.interaction.push(interaction);
     }
 
-    public getInteraction(name: string): Interaction {
-        for (let interaction of this.interactions) {
+    public getInteraction(name: string): InteractionPattern {
+        for (let interaction of this.interaction) {
             if (interaction.name == name) {
                 return interaction;
             }
@@ -61,7 +61,7 @@ export class Thing {
     get links() {
         let links = [];
 
-        for (let interaction of this.interactions) {
+        for (let interaction of this.interaction) {
             for (let link of interaction.links) {
                 links.push(link);
             }

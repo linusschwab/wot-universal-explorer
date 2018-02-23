@@ -1,15 +1,18 @@
-import {Interaction} from "./Interaction";
-import {OutputData} from "../data";
+import {InteractionPattern} from "./InteractionPattern";
+import {DataSchema} from "../schema";
 
 
-export class Property extends Interaction {
+export class Property extends InteractionPattern {
 
+    public schema: DataSchema;
     public writable: boolean;
+    public observable: boolean;
 
-    constructor(name: string, outputData: OutputData, writable: boolean) {
+    constructor(name: string, schema: DataSchema, writable: boolean, observable: boolean) {
         super(name);
-        this.outputData = outputData;
+        this.schema = schema;
         this.writable = writable;
+        this.observable = observable;
     }
 
     public async read() {

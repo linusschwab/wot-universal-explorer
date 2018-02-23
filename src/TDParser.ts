@@ -1,6 +1,6 @@
 import {Thing} from "./models/thing/Thing";
-import {Action, Event, Interaction, Property} from "./models/interactions";
-import {InputData, OutputData} from "./models/data";
+import {Action, Event, InteractionPattern, Property} from "./models/interaction";
+import {DataSchema, InputSchema, OutputSchema} from "./models/schema";
 import {HTTPLink} from "./models/links";
 
 
@@ -14,8 +14,8 @@ export class TDParser {
         for (let iobj of obj.interaction) {
             let interaction = this.parseInteraction(iobj);
 
-            for (let lobj of iobj.link) {
-                let link = this.parseLink(lobj, thing.base);
+            for (let fobj of iobj.form) {
+                let link = this.parseForm(fobj, thing.base);
                 interaction.registerLink(link);
             }
 
@@ -28,41 +28,19 @@ export class TDParser {
     // Interactions
     private static parseInteraction(iobj: any) {
         let type = iobj['@type'][0];
+        // TODO: Parse detailed type? ["Property","Temperature"]
 
         switch(type) {
+            case 'Property':
+                return this.parseProperty(iobj);
             case 'Action':
                 return this.parseAction(iobj);
             case 'Event':
                 return this.parseEvent(iobj);
-            case 'Property':
-                return this.parseProperty(iobj);
             default:
                 let name = iobj.name;
-                return new Interaction(name);
+                return new InteractionPattern(name);
         }
-    }
-
-    private static parseAction(iobj: any) {
-        let name = iobj.name;
-
-        let outputData = null;
-        if ('outputData' in iobj && iobj.outputData) {
-            outputData = new OutputData('data', iobj.outputData.type, false, false);
-        }
-
-        let inputData = null;
-        if ('inputData' in iobj && iobj.inputData) {
-            inputData = new InputData('data', iobj.inputData.type, true);
-        }
-
-        return new Action(name, outputData, inputData);
-    }
-
-    private static parseEvent(iobj: any) {
-        let name = iobj.name;
-        let outputData = new InputData('data', iobj.outputData.type, false);
-
-        return new Event(name, outputData);
     }
 
     private static parseProperty(iobj: any) {
@@ -73,15 +51,44 @@ export class TDParser {
             writable = iobj.writable;
         }
 
-        let outputData = new OutputData('data', iobj.outputData.type, writable, false);
+        let observable = false;
+        if ('observable' in iobj) {
+            observable = iobj.observable;
+        }
 
-        return new Property(name, outputData, writable);
+        let schema = new DataSchema(iobj.schema.type, writable, false);
+
+        return new Property(name, schema, writable, observable);
+    }
+
+    private static parseAction(iobj: any) {
+        let name = iobj.name;
+
+        let outputSchema = null;
+        if ('outputSchema' in iobj && iobj.outputSchema) {
+            outputSchema = new OutputSchema(iobj.outputSchema.type);
+        }
+
+        let inputSchema = null;
+        if ('inputSchema' in iobj && iobj.inputSchema) {
+            inputSchema = new InputSchema(iobj.inputSchema.type);
+        }
+
+        return new Action(name, outputSchema, inputSchema);
+    }
+
+    private static parseEvent(iobj: any) {
+        let name = iobj.name;
+
+        let schema = new DataSchema(iobj.schema.type, false, false);
+
+        return new Event(name, schema);
     }
 
     // Links
-    private static parseLink(lobj: any, base: string) {
-        let href = lobj.href;
-        let mediaType = lobj.mediaType;
+    private static parseForm(fobj: any, base: string) {
+        let href = fobj.href;
+        let mediaType = fobj.mediaType;
         // TODO: Support other link types
         return new HTTPLink(href, base, mediaType);
     }

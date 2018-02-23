@@ -1,8 +1,8 @@
 import {Thing} from "./models/thing/Thing";
 import {HTTPLink, Link, Operation} from "./models/links";
-import {Data, InputData} from "./models/data";
+import {DataSchema, InputSchema} from "./models/schema";
 import {isArray} from "util";
-import {Action} from "./models/interactions";
+import {Action} from "./models/interaction";
 
 
 export class OpenAPIEncoder {
@@ -71,13 +71,13 @@ export class OpenAPIEncoder {
 
         let requestBodyData = [];
         if (o.link.interaction instanceof Action) {
-            let inputData = o.link.interaction.inputData;
+            let inputData = o.link.interaction.inputSchema;
             if (inputData) {
                 requestBodyData.push(inputData);
             }
         }
 
-        let outputData = o.link.interaction.outputData;
+        /*let outputData = o.link.interaction.schema;
         if (outputData) {
             operation['responses']['200']['content'] = {
                 [o.link.mediaType]: {
@@ -88,7 +88,7 @@ export class OpenAPIEncoder {
             if (outputData.writable) {
                 requestBodyData.push(outputData);
             }
-        }
+        }*/
 
         if (requestBodyData.length > 0) {
             operation['requestBody'] = this.requestBody(o.link.interaction.toString(), o.link.mediaType, requestBodyData);
@@ -97,7 +97,7 @@ export class OpenAPIEncoder {
         return operation;
     }
 
-    private static schema(data: Data | Data[]) {
+    private static schema(data: DataSchema | DataSchema[]) {
         if (!isArray(data)) {
             data = [data];
         }
@@ -107,12 +107,12 @@ export class OpenAPIEncoder {
         let required: string[] = [];
 
         for (let d of data) {
-            properties[d.name] = {
+            properties[d.type] = {
                 "type": d.type
             };
 
-            if (d instanceof InputData) {
-                required.push(d.name);
+            if (d instanceof InputSchema) {
+                required.push(d.type);
             }
         }
 
@@ -128,7 +128,7 @@ export class OpenAPIEncoder {
         return schema;
     }
 
-    private static requestBody(description: string, mediaType: string, data: Data | Data[]) {
+    private static requestBody(description: string, mediaType: string, data: DataSchema | DataSchema[]) {
         return {
             "description": description + " parameters",
             "required": "true",

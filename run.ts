@@ -25,7 +25,7 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 /**
- * Throw error on unhandled Promise rejection
+ * Throw error on unhandled promise rejection
  */
 process.on('unhandledRejection', error => {
     throw error;

@@ -1,11 +1,11 @@
-import {Interaction} from "../interactions";
+import {InteractionPattern} from "../interaction";
 
 export class Link {
 
     public href: string;
     public host: string;
     public mediaType: string;
-    public interaction: Interaction;
+    public interaction: InteractionPattern;
 
     constructor(href: string, host = '', mediaType = '') {
         this.href = href;

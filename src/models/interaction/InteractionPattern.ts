@@ -1,12 +1,11 @@
 import {Link} from "../links";
-import {OutputData} from "../data";
+import {OutputSchema} from "../schema";
 
-export class Interaction {
+export class InteractionPattern {
 
     public name: string;
     public base: string;
     public links: Link[];
-    public outputData: OutputData;
 
     constructor(name: string) {
         this.name = name;

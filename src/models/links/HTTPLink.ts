@@ -1,5 +1,5 @@
 import {Link} from "./Link";
-import {Action, Event, Property} from "../interactions";
+import {Action, Event, Property} from "../interaction";
 import {Operation} from "./Operation";
 import * as request from "request-promise-native";
 
