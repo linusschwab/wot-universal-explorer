@@ -7,14 +7,13 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "axios": "0.18.0",
     "body-parser": "latest",
     "cookie-parser": "latest",
     "errorhandler": "latest",
     "express": "latest",
     "jade": "1.11.0",
-    "morgan": "latest",
-    "request": "2.83.0",
-    "request-promise-native": "1.0.5"
+    "morgan": "latest"
   },
   "devDependencies": {
     "@types/cookie-parser": "1.4.1",
@@ -22,8 +21,6 @@
     "@types/es6-promise": "3.3.0",
     "@types/express": "4.11.0",
     "@types/morgan": "1.7.35",
-    "@types/request": "2.47.0",
-    "@types/request-promise-native": "1.0.13",
     "typescript": "2.6.2"
   }
 }

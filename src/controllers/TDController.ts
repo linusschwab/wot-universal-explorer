@@ -33,14 +33,14 @@ export class TDController {
         try {
             let test;
             test = await thing.invokeAction('increment');
-            //await thing.writeProperty('count', 10);
+            await thing.writeProperty('count', 10);
 
             test = await thing.readProperty('count');
             //thing.invokeAction('status');
 
             res.setHeader('Content-Type', 'application/json');
             res.status(200);
-            res.send(test);
+            res.send(test.data);
         } catch(e) {
             if (e instanceof TypeError) {
                 console.log(e.message);

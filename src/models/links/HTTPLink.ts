@@ -1,14 +1,32 @@
 import {Link} from "./Link";
 import {Action, Event, Property} from "../interaction";
 import {Operation} from "./Operation";
-import * as request from "request-promise-native";
+import axios, {AxiosInstance} from 'axios';
 
 
 export class HTTPLink extends Link {
 
-    private timeout = 2000;
+    private http: AxiosInstance;
 
-    public async execute(data: any = null) {
+    constructor(href: string, host = '', mediaType = '') {
+        super(href, host, mediaType);
+
+        this.http = axios.create({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': this.mediaType
+            },
+            transformRequest: [(data: any, headers: any) => {
+                return String(data);
+            }],
+            transformResponse: [(data: any) => {
+                return String(data);
+            }],
+            timeout: 2000
+        });
+    }
+
+    public async execute(data: any = null): Promise<any> {
         if (this.interaction instanceof Action) {
             return this.executeAction(data)
         }
@@ -17,40 +35,28 @@ export class HTTPLink extends Link {
         }
     }
 
-    private async executeAction(data: any = null) {
-        const options: any = {
-            timeout: this.timeout
-        };
-
-        return request.post(this.toString(), options).catch(e => {
+    private async executeAction(data: any = null): Promise<any> {
+        return this.http.post(this.toString()).catch(e => {
+            console.log(e);
             return false;
         });
     }
 
-    private async executeProperty(data: any = null) {
+    private async executeProperty(data: any = null): Promise<any> {
         if (data !== null) {
+            // Write property
             if (this.mediaType === 'application/json') {
-                const options: any = {
-                    json: data,
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content': 'application/json'
-                    },
-                    timeout: this.timeout
-                };
-
-                return request.put(this.toString(), options).catch(e => {
+                return this.http.put(this.toString(), data).catch(e => {
+                    console.log(e);
                     return false;
                 });
             }
             // TODO: Support other mediaTypes
             return false;
         } else {
-            const options: any = {
-                timeout: this.timeout
-            };
-
-            return request.get(this.toString(), options).catch(e => {
+            // Read property
+            return this.http.get(this.toString()).catch(e => {
+                console.log(e);
                 return false;
             });
         }
