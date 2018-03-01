@@ -6,8 +6,14 @@ import {HTTPLink} from "./models/links";
 
 export class TDParser {
 
-    public static parse(td: string) {
-        const obj = JSON.parse(td);
+    public static parse(td: string|object) {
+        let obj;
+
+        if (typeof td === 'string') {
+            obj = JSON.parse(td);
+        } else {
+            obj = td;
+        }
 
         let thing = new Thing(obj.name, obj.base);
 
