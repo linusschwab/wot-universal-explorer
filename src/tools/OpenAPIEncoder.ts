@@ -1,8 +1,8 @@
-import {Thing} from "./models/thing/Thing";
-import {HTTPLink, Link, Operation} from "./models/links";
-import {DataSchema, InputSchema} from "./models/schema";
+import {Thing} from "../models/thing";
+import {HTTPLink, Link, Operation} from "../models/links";
+import {DataSchema, InputSchema} from "../models/schema";
 import {isArray} from "util";
-import {Action} from "./models/interaction";
+import {Action} from "../models/interaction";
 
 
 export class OpenAPIEncoder {

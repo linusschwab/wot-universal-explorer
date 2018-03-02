@@ -4,7 +4,8 @@ import * as express from "express";
 import * as logger from "morgan";
 
 import {IndexController, TDController, ThingsController} from "./controllers";
-import {ThingsManager} from "./models/thing/ThingsManager";
+import {ThingsManager} from "./models/thing";
+
 
 export class App {
 

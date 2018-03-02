@@ -1,7 +1,7 @@
-import {Thing} from "./models/thing/Thing";
-import {Action, Event, InteractionPattern, Property} from "./models/interaction";
-import {DataSchema, InputSchema, OutputSchema} from "./models/schema";
-import {HTTPLink} from "./models/links";
+import {Thing} from "../models/thing";
+import {Action, Event, InteractionPattern, Property} from "../models/interaction";
+import {DataSchema, InputSchema, OutputSchema} from "../models/schema";
+import {HTTPLink} from "../models/links";
 
 
 export class TDParser {

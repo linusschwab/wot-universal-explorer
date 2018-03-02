@@ -1,5 +1,5 @@
 import {Request, Response, Router} from "express";
-import {ThingsManager} from "../models/thing/ThingsManager";
+import {ThingsManager} from "../models/thing";
 
 export class ThingsController {
 

@@ -1,5 +1,5 @@
 import {Link} from "../links";
-import {OutputSchema} from "../schema";
+
 
 export class InteractionPattern {
 

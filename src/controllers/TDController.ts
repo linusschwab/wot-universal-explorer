@@ -1,8 +1,7 @@
 import {NextFunction, Request, Response, Router} from "express";
 import * as fs from "fs";
-import {TDParser} from "../TDParser";
-import {OpenAPIEncoder} from "../OpenAPIEncoder";
-import {ThingsManager} from "../models/thing/ThingsManager";
+import {TDParser} from "../tools";
+import {ThingsManager} from "../models/thing";
 
 
 export class TDController {
@@ -34,6 +33,9 @@ export class TDController {
             res.setHeader('Content-Type', 'application/json');
             res.status(200);
             res.send("");
+
+            // Regenerate openapi file
+
         } catch (e) {
             res.status(400);
             res.send(e.message);
