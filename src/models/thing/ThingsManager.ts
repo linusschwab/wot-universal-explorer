@@ -32,4 +32,14 @@ export class ThingsManager {
         }
         return null;
     }
+
+    public getThingsNames() {
+        let names: string[] = [];
+
+        for (let thing of this.things) {
+            names.push(thing.toString());
+        }
+
+        return names;
+    }
 }

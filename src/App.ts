@@ -3,7 +3,7 @@ import * as cookieParser from "cookie-parser";
 import * as express from "express";
 import * as logger from "morgan";
 
-import {IndexController, TDController} from "./controllers";
+import {IndexController, TDController, ThingsController} from "./controllers";
 import {ThingsManager} from "./models/thing/ThingsManager";
 
 export class App {
@@ -72,6 +72,7 @@ export class App {
 
         new IndexController(router);
         new TDController(router, this.things);
+        new ThingsController(router, this.things);
     }
 
 }
