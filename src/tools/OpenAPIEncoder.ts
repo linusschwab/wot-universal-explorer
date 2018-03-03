@@ -1,7 +1,7 @@
 import {Thing, ThingsManager} from "../models/thing";
 import {Operation} from "../models/links";
 import {DataSchema, InputSchema} from "../models/schema";
-import {Action, InteractionPattern, Property} from "../models/interaction";
+import {Action, InteractionPattern, Property, Event} from "../models/interaction";
 import {isArray} from "util";
 
 
@@ -76,37 +76,69 @@ export class OpenAPIEncoder {
             },
             "tags": [
                 o.interaction.thing.name
-                //(<any>o.interaction).constructor.name
             ]
         };
 
-        let requestBodyData = [];
-        if (o.interaction instanceof Action) {
-            let inputData = o.interaction.inputSchema;
-            if (inputData) {
-                requestBodyData.push(inputData);
-            }
+        // Request body
+        let requestSchema: DataSchema = this.requestSchema(o);
+        if (requestSchema) {
+            operation['requestBody'] = this.requestBody(
+                o.interaction.toString(),
+                'application/json',
+                requestSchema
+            );
         }
 
-        // TODO: Output data
-        /*let outputData = o.link.interaction.schema;
-        if (outputData) {
+        // Response
+        let responseSchema: DataSchema = this.responseSchema(o);
+        if (responseSchema) {
             operation['responses']['200']['content'] = {
-                [o.link.mediaType]: {
-                    "schema": this.schema(outputData)
+                ['application/json']: {
+                    "schema": this.schema(responseSchema)
                 }
             };
-
-            if (outputData.writable) {
-                requestBodyData.push(outputData);
-            }
-        }*/
-
-        if (requestBodyData.length > 0) {
-            operation['requestBody'] = this.requestBody(o.interaction.toString(), 'application/json', requestBodyData);
         }
 
         return operation;
+    }
+
+    private static requestSchema(o: Operation): DataSchema {
+        let requestSchema: DataSchema = null;
+
+        // Check if operation type allows request body
+        if (o.type !== 'post' && o.type !== 'put') {
+            return null;
+        }
+
+        // Transform interaction data schema
+        if (o.interaction instanceof Property) {
+            if (o.interaction.schema && o.interaction.schema.writable) {
+                requestSchema = o.interaction.schema;
+            }
+        }
+        else if (o.interaction instanceof Action) {
+            requestSchema = o.interaction.inputSchema;
+        }
+        else if (o.interaction instanceof Event) {
+            requestSchema = null;
+        }
+
+        return requestSchema
+    }
+
+    private static responseSchema(o: Operation): DataSchema {
+        if (o.interaction instanceof Property) {
+            return o.interaction.schema;
+        }
+        else if (o.interaction instanceof Action) {
+            return o.interaction.outputSchema;
+        }
+        else if (o.interaction instanceof Event) {
+            return o.interaction.schema;
+        }
+        else {
+            return null;
+        }
     }
 
     private static schema(data: DataSchema | DataSchema[]) {
