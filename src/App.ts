@@ -2,9 +2,11 @@ import * as bodyParser from "body-parser";
 import * as cookieParser from "cookie-parser";
 import * as express from "express";
 import * as logger from "morgan";
+import * as fs from "fs";
 
 import {IndexController, TDController, ThingsController} from "./controllers";
 import {ThingsManager} from "./models/thing";
+import {OpenAPIEncoder, TDParser} from "./tools";
 
 
 export class App {
@@ -62,6 +64,8 @@ export class App {
             res.status(err.status || 500);
             res.render('error');
         });
+
+        this.importTD();
     }
 
     /**
@@ -74,6 +78,24 @@ export class App {
         new IndexController(router);
         new TDController(router, this.things);
         new ThingsController(router, this.things);
+    }
+
+    private importTD() {
+        // Parse td files to things
+        const tdPath = '../public/td/';
+        fs.readdirSync(tdPath).forEach(file => {
+            let td = fs.readFileSync(tdPath + file, 'utf8');
+            let thing = TDParser.parse(td);
+            this.things.addThing(thing);
+        });
+
+        // Generate openapi file from things
+        let json = OpenAPIEncoder.encode(this.things);
+        fs.writeFile('../public/swagger-ui/openapi.json', json, 'utf8', (err) => {
+            if (err) {
+                console.log(err.message);
+            }
+        });
     }
 
 }

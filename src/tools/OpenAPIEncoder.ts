@@ -49,6 +49,7 @@ export class OpenAPIEncoder {
     private static paths(things: ThingsManager) {
         let obj: any = {};
 
+        // Add all interactions as paths
         for (let interaction of things.getInteractions()) {
             obj[interaction.url] = interaction;
         }
@@ -75,7 +76,7 @@ export class OpenAPIEncoder {
                 }
             },
             "tags": [
-                o.interaction.thing.name
+                o.interaction.thing.name // Group interactions by thing
             ]
         };
 
@@ -142,6 +143,7 @@ export class OpenAPIEncoder {
     }
 
     private static schema(data: DataSchema | DataSchema[]) {
+        // TODO: Check if multiple data schemas are even possible
         if (!isArray(data)) {
             data = [data];
         }
