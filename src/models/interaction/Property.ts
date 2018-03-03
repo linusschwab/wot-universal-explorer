@@ -1,5 +1,6 @@
 import {InteractionPattern} from "./InteractionPattern";
 import {DataSchema} from "../schema";
+import {Operation} from "../links/Operation";
 
 
 export class Property extends InteractionPattern {
@@ -31,6 +32,22 @@ export class Property extends InteractionPattern {
 
     public toString() {
         return this.name + ' property';
+    }
+
+    public get url() {
+        return '/' + this.thing.name + '/properties/' + this.name;
+    }
+
+    public get operations(): Operation[] {
+        let operations = [];
+
+        operations.push(new Operation('get', 'read ' + this.name, this));
+
+        if (this.writable) {
+            operations.push(new Operation('put', 'write ' + this.name, this));
+        }
+
+        return operations;
     }
 
 }

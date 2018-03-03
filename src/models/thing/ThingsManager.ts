@@ -1,4 +1,5 @@
 import {Thing} from "./Thing";
+import {InteractionPattern} from "../interaction";
 
 
 export class ThingsManager {
@@ -6,7 +7,7 @@ export class ThingsManager {
     public things: Thing[];
 
     constructor() {
-        this.things =  [];
+        this.things = [];
     }
 
     public addThing(thing: Thing): boolean {
@@ -41,5 +42,17 @@ export class ThingsManager {
         }
 
         return names;
+    }
+
+    public getInteractions() {
+        let interactions: InteractionPattern[] = [];
+
+        for (let thing of this.things) {
+            for (let interaction of thing.interaction) {
+                interactions.push(interaction);
+            }
+        }
+
+        return interactions;
     }
 }

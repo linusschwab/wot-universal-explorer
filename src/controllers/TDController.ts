@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response, Router} from "express";
 import * as fs from "fs";
-import {TDParser} from "../tools";
+import {OpenAPIEncoder, TDParser} from "../tools";
 import {ThingsManager} from "../models/thing";
 
 
@@ -30,12 +30,18 @@ export class TDController {
             let thing = TDParser.parse(req.body);
             this.things.addThing(thing);
 
+            // Regenerate openapi file
+            let json = OpenAPIEncoder.encode(this.things);
+
+            fs.writeFile('../public/swagger-ui/openapi.json', json, 'utf8', (err) => {
+                if (err) {
+                    console.log(err.message);
+                }
+            });
+
             res.setHeader('Content-Type', 'application/json');
             res.status(200);
             res.send("");
-
-            // Regenerate openapi file
-
         } catch (e) {
             res.status(400);
             res.send(e.message);
@@ -59,7 +65,7 @@ export class TDController {
         if (thing === null) {
             res.setHeader('Content-Type', 'application/json');
             res.status(400);
-            res.send();
+            res.send("Counter Thing does not exist");
             return;
         }
 
@@ -76,22 +82,12 @@ export class TDController {
             res.send(test.data);
         } catch(e) {
             if (e instanceof TypeError) {
-                console.log(e.message);
+                res.setHeader('Content-Type', 'application/json');
+                res.status(400);
+                res.send(e.message);
             } else {
                 throw e;
             }
         }
-
-        //let json = OpenAPIEncoder.encode(thing);
-
-        /*fs.writeFile('../public/swagger-ui/openapi.json', json, 'utf8', (err) => {
-            if (err) {
-                console.log(err.message);
-            }
-        });*/
-
-        //res.setHeader('Content-Type', 'application/json');
-        //res.status(200);
-        //res.send(json);
     }
 }

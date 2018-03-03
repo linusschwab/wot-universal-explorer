@@ -45,6 +45,7 @@ export class Thing {
     }
 
     public registerInteraction(interaction: InteractionPattern) {
+        interaction.thing = this;
         interaction.base = this.base;
         this.interaction.push(interaction);
     }

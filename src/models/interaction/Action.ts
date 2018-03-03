@@ -1,5 +1,6 @@
 import {InteractionPattern} from "./InteractionPattern";
 import {InputSchema, OutputSchema} from "../schema";
+import {Operation} from "../links";
 
 
 export class Action extends InteractionPattern {
@@ -20,6 +21,14 @@ export class Action extends InteractionPattern {
 
     public toString() {
         return this.name + ' action';
+    }
+
+    public get url() {
+        return '/' + this.thing.name + '/actions/' + this.name;
+    }
+
+    public get operations(): Operation[] {
+        return [new Operation('post', 'invoke ' + this.name, this)];
     }
 
 }

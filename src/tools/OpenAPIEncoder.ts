@@ -1,23 +1,23 @@
-import {Thing} from "../models/thing";
-import {HTTPLink, Link, Operation} from "../models/links";
+import {Thing, ThingsManager} from "../models/thing";
+import {Operation} from "../models/links";
 import {DataSchema, InputSchema} from "../models/schema";
+import {Action, InteractionPattern, Property} from "../models/interaction";
 import {isArray} from "util";
-import {Action} from "../models/interaction";
 
 
 export class OpenAPIEncoder {
 
-    public static encode(thing: Thing) {
-        return JSON.stringify(thing, (key: string, value: Object) => {
-            if (value instanceof Thing) {
+    public static encode(things: ThingsManager) {
+        return JSON.stringify(things, (key: string, value: Object) => {
+            if (value instanceof ThingsManager) {
                 return {
                     "openapi": "3.0.0",
-                    "info": this.info(value.name),
-                    "paths": this.paths(value.links),
+                    "info": this.info(),
+                    "servers": this.servers(),
+                    "paths": this.paths(value),
                 }
             }
-            // TODO: Support other link types
-            if (value instanceof HTTPLink) {
+            if (value instanceof InteractionPattern) {
                 return this.operations(value);
             }
             if (value instanceof Operation) {
@@ -28,28 +28,38 @@ export class OpenAPIEncoder {
         }, 4);
     }
 
-    private static info(name: string) {
+    private static info() {
         return {
             "version": "1.0",
-            "title": name,
-            "description": "API to interact with " + name + " generated from the TD",
+            "title": "Universal Explorer for the Web of Things",
+            "description": "API to interact with things",
         };
     }
 
-    private static paths(links: Link[]) {
+    private static servers() {
+        // TODO: Remove hardcoded url, read from config
+        return [
+            {
+                "url": "http://localhost:5000/things",
+                "description": "Development server"
+            }
+        ]
+    }
+
+    private static paths(things: ThingsManager) {
         let obj: any = {};
 
-        for (let link of links) {
-            obj[link.href] = link;
+        for (let interaction of things.getInteractions()) {
+            obj[interaction.url] = interaction;
         }
 
         return obj
     }
 
-    private static operations(link: HTTPLink) {
+    private static operations(interaction: InteractionPattern) {
         let obj: any = {};
 
-        for (let operation of link.operations) {
+        for (let operation of interaction.operations) {
             obj[operation.type] = operation;
         }
 
@@ -65,18 +75,20 @@ export class OpenAPIEncoder {
                 }
             },
             "tags": [
-                (<any>o.link.interaction).constructor.name
+                o.interaction.thing.name
+                //(<any>o.interaction).constructor.name
             ]
         };
 
         let requestBodyData = [];
-        if (o.link.interaction instanceof Action) {
-            let inputData = o.link.interaction.inputSchema;
+        if (o.interaction instanceof Action) {
+            let inputData = o.interaction.inputSchema;
             if (inputData) {
                 requestBodyData.push(inputData);
             }
         }
 
+        // TODO: Output data
         /*let outputData = o.link.interaction.schema;
         if (outputData) {
             operation['responses']['200']['content'] = {
@@ -91,7 +103,7 @@ export class OpenAPIEncoder {
         }*/
 
         if (requestBodyData.length > 0) {
-            operation['requestBody'] = this.requestBody(o.link.interaction.toString(), o.link.mediaType, requestBodyData);
+            operation['requestBody'] = this.requestBody(o.interaction.toString(), 'application/json', requestBodyData);
         }
 
         return operation;

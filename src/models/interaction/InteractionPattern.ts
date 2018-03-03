@@ -1,11 +1,16 @@
-import {Link} from "../links";
+import {Link, Operation} from "../links";
+import {Thing} from "../thing";
 
 
 export class InteractionPattern {
 
     public name: string;
+    public thing: Thing;
+
     public base: string;
     public links: Link[];
+    public url: string;
+    public operations: Operation[];
 
     constructor(name: string) {
         this.name = name;

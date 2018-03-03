@@ -1,15 +1,15 @@
-import {Link} from "./Link";
+import {InteractionPattern} from "../interaction";
 
 export class Operation {
 
     public type: string;
     public description: string;
-    public link: Link;
+    public interaction: InteractionPattern;
 
-    constructor(type: string, description: string, link: Link) {
+    constructor(type: string, description: string, interaction: InteractionPattern) {
         this.type = type;
         this.description = description;
-        this.link = link;
+        this.interaction = interaction;
     }
 
 }
