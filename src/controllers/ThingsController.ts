@@ -20,15 +20,10 @@ export class ThingsController {
         router.get('/', this.getThings.bind(this));
 
         // Interactions
-        const properties = '/:name/properties/:property';
-        router.get(properties, this.getProperty.bind(this));
-        router.put(properties, this.putProperty.bind(this));
-
-        const actions = '/:name/actions/:action';
-        router.post(actions, this.postAction.bind(this));
-
-        const events = '/:name/events/:event';
-        router.post(events, this.postEvent.bind(this));
+        router.get('/:name/properties/:property', this.getProperty.bind(this));
+        router.put('/:name/properties/:property', this.putProperty.bind(this));
+        router.post('/:name/actions/:action', this.postAction.bind(this));
+        router.post('/:name/events/:event', this.postEvent.bind(this));
 
         return router;
     }
@@ -77,7 +72,6 @@ export class ThingsController {
         let action = ctx.params['action'];
 
         let thing = await this.getThing(ctx);
-
 
         try {
             let result = await thing.invokeAction(action);

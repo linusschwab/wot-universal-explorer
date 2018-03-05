@@ -143,7 +143,30 @@ export class OpenAPIEncoder {
     }
 
     private static schema(data: DataSchema | DataSchema[]) {
-        // TODO: Check if multiple data schemas are even possible
+        if (!isArray(data) && this.isSimpleDataType(data.type)) {
+            return this.simpleDataSchema(data);
+        } else {
+            return this.structuredDataSchema(data);
+        }
+    }
+
+    private static isSimpleDataType(type: string) {
+        // See: https://w3c.github.io/wot-thing-description/#simple-type-list
+        return (
+            type === 'boolean' ||
+            type === 'integer' ||
+            type === 'number' ||
+            type === 'string'
+        );
+    }
+
+    private static simpleDataSchema(data: DataSchema) {
+        return {
+            "type": data.type,
+        };
+    }
+
+    private static structuredDataSchema(data: DataSchema | DataSchema[]) {
         if (!isArray(data)) {
             data = [data];
         }

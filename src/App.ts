@@ -30,7 +30,7 @@ export class App {
         });
 
         // Mount body parser
-        this.koa.use(bodyParser());
+        this.koa.use(bodyParser({strict: false}));
 
         // Set defaults
         this.koa.use(async (ctx, next) => {
