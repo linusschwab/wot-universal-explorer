@@ -10,4 +10,13 @@ export class DataSchema {
         this.required = required;
     }
 
+    // See: https://w3c.github.io/wot-thing-description/#simple-type-list
+    public isSimpleType() {
+        return (
+            this.type === 'boolean' ||
+            this.type === 'integer' ||
+            this.type === 'number' ||
+            this.type === 'string'
+        );
+    }
 }
