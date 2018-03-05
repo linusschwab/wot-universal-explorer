@@ -39,43 +39,74 @@ export class ThingsController {
     }
 
     public async getProperty(ctx: Context) {
-        // TODO: Error handling (for all endpoints)
-        let name = ctx.params['name'];
         let property = ctx.params['property'];
 
-        let thing = this.things.getThing(name);
-        let result = await thing.readProperty(property);
+        let thing = await this.getThing(ctx);
 
-        ctx.body = result.data;
+        try {
+            let result = await thing.readProperty(property);
+            ctx.body = result.data;
+        } catch (e) {
+            if (e instanceof TypeError) {
+                ctx.throw(400, e.message);
+            } else {
+                throw e;
+            }
+        }
     }
 
     public async putProperty(ctx: Context) {
-        let name = ctx.params['name'];
         let property = ctx.params['property'];
         let data = ctx.request.body;
 
-        let thing = this.things.getThing(name);
-        let result = await thing.writeProperty(property, data);
+        let thing = await this.getThing(ctx);
 
-        ctx.body = result.data;
+        try {
+            let result = await thing.writeProperty(property, data);
+            ctx.body = result.data;
+        } catch (e) {
+            if (e instanceof TypeError) {
+                ctx.throw(400, e.message);
+            } else {
+                throw e;
+            }
+        }
     }
 
     public async postAction(ctx: Context) {
-        let name = ctx.params['name'];
         let action = ctx.params['action'];
 
-        let thing = this.things.getThing(name);
-        let result = await thing.invokeAction(action);
+        let thing = await this.getThing(ctx);
 
-        ctx.body = result.data;
+
+        try {
+            let result = await thing.invokeAction(action);
+            ctx.body = result.data;
+        } catch (e) {
+            if (e instanceof TypeError) {
+                ctx.throw(400, e.message);
+            } else {
+                throw e;
+            }
+        }
     }
 
     public async postEvent(ctx: Context) {
-        let name = ctx.params['name'];
         let event = ctx.params['event'];
 
         // TODO: Implement
 
         ctx.body = 'Not implemented yet';
+    }
+
+    private async getThing(ctx: Context) {
+        let name = ctx.params['name'];
+        let thing = this.things.getThing(name);
+
+        if (thing === null) {
+            ctx.throw(400, 'Thing ' + name + ' does not exist');
+        }
+
+        return thing;
     }
 }
