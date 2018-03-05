@@ -1,6 +1,5 @@
 import {Link} from "./Link";
 import {Action, Event, Property} from "../interaction";
-import {Operation} from "./Operation";
 import axios, {AxiosInstance} from 'axios';
 
 

@@ -1,87 +1,81 @@
-import {Request, Response, Router} from "express";
+import * as Router from "koa-router";
+import {Context} from "koa";
 import {ThingsManager} from "../models/thing";
+
 
 export class ThingsController {
 
-    private router: Router;
+    public router: Router;
     private things: ThingsManager;
 
-    constructor(router: Router, things: ThingsManager) {
-        this.router = router;
+    constructor(things: ThingsManager) {
         this.things = things;
-        this.registerRoutes();
+        this.router = this.routes();
     }
 
-    public registerRoutes() {
-        const base = '/things';
+    public routes() {
+        const router = new Router();
+        router.prefix('/things');
 
-        this.router.get(base, this.getThings.bind(this));
+        router.get('/', this.getThings.bind(this));
 
         // Interactions
-        const properties = base + '/:name/properties/:property';
-        this.router.get(properties, this.getProperty.bind(this));
-        this.router.put(properties, this.putProperty.bind(this));
+        const properties = '/:name/properties/:property';
+        router.get(properties, this.getProperty.bind(this));
+        router.put(properties, this.putProperty.bind(this));
 
-        const actions = base + '/:name/actions/:action';
-        this.router.post(actions, this.postAction.bind(this));
+        const actions = '/:name/actions/:action';
+        router.post(actions, this.postAction.bind(this));
 
-        const events = base + '/:name/events/:event';
-        this.router.post(events, this.postEvent.bind(this));
+        const events = '/:name/events/:event';
+        router.post(events, this.postEvent.bind(this));
+
+        return router;
     }
 
-    public async getThings(req: Request, res: Response) {
+    public async getThings(ctx: Context) {
         // TODO: Return more than names? Available interactions?
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200);
-        res.send(this.things.getThingsNames());
+        ctx.body = this.things.getThingsNames();
     }
 
-    public async getProperty(req: Request, res: Response) {
+    public async getProperty(ctx: Context) {
         // TODO: Error handling (for all endpoints)
-        let name = req.params['name'];
-        let property = req.params['property'];
+        let name = ctx.params['name'];
+        let property = ctx.params['property'];
 
         let thing = this.things.getThing(name);
         let result = await thing.readProperty(property);
 
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200);
-        res.send(result.data);
+        ctx.body = result.data;
     }
 
-    public async putProperty(req: Request, res: Response) {
-        let name = req.params['name'];
-        let property = req.params['property'];
-        let data = req.body;
+    public async putProperty(ctx: Context) {
+        let name = ctx.params['name'];
+        let property = ctx.params['property'];
+        let data = ctx.request.body;
 
         let thing = this.things.getThing(name);
         let result = await thing.writeProperty(property, data);
 
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200);
-        res.send(result.data);
+        ctx.body = result.data;
     }
 
-    public async postAction(req: Request, res: Response) {
-        let name = req.params['name'];
-        let action = req.params['action'];
+    public async postAction(ctx: Context) {
+        let name = ctx.params['name'];
+        let action = ctx.params['action'];
 
         let thing = this.things.getThing(name);
         let result = await thing.invokeAction(action);
 
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200);
-        res.send(result.data);
+        ctx.body = result.data;
     }
 
-    public async postEvent(req: Request, res: Response) {
-        let name = req.params['name'];
-        let event = req.params['event'];
+    public async postEvent(ctx: Context) {
+        let name = ctx.params['name'];
+        let event = ctx.params['event'];
 
         // TODO: Implement
 
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200);
-        res.send('Not implemented yet.');
+        ctx.body = 'Not implemented yet';
     }
 }

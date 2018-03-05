@@ -1,33 +1,34 @@
-import {NextFunction, Request, Response, Router} from "express";
+import * as Router from "koa-router";
 import * as fs from "fs";
 import {OpenAPIEncoder, TDParser} from "../tools";
 import {ThingsManager} from "../models/thing";
+import {Context} from "koa";
 
 
 export class TDController {
 
-    private router: Router;
+    public router: Router;
     private things: ThingsManager;
 
-    constructor(router: Router, things: ThingsManager) {
-        this.router = router;
+    constructor(things: ThingsManager) {
         this.things = things;
-        this.registerRoutes();
+        this.router = this.routes();
     }
 
-    public registerRoutes() {
-        const base = '/td';
+    public routes(): Router {
+        const router = new Router();
+        router.prefix('/td');
 
-        this.router.post(base + '/add', this.postTD.bind(this));
-        this.router.get(base + '/:name', this.getTD.bind(this));
+        router.post('/add', this.postTD.bind(this));
+        router.get('/test', this.test.bind(this)); // TODO: Remove
+        router.get('/:name', this.getTD.bind(this));
 
-        // TODO: Remove
-        this.router.get('/test', this.test.bind(this));
+        return router;
     }
 
-    public async postTD(req: Request, res: Response) {
+    public async postTD(ctx: Context) {
         try {
-            let thing = TDParser.parse(req.body);
+            let thing = TDParser.parse(ctx.request.body);
             this.things.addThing(thing);
 
             // Regenerate openapi file
@@ -39,34 +40,26 @@ export class TDController {
                 }
             });
 
-            res.setHeader('Content-Type', 'application/json');
-            res.status(200);
-            res.send("");
+            ctx.body = '';
         } catch (e) {
-            res.status(400);
-            res.send(e.message);
+            ctx.throw(400, 'Invalid TD format');
         }
     }
 
-    public async getTD(req: Request, res: Response) {
-        let name = req.params['name'];
+    public async getTD(ctx: Context) {
+        let name = ctx.params['name'];
 
         // TODO: Return TD generated from thing instead
         let td = fs.readFileSync('../public/td/' + name + '.jsonld', 'utf8');
 
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200);
-        res.send(td);
+        ctx.body = td;
     }
 
-    public async test(req: Request, res: Response) {
+    public async test(ctx: Context) {
         let thing = this.things.getThing('counter');
 
         if (thing === null) {
-            res.setHeader('Content-Type', 'application/json');
-            res.status(400);
-            res.send("Counter Thing does not exist");
-            return;
+            ctx.throw(400, 'Counter Thing does not exist');
         }
 
         try {
@@ -77,14 +70,10 @@ export class TDController {
             test = await thing.readProperty('count');
             //thing.invokeAction('status');
 
-            res.setHeader('Content-Type', 'application/json');
-            res.status(200);
-            res.send(test.data);
+            ctx.body = test.data;
         } catch(e) {
             if (e instanceof TypeError) {
-                res.setHeader('Content-Type', 'application/json');
-                res.status(400);
-                res.send(e.message);
+                ctx.throw(400, e.message);
             } else {
                 throw e;
             }

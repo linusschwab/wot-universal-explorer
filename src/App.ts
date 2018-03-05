@@ -1,7 +1,5 @@
-import * as bodyParser from "body-parser";
-import * as cookieParser from "cookie-parser";
-import * as express from "express";
-import * as logger from "morgan";
+import * as Koa from "koa";
+import * as bodyParser from "koa-bodyparser";
 import * as fs from "fs";
 
 import {IndexController, TDController, ThingsController} from "./controllers";
@@ -11,73 +9,51 @@ import {OpenAPIEncoder, TDParser} from "./tools";
 
 export class App {
 
-    public express: express.Application;
+    public koa: Koa;
     public things: ThingsManager;
 
-    public static run(): express.Application {
+    public static run(): Koa {
         let instance = new App();
-        return instance.express;
+        return instance.koa;
     }
 
     constructor() {
-        this.express = express();
+        this.koa = new Koa();
         this.things = new ThingsManager();
 
-        // Add static paths
-        this.express.use(express.static("../public"));
-
-        // Configure pug
-        this.express.set("views", "../views");
-        this.express.set("view engine", "jade");
-
         // Mount logger
-        this.express.use(logger("dev"));
+        this.koa.use(async (ctx, next) => {
+            const start = Date.now();
+            await next();
+            const ms = Date.now() - start;
+            console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
+        });
 
-        // Mount json form parser
-        this.express.use(bodyParser.json());
+        // Mount body parser
+        this.koa.use(bodyParser());
 
-        // Mount query string parser
-        this.express.use(bodyParser.urlencoded({
-            extended: true
-        }));
+        // Set defaults
+        this.koa.use(async (ctx, next) => {
+            ctx.set('Content-Type', 'application/json');
+            await next();
+        });
 
         // Create routes
         this.routes();
 
-        // Mount cookie parser middleware
-        this.express.use(cookieParser("SECRET_GOES_HERE"));
-
-        // Catch 404 and forward to error handler
-        this.express.use((req: any, res: any, next: any) => {
-            let err: any = new Error('Not Found');
-            err.status = 404;
-            next(err);
-        });
-
-        // Error handler
-        this.express.use((err: any, req: any, res: any, next: any) => {
-            // set locals, only providing error in development
-            res.locals.message = err.message;
-            res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-            // render the error page
-            res.status(err.status || 500);
-            res.render('error');
-        });
-
+        // Import TDs in folder
         this.importTD();
     }
 
-    /**
-     * Create routes
-     */
     private routes() {
-        let router: express.Router = express.Router();
-        this.express.use('/', router);
+        const index = new IndexController();
+        this.koa.use(index.router.routes());
 
-        new IndexController(router);
-        new TDController(router, this.things);
-        new ThingsController(router, this.things);
+        const td = new TDController(this.things);
+        this.koa.use(td.router.routes());
+
+        const things = new ThingsController(this.things);
+        this.koa.use(things.router.routes());
     }
 
     private importTD() {

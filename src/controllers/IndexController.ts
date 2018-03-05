@@ -1,27 +1,25 @@
-import {NextFunction, Request, Response, Router} from "express";
+import * as Router from "koa-router";
+import {Context} from "koa";
 
 
 export class IndexController {
 
-    private title: string = "Web of Things Explorer";
-    private router: Router;
+    public router: Router;
 
-    constructor(router: Router) {
-        this.router = router;
-        this.registerRoutes();
+    constructor() {
+        this.router = this.routes();
     }
 
-    public registerRoutes() {
-        this.router.get('/', this.getIndex.bind(this));
+    public routes(): Router {
+        const router = new Router();
+
+        router.get('/', this.getIndex.bind(this));
+
+        return router;
     }
 
-    public getIndex(req: Request, res: Response, next: NextFunction) {
-        res.locals.title = this.title;
-
-        let options: Object = {
-            "message": "Test"
-        };
-
-        res.render("index", options);
+    // TODO: Serve Swagger UI
+    public getIndex(ctx: Context) {
+        ctx.body = 'Universal Explorer for the Web of Things';
     }
 }
