@@ -21,10 +21,10 @@ export class Property extends InteractionPattern {
         return this.links[0].execute();
     }
 
-    public async write(value: any) {
+    public async write(data: any) {
         if (this.writable) {
             // TODO: Choose correct link
-            this.links[0].execute(value);
+            this.links[0].execute(data);
             return true;
         }
         return false;

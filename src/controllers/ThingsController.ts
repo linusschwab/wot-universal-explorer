@@ -70,11 +70,12 @@ export class ThingsController {
 
     public async postAction(ctx: Context) {
         let action = ctx.params['action'];
+        let data = ctx.request.body;
 
         let thing = await this.getThing(ctx);
 
         try {
-            let result = await thing.invokeAction(action);
+            let result = await thing.invokeAction(action, data);
             ctx.body = result.data;
         } catch (e) {
             if (e instanceof TypeError) {

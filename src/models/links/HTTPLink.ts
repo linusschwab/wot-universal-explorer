@@ -34,14 +34,14 @@ export class HTTPLink extends Link {
         }
     }
 
-    private async executeAction(data: any = null): Promise<any> {
-        return this.http.post(this.toString()).catch(e => {
+    private async executeAction(data: any): Promise<any> {
+        return this.http.post(this.toString(), data).catch(e => {
             console.log(e);
             return false;
         });
     }
 
-    private async executeProperty(data: any = null): Promise<any> {
+    private async executeProperty(data: any): Promise<any> {
         if (data !== null) {
             // Write property
             if (this.mediaType === 'application/json') {

@@ -14,9 +14,9 @@ export class Action extends InteractionPattern {
         this.inputSchema = inputSchema;
     }
 
-    public async invoke() {
+    public async invoke(data: any = null) {
         // TODO: Choose correct link
-        return this.links[0].execute();
+        return this.links[0].execute(data);
     }
 
     public toString() {

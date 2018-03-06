@@ -13,19 +13,6 @@ export class Thing {
         this.interaction = [];
     }
 
-    public async invokeAction(name: string): Promise<any> {
-        let interaction = this.getInteraction(name);
-
-        if (interaction instanceof Action) {
-            return interaction.invoke();
-        }
-        throw new TypeError('No action with name ' + name);
-    }
-
-    public async subcribeToEvent(name: string): Promise<any> {
-        // TODO: Implement
-    }
-
     public async readProperty(name: string): Promise<any> {
         let interaction = this.getInteraction(name);
 
@@ -35,13 +22,26 @@ export class Thing {
         throw new TypeError('No property with name ' + name);
     }
 
-    public async writeProperty(name: string, value: any): Promise<any> {
+    public async writeProperty(name: string, data: any): Promise<any> {
         let interaction = this.getInteraction(name);
 
         if (interaction instanceof Property) {
-            return interaction.write(value);
+            return interaction.write(data);
         }
         throw new TypeError('No property with name ' + name);
+    }
+
+    public async invokeAction(name: string, data: any = null): Promise<any> {
+        let interaction = this.getInteraction(name);
+
+        if (interaction instanceof Action) {
+            return interaction.invoke(data);
+        }
+        throw new TypeError('No action with name ' + name);
+    }
+
+    public async subcribeToEvent(name: string): Promise<any> {
+        // TODO: Implement
     }
 
     public registerInteraction(interaction: InteractionPattern) {
