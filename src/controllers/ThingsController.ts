@@ -1,6 +1,7 @@
 import * as Router from "koa-router";
 import {Context} from "koa";
 import {ThingsManager} from "../models/thing";
+import {InteractionError, TimeoutError} from "../tools/errors";
 
 
 export class ThingsController {
@@ -42,11 +43,7 @@ export class ThingsController {
             let result = await thing.readProperty(property);
             ctx.body = result.data;
         } catch (e) {
-            if (e instanceof TypeError) {
-                ctx.throw(400, e.message);
-            } else {
-                throw e;
-            }
+            await this.handleError(ctx, e);
         }
     }
 
@@ -60,11 +57,7 @@ export class ThingsController {
             let result = await thing.writeProperty(property, data);
             ctx.body = result.data;
         } catch (e) {
-            if (e instanceof TypeError) {
-                ctx.throw(400, e.message);
-            } else {
-                throw e;
-            }
+            await this.handleError(ctx, e);
         }
     }
 
@@ -78,11 +71,7 @@ export class ThingsController {
             let result = await thing.invokeAction(action, data);
             ctx.body = result.data;
         } catch (e) {
-            if (e instanceof TypeError) {
-                ctx.throw(400, e.message);
-            } else {
-                throw e;
-            }
+            await this.handleError(ctx, e);
         }
     }
 
@@ -103,5 +92,15 @@ export class ThingsController {
         }
 
         return thing;
+    }
+
+    private async handleError(ctx: Context, e: Error) {
+        if (e instanceof InteractionError) {
+            ctx.throw(400, e.message);
+        } if (e instanceof TimeoutError) {
+            ctx.throw(408, e.message);
+        } else {
+            throw e;
+        }
     }
 }

@@ -1,6 +1,6 @@
 import * as Koa from "koa";
 import * as bodyParser from "koa-bodyparser";
-import * as cors from "koa2-cors";
+import * as cors from "@koa/cors";
 import * as fs from "fs";
 
 import {IndexController, TDController, ThingsController} from "./controllers";

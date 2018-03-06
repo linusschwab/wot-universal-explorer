@@ -1,5 +1,6 @@
 import {Link} from "./Link";
 import {Action, Event, Property} from "../interaction";
+import {TimeoutError} from "../../tools/errors";
 import axios, {AxiosInstance} from 'axios';
 
 
@@ -21,24 +22,17 @@ export class HTTPLink extends Link {
             transformResponse: [(data: any) => {
                 return String(data);
             }],
-            timeout: 2000
+            timeout: 1000
         });
     }
 
     public async execute(data: any = null): Promise<any> {
-        if (this.interaction instanceof Action) {
-            return this.executeAction(data)
-        }
         if (this.interaction instanceof Property) {
             return this.executeProperty(data);
         }
-    }
-
-    private async executeAction(data: any): Promise<any> {
-        return this.http.post(this.toString(), data).catch(e => {
-            console.log(e);
-            return false;
-        });
+        if (this.interaction instanceof Action) {
+            return this.executeAction(data)
+        }
     }
 
     private async executeProperty(data: any): Promise<any> {
@@ -46,8 +40,7 @@ export class HTTPLink extends Link {
             // Write property
             if (this.mediaType === 'application/json') {
                 return this.http.put(this.toString(), data).catch(e => {
-                    console.log(e);
-                    return false;
+                    this.handleError(e);
                 });
             }
             // TODO: Support other mediaTypes
@@ -55,10 +48,22 @@ export class HTTPLink extends Link {
         } else {
             // Read property
             return this.http.get(this.toString()).catch(e => {
-                console.log(e);
-                return false;
+                this.handleError(e);
             });
         }
     }
 
+    private async executeAction(data: any): Promise<any> {
+        return this.http.post(this.toString(), data).catch(e => {
+            this.handleError(e);
+        });
+    }
+
+    private handleError(error: any) {
+        if (error.code === 'ECONNABORTED') {
+            throw new TimeoutError('Remote thing did not respond.')
+        } else {
+            throw error;
+        }
+    }
 }

@@ -1,4 +1,5 @@
 import {Action, InteractionPattern, Property} from "../interaction";
+import {InteractionError} from "../../tools/errors";
 
 
 export class Thing {
@@ -18,8 +19,9 @@ export class Thing {
 
         if (interaction instanceof Property) {
             return interaction.read();
+        } else {
+            throw new InteractionError('No property with name ' + name);
         }
-        throw new TypeError('No property with name ' + name);
     }
 
     public async writeProperty(name: string, data: any): Promise<any> {
@@ -27,8 +29,9 @@ export class Thing {
 
         if (interaction instanceof Property) {
             return interaction.write(data);
+        } else {
+            throw new InteractionError('No property with name ' + name);
         }
-        throw new TypeError('No property with name ' + name);
     }
 
     public async invokeAction(name: string, data: any = null): Promise<any> {
@@ -36,8 +39,9 @@ export class Thing {
 
         if (interaction instanceof Action) {
             return interaction.invoke(data);
+        } else {
+            throw new InteractionError('No action with name ' + name);
         }
-        throw new TypeError('No action with name ' + name);
     }
 
     public async subcribeToEvent(name: string): Promise<any> {
