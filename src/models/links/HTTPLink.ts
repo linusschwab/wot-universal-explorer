@@ -61,7 +61,7 @@ export class HTTPLink extends Link {
 
     private handleError(error: any) {
         if (error.code === 'ECONNABORTED') {
-            throw new TimeoutError('Remote thing did not respond.')
+            throw new TimeoutError('Remote thing did not respond')
         } else {
             throw error;
         }

@@ -72,7 +72,13 @@ export class OpenAPIEncoder {
             "description": o.description,
             "responses": {
                 "200": {
-                    "description": "success"
+                    "description": "Ok"
+                },
+                "400": {
+                    "description": "Bad request"
+                },
+                "408": {
+                    "description": "Remote thing did not respond"
                 }
             },
             "tags": [
