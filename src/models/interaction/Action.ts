@@ -20,15 +20,14 @@ export class Action extends InteractionPattern {
     }
 
     public toString() {
-        return this.name + ' action';
+        return this.name + ' Action';
     }
 
     public get url() {
-        return '/' + this.thing.name + '/actions/' + this.name;
+        return '/' + this.thing.slug + '/actions/' + this.slug;
     }
 
     public get operations(): Operation[] {
         return [new Operation('post', 'invoke ' + this.name, this)];
     }
-
 }

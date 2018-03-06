@@ -1,3 +1,4 @@
+import * as getSlug from "speakingurl";
 import {Action, InteractionPattern, Property} from "../interaction";
 import {InteractionError} from "../../tools/errors";
 
@@ -14,33 +15,33 @@ export class Thing {
         this.interaction = [];
     }
 
-    public async readProperty(name: string): Promise<any> {
-        let interaction = this.getInteraction(name);
+    public async readProperty(slug: string): Promise<any> {
+        let interaction = this.getInteraction(slug);
 
         if (interaction instanceof Property) {
             return interaction.read();
         } else {
-            throw new InteractionError('No property with name ' + name);
+            throw new InteractionError('No property with name ' + slug);
         }
     }
 
-    public async writeProperty(name: string, data: any): Promise<any> {
-        let interaction = this.getInteraction(name);
+    public async writeProperty(slug: string, data: any): Promise<any> {
+        let interaction = this.getInteraction(slug);
 
         if (interaction instanceof Property) {
             return interaction.write(data);
         } else {
-            throw new InteractionError('No property with name ' + name);
+            throw new InteractionError('No property with name ' + slug);
         }
     }
 
-    public async invokeAction(name: string, data: any = null): Promise<any> {
-        let interaction = this.getInteraction(name);
+    public async invokeAction(slug: string, data: any = null): Promise<any> {
+        let interaction = this.getInteraction(slug);
 
         if (interaction instanceof Action) {
             return interaction.invoke(data);
         } else {
-            throw new InteractionError('No action with name ' + name);
+            throw new InteractionError('No action with name ' + slug);
         }
     }
 
@@ -54,13 +55,17 @@ export class Thing {
         this.interaction.push(interaction);
     }
 
-    public getInteraction(name: string): InteractionPattern {
+    public getInteraction(slug: string): InteractionPattern {
         for (let interaction of this.interaction) {
-            if (interaction.name == name) {
+            if (interaction.slug == slug) {
                 return interaction;
             }
         }
         return null;
+    }
+
+    public toString() {
+        return this.name;
     }
 
     get links() {
@@ -75,7 +80,7 @@ export class Thing {
         return links;
     }
 
-    public toString() {
-        return this.name;
+    get slug() {
+        return getSlug(this.name);
     }
 }

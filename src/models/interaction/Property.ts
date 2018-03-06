@@ -31,11 +31,11 @@ export class Property extends InteractionPattern {
     }
 
     public toString() {
-        return this.name + ' property';
+        return this.name + ' Property';
     }
 
     public get url() {
-        return '/' + this.thing.name + '/properties/' + this.name;
+        return '/' + this.thing.slug + '/properties/' + this.slug;
     }
 
     public get operations(): Operation[] {
@@ -49,5 +49,4 @@ export class Property extends InteractionPattern {
 
         return operations;
     }
-
 }

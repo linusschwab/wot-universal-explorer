@@ -1,3 +1,4 @@
+import * as getSlug from "speakingurl";
 import {Link, Operation} from "../links";
 import {Thing} from "../thing";
 
@@ -26,4 +27,7 @@ export class InteractionPattern {
         return this.name + ' interaction';
     }
 
+    get slug() {
+        return getSlug(this.name);
+    }
 }

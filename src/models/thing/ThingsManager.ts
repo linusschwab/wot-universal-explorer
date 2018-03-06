@@ -12,7 +12,7 @@ export class ThingsManager {
 
     public addThing(thing: Thing): boolean {
         // Check if thing already exists
-        if (this.getThing(thing.name) !== null) {
+        if (this.getThing(thing.slug) !== null) {
             return false;
         }
 
@@ -20,14 +20,14 @@ export class ThingsManager {
         return true;
     }
 
-    public removeThing(name: string) {
-        let thing = this.getThing(name);
+    public removeThing(slug: string) {
+        let thing = this.getThing(slug);
         // TODO: Implement
     }
 
-    public getThing(name: string): Thing {
+    public getThing(slug: string): Thing {
         for (let thing of this.things) {
-            if (thing.name == name) {
+            if (thing.slug == slug) {
                 return thing;
             }
         }

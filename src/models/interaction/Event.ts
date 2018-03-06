@@ -13,15 +13,14 @@ export class Event extends InteractionPattern {
     }
 
     public toString() {
-        return this.name + ' event';
+        return this.name + ' Event';
     }
 
     public get url() {
-        return '/' + this.thing.name + '/events/' + this.name;
+        return '/' + this.thing.slug + '/events/' + this.slug;
     }
 
     public get operations(): Operation[] {
         return [new Operation('post', 'subscribe to ' + this.name, this)];
     }
-
 }
