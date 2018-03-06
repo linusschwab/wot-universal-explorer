@@ -24,7 +24,7 @@ export class InteractionPattern {
     }
 
     public toString() {
-        return this.name + ' interaction';
+        return 'Interaction ' + this.name ;
     }
 
     get slug() {

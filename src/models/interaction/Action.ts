@@ -20,7 +20,7 @@ export class Action extends InteractionPattern {
     }
 
     public toString() {
-        return this.name + ' Action';
+        return 'Action ' + this.name;
     }
 
     public get url() {
@@ -28,6 +28,6 @@ export class Action extends InteractionPattern {
     }
 
     public get operations(): Operation[] {
-        return [new Operation('post', 'invoke ' + this.name, this)];
+        return [new Operation('post', 'Invoke ' + this.toString(), this)];
     }
 }

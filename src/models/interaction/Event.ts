@@ -13,7 +13,7 @@ export class Event extends InteractionPattern {
     }
 
     public toString() {
-        return this.name + ' Event';
+        return 'Event ' + this.name;
     }
 
     public get url() {
@@ -21,6 +21,6 @@ export class Event extends InteractionPattern {
     }
 
     public get operations(): Operation[] {
-        return [new Operation('post', 'subscribe to ' + this.name, this)];
+        return [new Operation('post', 'Subscribe to ' + this.toString(), this)];
     }
 }

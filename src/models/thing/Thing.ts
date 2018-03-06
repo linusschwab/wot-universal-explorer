@@ -15,33 +15,33 @@ export class Thing {
         this.interaction = [];
     }
 
-    public async readProperty(slug: string): Promise<any> {
-        let interaction = this.getInteraction(slug);
+    public async readProperty(name: string): Promise<any> {
+        let interaction = this.getInteraction(name);
 
         if (interaction instanceof Property) {
             return interaction.read();
         } else {
-            throw new InteractionError('No property with name ' + slug);
+            throw new InteractionError('No property with name ' + name);
         }
     }
 
-    public async writeProperty(slug: string, data: any): Promise<any> {
-        let interaction = this.getInteraction(slug);
+    public async writeProperty(name: string, data: any): Promise<any> {
+        let interaction = this.getInteraction(name);
 
         if (interaction instanceof Property) {
             return interaction.write(data);
         } else {
-            throw new InteractionError('No property with name ' + slug);
+            throw new InteractionError('No property with name ' + name);
         }
     }
 
-    public async invokeAction(slug: string, data: any = null): Promise<any> {
-        let interaction = this.getInteraction(slug);
+    public async invokeAction(name: string, data: any = null): Promise<any> {
+        let interaction = this.getInteraction(name);
 
         if (interaction instanceof Action) {
             return interaction.invoke(data);
         } else {
-            throw new InteractionError('No action with name ' + slug);
+            throw new InteractionError('No action with name ' + name);
         }
     }
 
@@ -55,9 +55,9 @@ export class Thing {
         this.interaction.push(interaction);
     }
 
-    public getInteraction(slug: string): InteractionPattern {
+    public getInteraction(name: string): InteractionPattern {
         for (let interaction of this.interaction) {
-            if (interaction.slug == slug) {
+            if (interaction.slug == getSlug(name)) {
                 return interaction;
             }
         }

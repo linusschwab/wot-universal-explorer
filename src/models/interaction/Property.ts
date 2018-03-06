@@ -31,7 +31,7 @@ export class Property extends InteractionPattern {
     }
 
     public toString() {
-        return this.name + ' Property';
+        return 'Property ' + this.name;
     }
 
     public get url() {
@@ -41,10 +41,10 @@ export class Property extends InteractionPattern {
     public get operations(): Operation[] {
         let operations = [];
 
-        operations.push(new Operation('get', 'read ' + this.name, this));
+        operations.push(new Operation('get', 'Read ' + this.toString(), this));
 
         if (this.writable) {
-            operations.push(new Operation('put', 'write ' + this.name, this));
+            operations.push(new Operation('put', 'Write ' + this.toString(), this));
         }
 
         return operations;
