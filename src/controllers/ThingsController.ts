@@ -56,6 +56,7 @@ export class ThingsController {
         try {
             let result = await thing.writeProperty(property, data);
             ctx.body = result.data;
+            ctx.status = 200;
         } catch (e) {
             await this.handleError(ctx, e);
         }

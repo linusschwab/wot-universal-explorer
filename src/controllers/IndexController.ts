@@ -1,4 +1,5 @@
 import * as Router from "koa-router";
+import * as send from "koa-send";
 import {Context} from "koa";
 
 
@@ -13,13 +14,18 @@ export class IndexController {
     public routes(): Router {
         const router = new Router();
 
-        router.get('/', this.getIndex.bind(this));
+        router.get('/*', this.getSwaggerUI.bind(this));
 
         return router;
     }
 
-    // TODO: Serve Swagger UI
-    public getIndex(ctx: Context) {
-        ctx.body = 'Universal Explorer for the Web of Things';
+    public async getSwaggerUI(ctx: Context) {
+        const rootPath = '../public/swagger-ui/';
+
+        if (ctx.path === '/') {
+            await send(ctx, 'index.html', {root: rootPath});
+        } else {
+            await send(ctx, ctx.path, {root: rootPath});
+        }
     }
 }

@@ -50,14 +50,15 @@ export class App {
     }
 
     private routes() {
-        const index = new IndexController();
-        this.koa.use(index.router.routes());
-
         const td = new TDController(this.things);
         this.koa.use(td.router.routes());
 
         const things = new ThingsController(this.things);
         this.koa.use(things.router.routes());
+
+        // Must be defined last (generic route to serve static files)
+        const index = new IndexController();
+        this.koa.use(index.router.routes());
     }
 
     private importTD() {
