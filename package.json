@@ -10,12 +10,14 @@
     "axios": "0.18.0",
     "koa": "2.5.0",
     "koa-bodyparser": "4.2.0",
-    "koa-router": "7.4.0"
+    "koa-router": "7.4.0",
+    "koa2-cors": "2.0.5"
   },
   "devDependencies": {
     "@types/koa": "2.0.44",
     "@types/koa-bodyparser": "4.2.0",
     "@types/koa-router": "7.0.27",
+    "@types/koa2-cors": "2.0.1",
     "typescript": "2.6.2"
   }
 }

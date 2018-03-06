@@ -1,5 +1,6 @@
 import * as Koa from "koa";
 import * as bodyParser from "koa-bodyparser";
+import * as cors from "koa2-cors";
 import * as fs from "fs";
 
 import {IndexController, TDController, ThingsController} from "./controllers";
@@ -31,6 +32,9 @@ export class App {
 
         // Mount body parser
         this.koa.use(bodyParser({strict: false}));
+
+        // Enable CORS
+        this.koa.use(cors());
 
         // Set defaults
         this.koa.use(async (ctx, next) => {
