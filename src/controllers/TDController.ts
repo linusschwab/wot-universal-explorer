@@ -1,6 +1,6 @@
 import * as Router from "koa-router";
 import * as fs from "fs";
-import {OpenAPIEncoder, TDParser} from "../tools";
+import {OpenAPIEncoder, TDEncoder, TDParser} from "../tools";
 import {ThingsManager} from "../models/thing";
 import {Context} from "koa";
 
@@ -47,10 +47,15 @@ export class TDController {
     }
 
     public async getTD(ctx: Context) {
+        // TODO: Factor out in BaseController parent class?
         let name = ctx.params['name'];
+        let thing = this.things.getThing(name);
 
-        // TODO: Return TD generated from thing instead
-        let td = fs.readFileSync('../public/td/' + name + '.jsonld', 'utf8');
+        if (thing === null) {
+            ctx.throw(400, 'Thing ' + name + ' does not exist');
+        }
+
+        let td = TDEncoder.encode(thing);
 
         ctx.body = td;
     }

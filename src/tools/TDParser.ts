@@ -15,7 +15,7 @@ export class TDParser {
             obj = td;
         }
 
-        let thing = new Thing(obj.name, obj.base);
+        let thing = new Thing(obj.name, obj['@type'][0], obj.base);
 
         for (let iobj of obj.interaction) {
             let interaction = this.parseInteraction(iobj);

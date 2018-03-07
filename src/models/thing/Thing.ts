@@ -6,11 +6,13 @@ import {InteractionError} from "../../tools/errors";
 export class Thing {
 
     public name: string;
+    public type: string;
     public base: string;
     public interaction: InteractionPattern[];
 
-    constructor(name: string, base = '') {
+    constructor(name: string, type: string, base = '') {
         this.name = name;
+        this.type = type;
         this.base = base;
         this.interaction = [];
     }
