@@ -3,6 +3,7 @@ import * as request from "supertest";
 import {App} from "../../App";
 import {OpenAPIEncoder} from "../../tools";
 
+
 const tdSample = `{
   "@context": ["https://w3c.github.io/wot/w3c-wot-td-context.jsonld",
                "https://w3c.github.io/wot/w3c-wot-common-context.jsonld"],
@@ -29,7 +30,6 @@ const tdSample = `{
     }
   ]
 }`;
-
 
 // Create mocks
 console.log = jest.fn();

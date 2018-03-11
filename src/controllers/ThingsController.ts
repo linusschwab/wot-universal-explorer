@@ -2,6 +2,7 @@ import * as Router from "koa-router";
 import {Context} from "koa";
 import {ThingsManager} from "../models/thing";
 import {InteractionError, TimeoutError} from "../tools/errors";
+import {ThingError} from "../tools/errors/ThingError";
 
 
 export class ThingsController {
@@ -86,13 +87,16 @@ export class ThingsController {
 
     private async getThing(ctx: Context) {
         let name = ctx.params['name'];
-        let thing = this.things.getThing(name);
 
-        if (thing === null) {
-            ctx.throw(400, 'Thing ' + name + ' does not exist');
+        try {
+            return this.things.getThing(name);
+        } catch (e) {
+            if (e instanceof ThingError) {
+                ctx.throw(400, 'Thing ' + name + ' does not exist');
+            } else {
+                throw e;
+            }
         }
-
-        return thing;
     }
 
     private async handleError(ctx: Context, e: Error) {
@@ -100,8 +104,6 @@ export class ThingsController {
             ctx.throw(400, e.message);
         } if (e instanceof TimeoutError) {
             ctx.throw(408, e.message);
-        } else {
-            throw e;
         }
     }
 }

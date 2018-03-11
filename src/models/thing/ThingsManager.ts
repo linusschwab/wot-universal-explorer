@@ -1,6 +1,7 @@
 import * as getSlug from "speakingurl";
 import {Thing} from "./Thing";
 import {InteractionPattern} from "../interaction";
+import {ThingError} from "../../tools/errors/ThingError";
 
 
 export class ThingsManager {
@@ -13,7 +14,7 @@ export class ThingsManager {
 
     public addThing(thing: Thing): boolean {
         // Check if thing already exists
-        if (this.getThing(thing.name) !== null) {
+        if (this.existsThing(thing)) {
             return false;
         }
 
@@ -32,7 +33,7 @@ export class ThingsManager {
                 return thing;
             }
         }
-        return null;
+        throw new ThingError('No thing with name ' + name);
     }
 
     public getThingsNames() {
@@ -55,5 +56,19 @@ export class ThingsManager {
         }
 
         return interactions;
+    }
+
+    private existsThing(thing: Thing) {
+        try {
+            this.getThing(thing.name);
+        } catch (e) {
+            if (e instanceof ThingError) {
+                return false;
+            } else {
+                throw e;
+            }
+        }
+
+        return true;
     }
 }

@@ -41,6 +41,8 @@
       "jsx",
       "json",
       "node"
-    ]
+    ],
+    "collectCoverage": true,
+    "coverageReporters": ["text-summary"]
   }
 }

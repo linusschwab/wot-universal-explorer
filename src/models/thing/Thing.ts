@@ -63,7 +63,7 @@ export class Thing {
                 return interaction;
             }
         }
-        return null;
+        throw new InteractionError('No interaction with name ' + name);
     }
 
     public toString() {

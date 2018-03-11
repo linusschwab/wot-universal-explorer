@@ -3,6 +3,7 @@ import * as fs from "fs";
 import {OpenAPIEncoder, TDEncoder, TDParser} from "../tools";
 import {ThingsManager} from "../models/thing";
 import {Context} from "koa";
+import {ThingError} from "../tools/errors/ThingError";
 
 
 export class TDController {
@@ -49,15 +50,17 @@ export class TDController {
     public async getTD(ctx: Context) {
         // TODO: Factor out in BaseController parent class?
         let name = ctx.params['name'];
-        let thing = this.things.getThing(name);
 
-        if (thing === null) {
-            ctx.throw(400, 'Thing ' + name + ' does not exist');
+        try {
+            let thing = this.things.getThing(name);
+            ctx.body = TDEncoder.encode(thing);
+        } catch (e) {
+            if (e instanceof ThingError) {
+                ctx.throw(400, 'Thing ' + name + ' does not exist');
+            } else {
+                throw e;
+            }
         }
-
-        let td = TDEncoder.encode(thing);
-
-        ctx.body = td;
     }
 
     public async test(ctx: Context) {
