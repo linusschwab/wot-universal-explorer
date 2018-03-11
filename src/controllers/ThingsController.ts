@@ -40,8 +40,8 @@ export class ThingsController {
         let thing = await this.getThing(ctx);
 
         try {
-            let result = await thing.readProperty(property);
-            ctx.body = result.data;
+            ctx.body = await thing.readProperty(property);
+            ctx.status = 200;
         } catch (e) {
             await this.handleError(ctx, e);
         }
@@ -54,8 +54,7 @@ export class ThingsController {
         let thing = await this.getThing(ctx);
 
         try {
-            let result = await thing.writeProperty(property, data);
-            ctx.body = result.data;
+            ctx.body = await thing.writeProperty(property, data);
             ctx.status = 200;
         } catch (e) {
             await this.handleError(ctx, e);
@@ -69,8 +68,8 @@ export class ThingsController {
         let thing = await this.getThing(ctx);
 
         try {
-            let result = await thing.invokeAction(action, data);
-            ctx.body = result.data;
+            ctx.body = await thing.invokeAction(action, data);
+            ctx.status = 200;
         } catch (e) {
             await this.handleError(ctx, e);
         }
@@ -82,6 +81,7 @@ export class ThingsController {
         // TODO: Implement
 
         ctx.body = 'Not implemented yet';
+        ctx.status = 200;
     }
 
     private async getThing(ctx: Context) {

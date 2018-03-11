@@ -4,6 +4,7 @@ import {App} from "./src/app";
 
 
 const app = App.run();
+App.instance.importTD();
 
 /**
  * Create HTTP server

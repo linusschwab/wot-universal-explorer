@@ -13,9 +13,11 @@ export class App {
     public koa: Koa;
     public things: ThingsManager;
 
+    static instance: App;
+
     public static run(): Koa {
-        let instance = new App();
-        return instance.koa;
+        this.instance = new App();
+        return this.instance.koa;
     }
 
     constructor() {
@@ -44,9 +46,6 @@ export class App {
 
         // Create routes
         this.routes();
-
-        // Import TDs in folder
-        this.importTD();
     }
 
     private routes() {
@@ -61,7 +60,7 @@ export class App {
         this.koa.use(index.router.routes());
     }
 
-    private importTD() {
+    public importTD() {
         // Parse td files to things
         const tdPath = '../public/td/';
         fs.readdirSync(tdPath).forEach(file => {

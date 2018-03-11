@@ -1,5 +1,5 @@
-import {Action} from "../src/models/interaction";
-import {Thing} from "../src/models/thing";
+import {Thing} from "../../thing";
+import {Action} from "../Action";
 
 
 test('url slug', () => {

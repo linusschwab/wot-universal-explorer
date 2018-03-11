@@ -1,7 +1,7 @@
 import {Link} from "./Link";
 import {Action, Event, Property} from "../interaction";
 import {TimeoutError} from "../../tools/errors";
-import axios, {AxiosInstance} from 'axios';
+import axios, {AxiosInstance, AxiosPromise, AxiosResponse} from 'axios';
 
 
 export class HTTPLink extends Link {
@@ -28,10 +28,12 @@ export class HTTPLink extends Link {
 
     public async execute(data: any = null): Promise<any> {
         if (this.interaction instanceof Property) {
-            return this.executeProperty(data);
+            const response = await this.executeProperty(data);
+            return response.data;
         }
         if (this.interaction instanceof Action) {
-            return this.executeAction(data)
+            const response = await this.executeAction(data);
+            return response.data;
         }
     }
 

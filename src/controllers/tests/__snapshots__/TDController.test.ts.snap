@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`post td then get td returns encoded td 1`] = `
+Object {
+  "@context": Array [
+    "https://w3c.github.io/wot/w3c-wot-td-context.jsonld",
+    "https://w3c.github.io/wot/w3c-wot-common-context.jsonld",
+  ],
+  "@type": Array [
+    "Lamp",
+  ],
+  "interaction": Array [
+    Object {
+      "@type": Array [
+        "Action",
+      ],
+      "form": Array [
+        Object {
+          "href": "coap://www.example.com:5683/master",
+          "mediaType": "application/json",
+        },
+        Object {
+          "href": "http://www.example.com:80/master",
+          "mediaType": "application/json",
+        },
+      ],
+      "inputSchema": Object {
+        "type": "boolean",
+      },
+      "name": "myMasterOnOff",
+    },
+  ],
+  "name": "myMasterLED",
+}
+`;
