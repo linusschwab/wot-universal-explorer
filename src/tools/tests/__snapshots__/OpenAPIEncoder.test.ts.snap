@@ -1,0 +1,296 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`encode multiple things 1`] = `
+"{
+    \\"openapi\\": \\"3.0.0\\",
+    \\"info\\": {
+        \\"version\\": \\"1.0\\",
+        \\"title\\": \\"Universal Explorer for the Web of Things\\",
+        \\"description\\": \\"API to interact with things\\"
+    },
+    \\"servers\\": [
+        {
+            \\"url\\": \\"http://localhost:5000/things\\",
+            \\"description\\": \\"Development server\\"
+        }
+    ],
+    \\"paths\\": {
+        \\"/testthing/properties/testproperty\\": {
+            \\"get\\": {
+                \\"description\\": \\"Read Property testProperty\\",
+                \\"responses\\": {
+                    \\"200\\": {
+                        \\"description\\": \\"Ok\\",
+                        \\"content\\": {
+                            \\"application/json\\": {
+                                \\"schema\\": {
+                                    \\"type\\": \\"integer\\"
+                                }
+                            }
+                        }
+                    },
+                    \\"400\\": {
+                        \\"description\\": \\"Bad request\\"
+                    },
+                    \\"408\\": {
+                        \\"description\\": \\"Remote thing did not respond\\"
+                    }
+                },
+                \\"tags\\": [
+                    \\"Testthing\\"
+                ]
+            },
+            \\"put\\": {
+                \\"description\\": \\"Write Property testProperty\\",
+                \\"responses\\": {
+                    \\"200\\": {
+                        \\"description\\": \\"Ok\\",
+                        \\"content\\": {
+                            \\"application/json\\": {
+                                \\"schema\\": {
+                                    \\"type\\": \\"integer\\"
+                                }
+                            }
+                        }
+                    },
+                    \\"400\\": {
+                        \\"description\\": \\"Bad request\\"
+                    },
+                    \\"408\\": {
+                        \\"description\\": \\"Remote thing did not respond\\"
+                    }
+                },
+                \\"tags\\": [
+                    \\"Testthing\\"
+                ],
+                \\"requestBody\\": {
+                    \\"description\\": \\"Property testProperty parameters\\",
+                    \\"required\\": \\"true\\",
+                    \\"content\\": {
+                        \\"application/json\\": {
+                            \\"schema\\": {
+                                \\"type\\": \\"integer\\"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        \\"/testthing/actions/testaction\\": {
+            \\"post\\": {
+                \\"description\\": \\"Invoke Action testAction\\",
+                \\"responses\\": {
+                    \\"200\\": {
+                        \\"description\\": \\"Ok\\",
+                        \\"content\\": {
+                            \\"application/json\\": {
+                                \\"schema\\": {
+                                    \\"type\\": \\"boolean\\"
+                                }
+                            }
+                        }
+                    },
+                    \\"400\\": {
+                        \\"description\\": \\"Bad request\\"
+                    },
+                    \\"408\\": {
+                        \\"description\\": \\"Remote thing did not respond\\"
+                    }
+                },
+                \\"tags\\": [
+                    \\"Testthing\\"
+                ],
+                \\"requestBody\\": {
+                    \\"description\\": \\"Action testAction parameters\\",
+                    \\"required\\": \\"true\\",
+                    \\"content\\": {
+                        \\"application/json\\": {
+                            \\"schema\\": {
+                                \\"type\\": \\"boolean\\"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        \\"/testthing-2/properties/testproperty\\": {
+            \\"get\\": {
+                \\"description\\": \\"Read Property testProperty\\",
+                \\"responses\\": {
+                    \\"200\\": {
+                        \\"description\\": \\"Ok\\",
+                        \\"content\\": {
+                            \\"application/json\\": {
+                                \\"schema\\": {
+                                    \\"type\\": \\"integer\\"
+                                }
+                            }
+                        }
+                    },
+                    \\"400\\": {
+                        \\"description\\": \\"Bad request\\"
+                    },
+                    \\"408\\": {
+                        \\"description\\": \\"Remote thing did not respond\\"
+                    }
+                },
+                \\"tags\\": [
+                    \\"Testthing 2\\"
+                ]
+            },
+            \\"put\\": {
+                \\"description\\": \\"Write Property testProperty\\",
+                \\"responses\\": {
+                    \\"200\\": {
+                        \\"description\\": \\"Ok\\",
+                        \\"content\\": {
+                            \\"application/json\\": {
+                                \\"schema\\": {
+                                    \\"type\\": \\"integer\\"
+                                }
+                            }
+                        }
+                    },
+                    \\"400\\": {
+                        \\"description\\": \\"Bad request\\"
+                    },
+                    \\"408\\": {
+                        \\"description\\": \\"Remote thing did not respond\\"
+                    }
+                },
+                \\"tags\\": [
+                    \\"Testthing 2\\"
+                ],
+                \\"requestBody\\": {
+                    \\"description\\": \\"Property testProperty parameters\\",
+                    \\"required\\": \\"true\\",
+                    \\"content\\": {
+                        \\"application/json\\": {
+                            \\"schema\\": {
+                                \\"type\\": \\"integer\\"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}"
+`;
+
+exports[`encode one thing 1`] = `
+"{
+    \\"openapi\\": \\"3.0.0\\",
+    \\"info\\": {
+        \\"version\\": \\"1.0\\",
+        \\"title\\": \\"Universal Explorer for the Web of Things\\",
+        \\"description\\": \\"API to interact with things\\"
+    },
+    \\"servers\\": [
+        {
+            \\"url\\": \\"http://localhost:5000/things\\",
+            \\"description\\": \\"Development server\\"
+        }
+    ],
+    \\"paths\\": {
+        \\"/testthing/properties/testproperty\\": {
+            \\"get\\": {
+                \\"description\\": \\"Read Property testProperty\\",
+                \\"responses\\": {
+                    \\"200\\": {
+                        \\"description\\": \\"Ok\\",
+                        \\"content\\": {
+                            \\"application/json\\": {
+                                \\"schema\\": {
+                                    \\"type\\": \\"integer\\"
+                                }
+                            }
+                        }
+                    },
+                    \\"400\\": {
+                        \\"description\\": \\"Bad request\\"
+                    },
+                    \\"408\\": {
+                        \\"description\\": \\"Remote thing did not respond\\"
+                    }
+                },
+                \\"tags\\": [
+                    \\"Testthing\\"
+                ]
+            },
+            \\"put\\": {
+                \\"description\\": \\"Write Property testProperty\\",
+                \\"responses\\": {
+                    \\"200\\": {
+                        \\"description\\": \\"Ok\\",
+                        \\"content\\": {
+                            \\"application/json\\": {
+                                \\"schema\\": {
+                                    \\"type\\": \\"integer\\"
+                                }
+                            }
+                        }
+                    },
+                    \\"400\\": {
+                        \\"description\\": \\"Bad request\\"
+                    },
+                    \\"408\\": {
+                        \\"description\\": \\"Remote thing did not respond\\"
+                    }
+                },
+                \\"tags\\": [
+                    \\"Testthing\\"
+                ],
+                \\"requestBody\\": {
+                    \\"description\\": \\"Property testProperty parameters\\",
+                    \\"required\\": \\"true\\",
+                    \\"content\\": {
+                        \\"application/json\\": {
+                            \\"schema\\": {
+                                \\"type\\": \\"integer\\"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        \\"/testthing/actions/testaction\\": {
+            \\"post\\": {
+                \\"description\\": \\"Invoke Action testAction\\",
+                \\"responses\\": {
+                    \\"200\\": {
+                        \\"description\\": \\"Ok\\",
+                        \\"content\\": {
+                            \\"application/json\\": {
+                                \\"schema\\": {
+                                    \\"type\\": \\"boolean\\"
+                                }
+                            }
+                        }
+                    },
+                    \\"400\\": {
+                        \\"description\\": \\"Bad request\\"
+                    },
+                    \\"408\\": {
+                        \\"description\\": \\"Remote thing did not respond\\"
+                    }
+                },
+                \\"tags\\": [
+                    \\"Testthing\\"
+                ],
+                \\"requestBody\\": {
+                    \\"description\\": \\"Action testAction parameters\\",
+                    \\"required\\": \\"true\\",
+                    \\"content\\": {
+                        \\"application/json\\": {
+                            \\"schema\\": {
+                                \\"type\\": \\"boolean\\"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}"
+`;

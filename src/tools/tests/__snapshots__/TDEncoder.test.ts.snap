@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`thing with base, 1 writable property and 1 action 1`] = `
+"{
+    \\"@context\\": [
+        \\"https://w3c.github.io/wot/w3c-wot-td-context.jsonld\\",
+        \\"https://w3c.github.io/wot/w3c-wot-common-context.jsonld\\"
+    ],
+    \\"@type\\": [
+        \\"Thing\\"
+    ],
+    \\"name\\": \\"Testthing\\",
+    \\"base\\": \\"http://localhost\\",
+    \\"interaction\\": [
+        {
+            \\"@type\\": [
+                \\"Property\\"
+            ],
+            \\"name\\": \\"testProperty\\",
+            \\"schema\\": {
+                \\"type\\": \\"integer\\"
+            },
+            \\"writable\\": true,
+            \\"observable\\": false,
+            \\"form\\": [
+                {
+                    \\"href\\": \\"/testproperty\\",
+                    \\"mediaType\\": \\"application/json\\"
+                }
+            ]
+        },
+        {
+            \\"@type\\": [
+                \\"Action\\"
+            ],
+            \\"name\\": \\"testAction\\",
+            \\"inputSchema\\": {
+                \\"type\\": \\"boolean\\"
+            },
+            \\"form\\": [
+                {
+                    \\"href\\": \\"/testaction\\",
+                    \\"mediaType\\": \\"application/json\\"
+                }
+            ]
+        }
+    ]
+}"
+`;
+
+exports[`thing without base, 1 property with multiple links 1`] = `
+"{
+    \\"@context\\": [
+        \\"https://w3c.github.io/wot/w3c-wot-td-context.jsonld\\",
+        \\"https://w3c.github.io/wot/w3c-wot-common-context.jsonld\\"
+    ],
+    \\"@type\\": [
+        \\"Thing\\"
+    ],
+    \\"name\\": \\"Testthing\\",
+    \\"interaction\\": [
+        {
+            \\"@type\\": [
+                \\"Property\\"
+            ],
+            \\"name\\": \\"testProperty\\",
+            \\"schema\\": {
+                \\"type\\": \\"integer\\"
+            },
+            \\"writable\\": true,
+            \\"observable\\": false,
+            \\"form\\": [
+                {
+                    \\"href\\": \\"http://link1.com/testproperty\\",
+                    \\"mediaType\\": \\"application/json\\"
+                },
+                {
+                    \\"href\\": \\"http://link2.com/testproperty\\",
+                    \\"mediaType\\": \\"application/json\\"
+                }
+            ]
+        }
+    ]
+}"
+`;
