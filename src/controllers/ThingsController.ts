@@ -102,8 +102,10 @@ export class ThingsController {
     private async handleError(ctx: Context, e: Error) {
         if (e instanceof InteractionError) {
             ctx.throw(400, e.message);
-        } if (e instanceof TimeoutError) {
+        } else if (e instanceof TimeoutError) {
             ctx.throw(408, e.message);
+        } else {
+            throw e;
         }
     }
 }
