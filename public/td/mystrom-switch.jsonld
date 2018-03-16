@@ -1,0 +1,84 @@
+{
+  "@context": ["https://w3c.github.io/wot/w3c-wot-td-context.jsonld",
+               "https://w3c.github.io/wot/w3c-wot-common-context.jsonld"],
+  "@type": ["Switch"],
+  "name": "myStrom Switch",
+  "base": "http://192.168.0.3/",
+  "interaction": [
+    {
+      "@type": ["Property"],
+      "name": "report",
+      "schema": {
+        "type" : "object",
+        "field": [
+            {
+                "name": "power",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            {
+                "name": "relay",
+                "schema": {
+                    "type": "boolean"
+                }
+            }
+        ]
+      },
+      "writable": false,
+      "observable": true,
+      "form": [
+        {
+           "href": "report",
+           "mediaType": "application/json"
+        }
+      ]
+    },
+    {
+      "@type": ["Action"],
+      "name": "on",
+      "inputSchema": null,
+      "outputSchema": null,
+      "form": [
+        {
+           "href":"relay?state=1",
+           "mediaType":"application/json"
+        }
+      ]
+    },
+    {
+      "@type": ["Action"],
+      "name": "off",
+      "inputSchema": null,
+      "outputSchema": null,
+      "form": [
+        {
+           "href":"relay?state=0",
+           "mediaType":"application/json"
+        }
+      ]
+    },
+    {
+      "@type": ["Action"],
+      "name": "toggle",
+      "inputSchema": null,
+      "outputSchema": {
+        "type" : "object",
+        "field": [
+          {
+              "name": "relay",
+              "schema": {
+                  "type": "boolean"
+              }
+          }
+        ]
+      },
+      "form": [
+        {
+           "href":"toggle",
+           "mediaType":"application/json"
+        }
+      ]
+    }
+  ]
+}

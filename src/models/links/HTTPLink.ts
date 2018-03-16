@@ -56,14 +56,25 @@ export class HTTPLink extends Link {
     }
 
     private async executeAction(data: any): Promise<any> {
-        return this.http.post(this.toString(), data).catch(e => {
-            this.handleError(e);
-        });
+        try {
+            return await this.http.post(this.toString(), data);
+        } catch (e) {
+            // Try again as get request to support some legacy devices
+            if (this.isEmpty(data) && e.response && e.response.status === 405) {
+                try {
+                    return await this.http.get(this.toString())
+                } catch (e) {
+                    this.handleError(e);
+                }
+            } else {
+                this.handleError(e);
+            }
+        }
     }
 
     private handleError(error: any) {
         if (error.code === 'ECONNABORTED') {
-            throw new TimeoutError('Remote thing did not respond')
+            throw new TimeoutError('Remote thing did not respond');
         } else {
             throw error;
         }
