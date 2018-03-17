@@ -1,6 +1,6 @@
 import * as Router from "koa-router";
 import * as fs from "fs";
-import {OpenAPIEncoder, TDEncoder, TDParser} from "../tools";
+import {MozillaTDParser, OpenAPIEncoder, TDEncoder, TDParser} from "../tools";
 import {ThingsManager} from "../models/thing";
 import {Context} from "koa";
 import {ThingError} from "../tools/errors/ThingError";
@@ -21,6 +21,9 @@ export class TDController extends BaseController {
         router.get('/test', this.test.bind(this)); // TODO: Remove
         router.get('/:name', this.getTD.bind(this));
 
+        router.post('/moz/add', this.postMozillaTD.bind(this));
+        router.get('/moz/:name', this.getMozillaTD.bind(this));
+
         return router;
     }
 
@@ -29,15 +32,7 @@ export class TDController extends BaseController {
             let thing = TDParser.parse(ctx.request.body);
             this.things.addThing(thing);
 
-            // Regenerate openapi file
-            let json = OpenAPIEncoder.encode(this.things);
-
-            fs.writeFile('../public/swagger-ui/openapi.json', json, 'utf8', (err) => {
-                if (err) {
-                    console.log(err.message);
-                }
-            });
-
+            this.regenerateOpenApi();
             ctx.body = '';
         } catch (e) {
             ctx.throw(400, 'Invalid TD format');
@@ -47,6 +42,32 @@ export class TDController extends BaseController {
     public async getTD(ctx: Context) {
         let thing = await this.getThing(ctx);
         ctx.body = TDEncoder.encode(thing);
+    }
+
+    public async postMozillaTD(ctx: Context) {
+        try {
+            const base = ctx.request.body.base;
+            const authorization = ctx.request.body.authorization;
+            const td = ctx.request.body.td;
+
+            try {
+                let thing = MozillaTDParser.parse(td, base, authorization);
+                this.things.addThing(thing);
+
+                this.regenerateOpenApi();
+                ctx.body = '';
+            } catch (e) {
+                ctx.throw(400, 'Invalid TD format');
+            }
+        } catch (e) {
+            ctx.throw(400, 'Body needs to contain "base", "authorization" and "td"');
+        }
+    }
+
+    public async getMozillaTD(ctx: Context) {
+        const thing = await this.getThing(ctx);
+        // TODO: Include MozillaTDEncoder
+        //ctx.body = TDEncoder.encode(thing);
     }
 
     public async test(ctx: Context) {
@@ -72,5 +93,15 @@ export class TDController extends BaseController {
                 throw e;
             }
         }
+    }
+
+    private async regenerateOpenApi() {
+        let json = OpenAPIEncoder.encode(this.things);
+
+        fs.writeFile('../public/swagger-ui/openapi.json', json, 'utf8', (err) => {
+            if (err) {
+                console.log(err.message);
+            }
+        });
     }
 }

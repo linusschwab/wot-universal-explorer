@@ -6,7 +6,7 @@ import {HTTPLink} from "../models/links";
 
 export class MozillaTDParser {
 
-    public static parse(td: string | object, base = '', authKey = '') {
+    public static parse(td: string | object, base = '', authorization = '') {
         // TODO: Implement authorization
         let obj;
 
