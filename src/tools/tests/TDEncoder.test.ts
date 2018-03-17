@@ -1,7 +1,7 @@
 import {Thing} from "../../models/thing";
 import {Action, Property} from "../../models/interaction";
 import {DataSchema, InputSchema, OutputSchema} from "../../models/schema";
-import {HTTPLink, Link} from "../../models/links";
+import {HTTPLink} from "../../models/links";
 import {TDEncoder} from "../TDEncoder";
 
 

@@ -6,7 +6,9 @@ import {InteractionError} from "../../tools/errors";
 export class Thing {
 
     public name: string;
+    public description: string;
     public type: string;
+
     public base: string;
     public interaction: InteractionPattern[];
 

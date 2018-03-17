@@ -6,9 +6,11 @@ import {Thing} from "../thing";
 export class InteractionPattern {
 
     public name: string;
-    public thing: Thing;
+    public description: string;
 
+    public thing: Thing;
     public base: string;
+
     public links: Link[];
     public url: string;
     public operations: Operation[];

@@ -1,0 +1,17 @@
+{
+  "name": "Virtual On/Off Color Light",
+  "type": "onOffColorLight",
+  "href": "/things/virtual-things-0",
+  "properties": {
+    "on": {
+      "type": "boolean",
+      "href": "/things/virtual-things-0/properties/on"
+    },
+    "color": {
+      "type": "string",
+      "href": "/things/virtual-things-0/properties/color"
+    }
+  },
+  "actions": {},
+  "events": {}
+}
