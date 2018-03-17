@@ -1,7 +1,7 @@
 import {Thing} from "../Thing";
 import {ThingsManager} from "../ThingsManager";
 import {ThingError} from "../../../tools/errors";
-import {Action, Property} from "../../interaction";
+import {Action, Property} from "../../interactions";
 
 
 test('adding thing to manager', () => {

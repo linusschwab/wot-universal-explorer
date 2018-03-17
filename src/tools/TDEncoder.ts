@@ -1,5 +1,5 @@
 import {Thing} from "../models/thing";
-import {Action, InteractionPattern, Property, Event} from "../models/interaction";
+import {Action, InteractionPattern, Property, Event} from "../models/interactions";
 import {Link} from "../models/links";
 import {DataSchema} from "../models/schema";
 
@@ -29,7 +29,7 @@ export class TDEncoder {
             "@type": [thing.type],
             "name": thing.name,
             "base": thing.base,
-            "interaction": thing.interaction
+            "interaction": thing.interactions
         };
 
         if (!thing.base) {

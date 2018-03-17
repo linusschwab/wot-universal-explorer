@@ -1,9 +1,8 @@
 import * as Router from "koa-router";
 import * as fs from "fs";
-import {MozillaTDParser, OpenAPIEncoder, TDEncoder, TDParser} from "../tools";
+import {MozillaTDEncoder, MozillaTDParser, OpenAPIEncoder, TDEncoder, TDParser} from "../tools";
 import {ThingsManager} from "../models/thing";
 import {Context} from "koa";
-import {ThingError} from "../tools/errors/ThingError";
 import {BaseController} from "./BaseController";
 
 
@@ -46,6 +45,7 @@ export class TDController extends BaseController {
 
     public async postMozillaTD(ctx: Context) {
         try {
+            // TODO: Config file with gateway base and authorization instead? (+ relative URL detection)
             const base = ctx.request.body.base;
             const authorization = ctx.request.body.authorization;
             const td = ctx.request.body.td;
@@ -66,8 +66,7 @@ export class TDController extends BaseController {
 
     public async getMozillaTD(ctx: Context) {
         const thing = await this.getThing(ctx);
-        // TODO: Include MozillaTDEncoder
-        //ctx.body = TDEncoder.encode(thing);
+        ctx.body = MozillaTDEncoder.encode(thing);
     }
 
     public async test(ctx: Context) {

@@ -1,6 +1,6 @@
 import * as getSlug from "speakingurl";
 import {Thing} from "./Thing";
-import {InteractionPattern} from "../interaction";
+import {InteractionPattern} from "../interactions";
 import {ThingError} from "../../tools/errors/ThingError";
 
 
@@ -50,7 +50,7 @@ export class ThingsManager {
         let interactions: InteractionPattern[] = [];
 
         for (let thing of this.things) {
-            for (let interaction of thing.interaction) {
+            for (let interaction of thing.interactions) {
                 interactions.push(interaction);
             }
         }

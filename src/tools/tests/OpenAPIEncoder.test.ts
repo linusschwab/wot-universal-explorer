@@ -1,4 +1,4 @@
-import {Action, Property} from "../../models/interaction";
+import {Action, Property} from "../../models/interactions";
 import {DataSchema, InputSchema, OutputSchema} from "../../models/schema";
 import {HTTPLink} from "../../models/links";
 import {Thing, ThingsManager} from "../../models/thing";

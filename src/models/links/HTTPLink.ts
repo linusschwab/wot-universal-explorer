@@ -1,5 +1,5 @@
 import {Link} from "./Link";
-import {Action, Event, Property} from "../interaction";
+import {Action, Event, Property} from "../interactions";
 import {TimeoutError} from "../../tools/errors";
 import axios, {AxiosInstance, AxiosPromise, AxiosResponse} from 'axios';
 

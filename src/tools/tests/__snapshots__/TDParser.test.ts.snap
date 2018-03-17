@@ -22,7 +22,7 @@ Array [
     },
     "thing": Thing {
       "base": "coap:///www.example.com:5683/temp/",
-      "interaction": [Circular],
+      "interactions": [Circular],
       "name": "myTempSensor",
       "type": "Sensor",
     },
@@ -48,7 +48,7 @@ Array [
     },
     "thing": Thing {
       "base": "coap:///www.example.com:5683/temp/",
-      "interaction": [Circular],
+      "interactions": [Circular],
       "name": "myTempSensor",
       "type": "Sensor",
     },
@@ -73,7 +73,7 @@ Array [
     },
     "thing": Thing {
       "base": "coap:///www.example.com:5683/temp/",
-      "interaction": [Circular],
+      "interactions": [Circular],
       "name": "myTempSensor",
       "type": "Sensor",
     },
@@ -97,7 +97,7 @@ Array [
     },
     "thing": Thing {
       "base": "coap:///www.example.com:5683/temp/",
-      "interaction": [Circular],
+      "interactions": [Circular],
       "name": "myTempSensor",
       "type": "Sensor",
     },

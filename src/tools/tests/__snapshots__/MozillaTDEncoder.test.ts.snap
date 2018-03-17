@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`thing with base, 1 property and 1 action 1`] = `
+"{
+    \\"name\\": \\"Testthing\\",
+    \\"type\\": \\"Thing\\",
+    \\"href\\": \\"\\",
+    \\"properties\\": {
+        \\"testProperty\\": {
+            \\"type\\": \\"integer\\",
+            \\"description\\": \\"Test Property Description\\",
+            \\"href\\": \\"http://localhost/testproperty\\"
+        }
+    },
+    \\"actions\\": {
+        \\"testAction\\": {
+            \\"description\\": \\"Test Action Description\\"
+        }
+    },
+    \\"events\\": {}
+}"
+`;
+
+exports[`thing without base, 1 property with multiple links 1`] = `
+"{
+    \\"name\\": \\"Testthing\\",
+    \\"type\\": \\"Thing\\",
+    \\"href\\": \\"\\",
+    \\"properties\\": {
+        \\"testProperty\\": {
+            \\"type\\": \\"integer\\",
+            \\"href\\": \\"http://link1.com/testproperty\\"
+        }
+    },
+    \\"actions\\": {},
+    \\"events\\": {}
+}"
+`;

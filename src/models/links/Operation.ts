@@ -1,4 +1,4 @@
-import {InteractionPattern} from "../interaction";
+import {InteractionPattern} from "../interactions";
 
 export class Operation {
 

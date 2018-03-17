@@ -1,5 +1,5 @@
 import {Thing} from "../models/thing";
-import {Property} from "../models/interaction";
+import {Property} from "../models/interactions";
 import {DataSchema} from "../models/schema";
 import {HTTPLink} from "../models/links";
 
@@ -32,6 +32,7 @@ export class MozillaTDParser {
     }
 
     private static parseProperty(name: string, pobj: any) {
+        // TODO: include unit in data schema? (celsius, percentage, ...)
         let schema = new DataSchema(pobj.type, true, false);
         return new Property(name, schema, true, false);
     }

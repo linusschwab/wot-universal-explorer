@@ -1,3 +1,4 @@
+export {MozillaTDEncoder} from "./MozillaTDEncoder";
 export {MozillaTDParser} from "./MozillaTDParser";
 export {OpenAPIEncoder} from "./OpenAPIEncoder";
 export {TDEncoder} from "./TDEncoder";

@@ -1,5 +1,5 @@
 import {Thing} from "../models/thing";
-import {Action, Event, InteractionPattern, Property} from "../models/interaction";
+import {Action, Event, InteractionPattern, Property} from "../models/interactions";
 import {DataSchema, InputSchema, OutputSchema} from "../models/schema";
 import {HTTPLink} from "../models/links";
 

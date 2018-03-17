@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import {MozillaTDParser} from "../MozillaTDParser";
-import {Action, Property} from "../../models/interaction";
+import {Action, Property} from "../../models/interactions";
 
 
 test('simple td with 2 properties', () => {
@@ -10,16 +10,16 @@ test('simple td with 2 properties', () => {
     // Basic data
     expect(thing.name).toBe('Virtual On/Off Color Light');
     expect(thing.type).toBe('onOffColorLight');
-    expect(thing.interaction).toHaveLength(2);
+    expect(thing.interactions).toHaveLength(2);
 
     // Interactions
-    const propertyOn = thing.interaction[0];
+    const propertyOn = thing.interactions[0];
     expect(propertyOn).toBeInstanceOf(Property);
     expect(propertyOn.name).toBe('on');
     expect(propertyOn.links).toHaveLength(1);
     expect(propertyOn.links[0].toString()).toBe('http://localhost:8080/things/virtual-things-0/properties/on');
 
-    const propertyColor = thing.interaction[1];
+    const propertyColor = thing.interactions[1];
     expect(propertyColor).toBeInstanceOf(Property);
     expect(propertyColor.name).toBe('color');
     expect(propertyColor.links).toHaveLength(1);

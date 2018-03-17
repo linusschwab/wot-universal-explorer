@@ -1,5 +1,5 @@
 import * as getSlug from "speakingurl";
-import {Action, InteractionPattern, Property} from "../interaction";
+import {Action, InteractionPattern, Property, Event} from "../interactions";
 import {InteractionError} from "../../tools/errors";
 
 
@@ -10,13 +10,13 @@ export class Thing {
     public type: string;
 
     public base: string;
-    public interaction: InteractionPattern[];
+    public interactions: InteractionPattern[];
 
     constructor(name: string, type: string, base = '') {
         this.name = name;
         this.type = type;
         this.base = base;
-        this.interaction = [];
+        this.interactions = [];
     }
 
     public async readProperty(name: string): Promise<any> {
@@ -56,11 +56,11 @@ export class Thing {
     public registerInteraction(interaction: InteractionPattern) {
         interaction.thing = this;
         interaction.base = this.base;
-        this.interaction.push(interaction);
+        this.interactions.push(interaction);
     }
 
     public getInteraction(name: string): InteractionPattern {
-        for (let interaction of this.interaction) {
+        for (let interaction of this.interactions) {
             if (interaction.slug == getSlug(name)) {
                 return interaction;
             }
@@ -72,15 +72,43 @@ export class Thing {
         return this.name;
     }
 
+    get properties() {
+        let properties: Property[] = [];
+        for (let interaction of this.interactions) {
+            if (interaction instanceof Property) {
+                properties.push(interaction)
+            }
+        }
+        return properties;
+    }
+
+    get actions() {
+        let actions: Action[] = [];
+        for (let interaction of this.interactions) {
+            if (interaction instanceof Action) {
+                actions.push(interaction)
+            }
+        }
+        return actions;
+    }
+
+    get events() {
+        let events: Event[] = [];
+        for (let interaction of this.interactions) {
+            if (interaction instanceof Event) {
+                events.push(interaction)
+            }
+        }
+        return events;
+    }
+
     get links() {
         let links = [];
-
-        for (let interaction of this.interaction) {
+        for (let interaction of this.interactions) {
             for (let link of interaction.links) {
                 links.push(link);
             }
         }
-
         return links;
     }
 

@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import {TDParser} from "../TDParser";
-import {Action} from "../../models/interaction";
+import {Action} from "../../models/interactions";
 
 
 test('td without base and 1 action with multiple links', () => {
@@ -11,10 +11,10 @@ test('td without base and 1 action with multiple links', () => {
     expect(thing.name).toBe('myMasterLED');
     expect(thing.type).toBe('Lamp');
     expect(thing.base).toBe('');
-    expect(thing.interaction).toHaveLength(1);
+    expect(thing.interactions).toHaveLength(1);
 
     // Interactions
-    const action = thing.interaction[0];
+    const action = thing.interactions[0];
     expect(action).toBeInstanceOf(Action);
     expect(action.name).toBe('myMasterOnOff');
     expect(action.links).toHaveLength(2);
@@ -38,8 +38,8 @@ test('td with base, 2 properties and 2 events', () => {
     expect(thing.name).toBe('myTempSensor');
     expect(thing.type).toBe('Sensor');
     expect(thing.base).toBe('coap:///www.example.com:5683/temp/');
-    expect(thing.interaction).toHaveLength(4);
+    expect(thing.interactions).toHaveLength(4);
 
     // Interactions
-    expect(thing.interaction).toMatchSnapshot()
+    expect(thing.interactions).toMatchSnapshot()
 });

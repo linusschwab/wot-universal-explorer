@@ -1,7 +1,7 @@
 import {Thing, ThingsManager} from "../models/thing";
 import {Operation} from "../models/links";
 import {DataSchema, InputSchema} from "../models/schema";
-import {Action, InteractionPattern, Property, Event} from "../models/interaction";
+import {Action, InteractionPattern, Property, Event} from "../models/interactions";
 import {isArray} from "util";
 
 
