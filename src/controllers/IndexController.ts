@@ -1,14 +1,13 @@
 import * as Router from "koa-router";
 import * as send from "koa-send";
 import {Context} from "koa";
+import {BaseController} from "./BaseController";
 
 
-export class IndexController {
-
-    public router: Router;
+export class IndexController extends BaseController {
 
     constructor() {
-        this.router = this.routes();
+        super(null);
     }
 
     public routes(): Router {

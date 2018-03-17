@@ -4,16 +4,13 @@ import {OpenAPIEncoder, TDEncoder, TDParser} from "../tools";
 import {ThingsManager} from "../models/thing";
 import {Context} from "koa";
 import {ThingError} from "../tools/errors/ThingError";
+import {BaseController} from "./BaseController";
 
 
-export class TDController {
-
-    public router: Router;
-    private things: ThingsManager;
+export class TDController extends BaseController {
 
     constructor(things: ThingsManager) {
-        this.things = things;
-        this.router = this.routes();
+        super(things);
     }
 
     public routes(): Router {
@@ -48,19 +45,8 @@ export class TDController {
     }
 
     public async getTD(ctx: Context) {
-        // TODO: Factor out in BaseController parent class?
-        let name = ctx.params['name'];
-
-        try {
-            let thing = this.things.getThing(name);
-            ctx.body = TDEncoder.encode(thing);
-        } catch (e) {
-            if (e instanceof ThingError) {
-                ctx.throw(400, 'Thing ' + name + ' does not exist');
-            } else {
-                throw e;
-            }
-        }
+        let thing = await this.getThing(ctx);
+        ctx.body = TDEncoder.encode(thing);
     }
 
     public async test(ctx: Context) {

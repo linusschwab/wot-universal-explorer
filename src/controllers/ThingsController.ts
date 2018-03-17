@@ -3,16 +3,13 @@ import {Context} from "koa";
 import {ThingsManager} from "../models/thing";
 import {InteractionError, TimeoutError} from "../tools/errors";
 import {ThingError} from "../tools/errors/ThingError";
+import {BaseController} from "./BaseController";
 
 
-export class ThingsController {
-
-    public router: Router;
-    private things: ThingsManager;
+export class ThingsController extends BaseController {
 
     constructor(things: ThingsManager) {
-        this.things = things;
-        this.router = this.routes();
+        super(things);
     }
 
     public routes() {
@@ -83,20 +80,6 @@ export class ThingsController {
 
         ctx.body = 'Not implemented yet';
         ctx.status = 200;
-    }
-
-    private async getThing(ctx: Context) {
-        let name = ctx.params['name'];
-
-        try {
-            return this.things.getThing(name);
-        } catch (e) {
-            if (e instanceof ThingError) {
-                ctx.throw(400, 'Thing ' + name + ' does not exist');
-            } else {
-                throw e;
-            }
-        }
     }
 
     private async handleError(ctx: Context, e: Error) {
