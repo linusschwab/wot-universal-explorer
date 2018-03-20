@@ -10,7 +10,7 @@ exports[`thing with base, 1 writable property and 1 action 1`] = `
         \\"Thing\\"
     ],
     \\"name\\": \\"Testthing\\",
-    \\"base\\": \\"http://localhost\\",
+    \\"base\\": \\"http://localhost:5000/things\\",
     \\"interaction\\": [
         {
             \\"@type\\": [
@@ -24,7 +24,7 @@ exports[`thing with base, 1 writable property and 1 action 1`] = `
             \\"observable\\": false,
             \\"form\\": [
                 {
-                    \\"href\\": \\"/testproperty\\",
+                    \\"href\\": \\"/testthing/properties/testproperty\\",
                     \\"mediaType\\": \\"application/json\\"
                 }
             ]
@@ -39,7 +39,7 @@ exports[`thing with base, 1 writable property and 1 action 1`] = `
             },
             \\"form\\": [
                 {
-                    \\"href\\": \\"/testaction\\",
+                    \\"href\\": \\"/testthing/actions/testaction\\",
                     \\"mediaType\\": \\"application/json\\"
                 }
             ]
@@ -58,6 +58,7 @@ exports[`thing without base, 1 property with multiple links 1`] = `
         \\"Thing\\"
     ],
     \\"name\\": \\"Testthing\\",
+    \\"base\\": \\"http://localhost:5000/things\\",
     \\"interaction\\": [
         {
             \\"@type\\": [
@@ -71,11 +72,7 @@ exports[`thing without base, 1 property with multiple links 1`] = `
             \\"observable\\": false,
             \\"form\\": [
                 {
-                    \\"href\\": \\"http://link1.com/testproperty\\",
-                    \\"mediaType\\": \\"application/json\\"
-                },
-                {
-                    \\"href\\": \\"http://link2.com/testproperty\\",
+                    \\"href\\": \\"/testthing/properties/testproperty\\",
                     \\"mediaType\\": \\"application/json\\"
                 }
             ]

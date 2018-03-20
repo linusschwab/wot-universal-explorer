@@ -14,6 +14,7 @@ export class App {
     public things: ThingsManager;
 
     static instance: App;
+    static url: string = 'http://localhost:5000';
 
     public static run(): Koa {
         this.instance = new App();

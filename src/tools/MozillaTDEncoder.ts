@@ -1,5 +1,6 @@
 import {Thing} from "../models/thing";
 import {Action, Event, Property} from "../models/interactions";
+import {App} from "../App";
 
 
 export class MozillaTDEncoder {
@@ -32,7 +33,7 @@ export class MozillaTDEncoder {
             obj[property.name] = {
                 "type": property.schema.type,
                 "description": property.description,
-                "href": property.links[0].toString()
+                "href": App.url + '/things' + property.url
             };
 
             if (!property.description) {

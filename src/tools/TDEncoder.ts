@@ -2,6 +2,7 @@ import {Thing} from "../models/thing";
 import {Action, InteractionPattern, Property, Event} from "../models/interactions";
 import {Link} from "../models/links";
 import {DataSchema} from "../models/schema";
+import {App} from "../App";
 
 
 export class TDEncoder {
@@ -14,29 +15,20 @@ export class TDEncoder {
             if (value instanceof InteractionPattern) {
                 return this.interaction(value);
             }
-            if (value instanceof Link) {
-                return this.form(value);
-            }
 
             return value;
         }, 4);
     }
 
     private static thing(thing: Thing) {
-        let obj: any = {
+        return {
             "@context": ["https://w3c.github.io/wot/w3c-wot-td-context.jsonld",
                 "https://w3c.github.io/wot/w3c-wot-common-context.jsonld"],
             "@type": [thing.type],
             "name": thing.name,
-            "base": thing.base,
+            "base": App.url + '/things',
             "interaction": thing.interactions
         };
-
-        if (!thing.base) {
-            delete obj.base;
-        }
-
-        return obj;
     }
 
     // Interactions
@@ -62,7 +54,7 @@ export class TDEncoder {
             "schema": this.schema(property.schema),
             "writable": property.writable,
             "observable": property.observable,
-            "form": property.links
+            "form": this.form(property.url)
         }
     }
 
@@ -71,7 +63,7 @@ export class TDEncoder {
             "@type": ["Action"],
             "name": action.name,
             "inputSchema": this.schema(action.inputSchema),
-            "form": action.links
+            "form": this.form(action.url)
         }
     }
 
@@ -80,7 +72,7 @@ export class TDEncoder {
             "@type": ["Event"],
             "name": event.name,
             "schema": this.schema(event.schema),
-            "form": event.links
+            "form": this.form(event.url)
         }
     }
 
@@ -94,10 +86,12 @@ export class TDEncoder {
         }
     }
 
-    private static form(link: Link) {
-        return {
-            "href": link.host ? link.href : link.toString(),
-            "mediaType": link.mediaType
-        }
+    private static form(url: string) {
+        return [
+            {
+                "href": url,
+                "mediaType": "application/json"
+            }
+        ]
     }
 }

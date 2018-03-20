@@ -32,25 +32,21 @@ const tdSample = `{
 }`;
 
 const mozTDSample = `{
-	"base": "http://localhost:8080",
-	"authorization": "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjU0YTc3YjE2LWJmZDQtNGE3YS1hYWVkLTgwYzA1YTQ4ZTg5ZCJ9.eyJyb2xlIjoidXNlcl90b2tlbiIsImlhdCI6MTUyMTEwODcwM30.qMq7KNSvLWC4oKYehGfj0_3Pt3tNDp18Xo_509194xDIghLUgVurfahAQb3I-Iv970C-ueiuTZNxnX0AUPAAeg",
-	"td": {
-		"name": "Virtual On/Off Color Light",
-		"type": "onOffColorLight",
-		"href": "/things/virtual-things-0",
-		"properties": {
-			"on": {
-				"type": "boolean",
-				"href": "/things/virtual-things-0/properties/on"
-			},
-			"color": {
-				"type": "string",
-				"href": "/things/virtual-things-0/properties/color"
-			}
-		},
-		"actions": {},
-		"events": {}
-	}
+    "name": "Virtual On/Off Color Light",
+    "type": "onOffColorLight",
+    "href": "/things/virtual-things-0",
+    "properties": {
+        "on": {
+            "type": "boolean",
+            "href": "/things/virtual-things-0/properties/on"
+        },
+        "color": {
+            "type": "string",
+            "href": "/things/virtual-things-0/properties/color"
+        }
+    },
+    "actions": {},
+    "events": {}
 }`;
 
 // Create mocks
@@ -130,18 +126,17 @@ describe('post mozilla td', () => {
     });
 
     test('post mozilla td then get td returns encoded td', async () => {
-        // TODO
-        /*await request(app.callback())
+        await request(app.callback())
             .post('/td/moz/add')
-            .send(tdSample)
+            .send(mozTDSample)
             .set('Content-Type', 'application/json');
 
         const response = await request(app.callback())
-            .get('/td/mymasterled');
+            .get('/td/moz/virtual-on-off-color-light');
 
         expect(response.status).toBe(200);
         expect(response.type).toBe('application/json');
-        expect(response.body).toMatchSnapshot();*/
+        expect(response.body).toMatchSnapshot();
     });
 });
 

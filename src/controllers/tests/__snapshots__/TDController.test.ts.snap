@@ -1,5 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`post mozilla td post mozilla td then get td returns encoded td 1`] = `
+Object {
+  "actions": Object {},
+  "events": Object {},
+  "href": "",
+  "name": "Virtual On/Off Color Light",
+  "properties": Object {
+    "color": Object {
+      "href": "http://localhost:5000/things/virtual-on-off-color-light/properties/color",
+      "type": "string",
+    },
+    "on": Object {
+      "href": "http://localhost:5000/things/virtual-on-off-color-light/properties/on",
+      "type": "boolean",
+    },
+  },
+  "type": "onOffColorLight",
+}
+`;
+
 exports[`post td post td then get td returns encoded td 1`] = `
 Object {
   "@context": Array [
@@ -9,6 +29,7 @@ Object {
   "@type": Array [
     "Lamp",
   ],
+  "base": "http://localhost:5000/things",
   "interaction": Array [
     Object {
       "@type": Array [
@@ -16,11 +37,7 @@ Object {
       ],
       "form": Array [
         Object {
-          "href": "coap://www.example.com:5683/master",
-          "mediaType": "application/json",
-        },
-        Object {
-          "href": "http://www.example.com:80/master",
+          "href": "/mymasterled/actions/mymasteronoff",
           "mediaType": "application/json",
         },
       ],

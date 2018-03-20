@@ -3,6 +3,7 @@ import {Operation} from "../models/links";
 import {DataSchema, InputSchema} from "../models/schema";
 import {Action, InteractionPattern, Property, Event} from "../models/interactions";
 import {isArray} from "util";
+import {App} from "../App";
 
 
 export class OpenAPIEncoder {
@@ -37,10 +38,9 @@ export class OpenAPIEncoder {
     }
 
     private static servers() {
-        // TODO: Remove hardcoded url, read from config
         return [
             {
-                "url": "http://localhost:5000/things",
+                "url": App.url + "/things",
                 "description": "Development server"
             }
         ]

@@ -9,7 +9,7 @@ exports[`thing with base, 1 property and 1 action 1`] = `
         \\"testProperty\\": {
             \\"type\\": \\"integer\\",
             \\"description\\": \\"Test Property Description\\",
-            \\"href\\": \\"http://localhost/testproperty\\"
+            \\"href\\": \\"http://localhost:5000/things/testthing/properties/testproperty\\"
         }
     },
     \\"actions\\": {
@@ -29,7 +29,7 @@ exports[`thing without base, 1 property with multiple links 1`] = `
     \\"properties\\": {
         \\"testProperty\\": {
             \\"type\\": \\"integer\\",
-            \\"href\\": \\"http://link1.com/testproperty\\"
+            \\"href\\": \\"http://localhost:5000/things/testthing/properties/testproperty\\"
         }
     },
     \\"actions\\": {},
