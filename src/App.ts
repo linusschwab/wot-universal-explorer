@@ -5,7 +5,7 @@ import * as fs from "fs";
 
 import {IndexController, TDController, ThingsController} from "./controllers";
 import {ThingsManager} from "./models/thing";
-import {OpenAPIEncoder, TDParser} from "./tools";
+import {MozillaTDParser, OpenAPIEncoder, TDParser} from "./tools";
 
 
 export class App {
@@ -66,6 +66,14 @@ export class App {
         fs.readdirSync(tdPath).forEach(file => {
             let td = fs.readFileSync(tdPath + file, 'utf8');
             let thing = TDParser.parse(td);
+            this.things.addThing(thing);
+        });
+
+        // Parse moz-td files to things
+        const mozTDPath = '../public/td-moz/';
+        fs.readdirSync(mozTDPath).forEach(file => {
+            let td = fs.readFileSync(mozTDPath + file, 'utf8');
+            let thing = MozillaTDParser.parse(td);
             this.things.addThing(thing);
         });
 
