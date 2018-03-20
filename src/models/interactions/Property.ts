@@ -1,6 +1,7 @@
 import {InteractionPattern} from "./InteractionPattern";
 import {DataSchema} from "../schema";
 import {Operation} from "../links/Operation";
+import {InteractionError} from "../../tools/errors";
 
 
 export class Property extends InteractionPattern {
@@ -24,10 +25,9 @@ export class Property extends InteractionPattern {
     public async write(data: any) {
         if (this.writable) {
             // TODO: Choose correct link
-            this.links[0].execute(data);
-            return true;
+            return this.links[0].execute(data);
         }
-        return false;
+        throw new InteractionError('Property is not writable');
     }
 
     public toString() {
