@@ -20,7 +20,11 @@ export class HTTPLink extends Link {
                 return JSON.stringify(data);
             }],
             transformResponse: [(data: any) => {
-                return String(data);
+                try {
+                    return JSON.parse(data);
+                } catch(e) {
+                    return String(data);
+                }
             }],
             timeout: 1000
         });
@@ -28,16 +32,15 @@ export class HTTPLink extends Link {
 
     public async execute(data: any = null): Promise<any> {
         if (this.interaction instanceof Property) {
-            const response = await this.executeProperty(data);
-            return response.data;
+            return this.executeProperty(data);
         }
         if (this.interaction instanceof Action) {
-            const response = await this.executeAction(data);
-            return response.data;
+            return this.executeAction(data);
         }
     }
 
-    private async executeProperty(data: any): Promise<any> {
+    protected async executeProperty(data: any): Promise<any> {
+        let response;
         if (data !== null) {
             // Write property
             const config: any = {
@@ -45,25 +48,31 @@ export class HTTPLink extends Link {
                     'Content-Type': this.mediaType
                 }
             };
-            return this.http.put(this.toString(), data, config).catch(e => {
+            try {
+                response = await this.http.put(this.toString(), data, config);
+            } catch (e) {
                 this.handleError(e);
-            });
+            }
         } else {
             // Read property
-            return this.http.get(this.toString()).catch(e => {
+            try {
+                response = await this.http.get(this.toString());
+            } catch (e) {
                 this.handleError(e);
-            });
+            }
         }
+        return response.data;
     }
 
-    private async executeAction(data: any): Promise<any> {
+    protected async executeAction(data: any): Promise<any> {
+        let response;
         try {
-            return await this.http.post(this.toString(), data);
+            response = await this.http.post(this.toString(), data);
         } catch (e) {
             // Try again as get request to support some legacy devices
             if (this.isEmpty(data) && e.response && e.response.status === 405) {
                 try {
-                    return await this.http.get(this.toString())
+                    response = await this.http.get(this.toString());
                 } catch (e) {
                     this.handleError(e);
                 }
@@ -71,6 +80,7 @@ export class HTTPLink extends Link {
                 this.handleError(e);
             }
         }
+        return response.data;
     }
 
     private handleError(e: any) {
