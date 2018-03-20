@@ -1,12 +1,12 @@
 import {Link} from "./Link";
-import {Action, Event, Property} from "../interactions";
-import {TimeoutError} from "../../tools/errors";
-import axios, {AxiosInstance, AxiosPromise, AxiosResponse} from 'axios';
+import {Action, Property} from "../interactions";
+import {RequestError, TimeoutError} from "../../tools/errors";
+import axios, {AxiosInstance} from 'axios';
 
 
 export class HTTPLink extends Link {
 
-    private http: AxiosInstance;
+    protected http: AxiosInstance;
 
     constructor(href: string, host = '', mediaType = '') {
         super(href, host, mediaType);
@@ -17,7 +17,7 @@ export class HTTPLink extends Link {
                 'Content-Type': this.mediaType
             },
             transformRequest: [(data: any, headers: any) => {
-                return String(data);
+                return JSON.stringify(data);
             }],
             transformResponse: [(data: any) => {
                 return String(data);
@@ -40,13 +40,14 @@ export class HTTPLink extends Link {
     private async executeProperty(data: any): Promise<any> {
         if (data !== null) {
             // Write property
-            if (this.mediaType === 'application/json') {
-                return this.http.put(this.toString(), data).catch(e => {
-                    this.handleError(e);
-                });
-            }
-            // TODO: Support other mediaTypes
-            return false;
+            const config: any = {
+                headers: {
+                    'Content-Type': this.mediaType
+                }
+            };
+            return this.http.put(this.toString(), data, config).catch(e => {
+                this.handleError(e);
+            });
         } else {
             // Read property
             return this.http.get(this.toString()).catch(e => {
@@ -72,11 +73,13 @@ export class HTTPLink extends Link {
         }
     }
 
-    private handleError(error: any) {
-        if (error.code === 'ECONNABORTED') {
+    private handleError(e: any) {
+        if (e.code === 'ECONNABORTED') {
             throw new TimeoutError('Remote thing did not respond');
+        } else if (e.response && e.response.status === 400) {
+            throw new RequestError('Request data schema not correct');
         } else {
-            throw error;
+            throw e;
         }
     }
 }

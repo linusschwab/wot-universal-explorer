@@ -1,8 +1,7 @@
 import * as Router from "koa-router";
 import {Context} from "koa";
 import {ThingsManager} from "../models/thing";
-import {InteractionError, TimeoutError} from "../tools/errors";
-import {ThingError} from "../tools/errors/ThingError";
+import {InteractionError, RequestError, TimeoutError} from "../tools/errors";
 import {BaseController} from "./BaseController";
 
 
@@ -83,7 +82,7 @@ export class ThingsController extends BaseController {
     }
 
     private async handleError(ctx: Context, e: Error) {
-        if (e instanceof InteractionError) {
+        if (e instanceof InteractionError || e instanceof RequestError) {
             ctx.throw(400, e.message);
         } else if (e instanceof TimeoutError) {
             ctx.throw(408, e.message);

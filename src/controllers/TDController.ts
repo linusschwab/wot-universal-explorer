@@ -45,22 +45,13 @@ export class TDController extends BaseController {
 
     public async postMozillaTD(ctx: Context) {
         try {
-            // TODO: Config file with gateway base and authorization instead? (+ relative URL detection)
-            const base = ctx.request.body.base;
-            const authorization = ctx.request.body.authorization;
-            const td = ctx.request.body.td;
+            let thing = MozillaTDParser.parse(ctx.request.body);
+            this.things.addThing(thing);
 
-            try {
-                let thing = MozillaTDParser.parse(td, base, authorization);
-                this.things.addThing(thing);
-
-                this.regenerateOpenApi();
-                ctx.body = '';
-            } catch (e) {
-                ctx.throw(400, 'Invalid TD format');
-            }
+            this.regenerateOpenApi();
+            ctx.body = '';
         } catch (e) {
-            ctx.throw(400, 'Body needs to contain "base", "authorization" and "td"');
+            ctx.throw(400, 'Invalid TD format');
         }
     }
 

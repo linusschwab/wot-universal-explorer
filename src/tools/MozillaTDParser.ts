@@ -2,12 +2,12 @@ import {Thing} from "../models/thing";
 import {Property} from "../models/interactions";
 import {DataSchema} from "../models/schema";
 import {HTTPLink} from "../models/links";
+import {MozillaHTTPLink} from "../models/links/MozillaHTTPLink";
 
 
 export class MozillaTDParser {
 
-    public static parse(td: string | object, base = '', authorization = '') {
-        // TODO: Implement authorization
+    public static parse(td: string | object) {
         let obj;
 
         if (typeof td === 'string') {
@@ -16,13 +16,13 @@ export class MozillaTDParser {
             obj = td;
         }
 
-        let thing = new Thing(obj.name, obj.type, base);
+        let thing = new Thing(obj.name, obj.type);
         thing.description = obj.description;
 
         for (let [name, pobj] of Object.entries(obj.properties)) {
             let property = this.parseProperty(name, pobj);
 
-            let link = this.parseLink(pobj.href, thing.base);
+            let link = new MozillaHTTPLink(pobj.href);
             property.registerLink(link);
 
             thing.registerInteraction(property);
@@ -35,9 +35,5 @@ export class MozillaTDParser {
         // TODO: include unit in data schema? (celsius, percentage, ...)
         let schema = new DataSchema(pobj.type, true, false);
         return new Property(name, schema, true, false);
-    }
-
-    private static parseLink(href: string, base: string) {
-        return new HTTPLink(href, base, 'application/json');
     }
 }
