@@ -1,0 +1,13 @@
+{
+  "name": "Hue Motion Sensor",
+  "type": "binarySensor",
+  "href": "/things/philips-hue-001788fffe401a06-sensors-3",
+  "properties": {
+    "on": {
+      "type": "boolean",
+      "href": "/things/philips-hue-001788fffe401a06-sensors-3/properties/on"
+    }
+  },
+  "actions": {},
+  "events": {}
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Hue Color Lamp",
+  "type": "onOffColorLight",
+  "href": "/things/philips-hue-001788fffe401a06-1",
+  "properties": {
+    "on": {
+      "type": "boolean",
+      "href": "/things/philips-hue-001788fffe401a06-1/properties/on"
+    },
+    "color": {
+      "type": "string",
+      "href": "/things/philips-hue-001788fffe401a06-1/properties/color"
+    }
+  },
+  "actions": {},
+  "events": {}
+}
