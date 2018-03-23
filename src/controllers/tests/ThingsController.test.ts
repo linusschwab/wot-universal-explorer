@@ -26,15 +26,15 @@ const mockThing = new Thing('testthing', 'Thing');
 });
 
 
-let app: Koa;
+let app: App;
 
 beforeEach(() => {
-    app = App.run();
+    app = new App();
     jest.clearAllMocks();
 });
 
 test('get property returns thing response', async () => {
-    const response = await request(app.callback())
+    const response = await request(app.koa.callback())
         .get('/things/testthing/properties/testproperty');
 
     expect(response.status).toBe(200);
@@ -43,7 +43,7 @@ test('get property returns thing response', async () => {
 });
 
 test('put property returns thing response', async () => {
-    const response = await request(app.callback())
+    const response = await request(app.koa.callback())
         .put('/things/testthing/properties/testproperty');
 
     expect(response.status).toBe(200);
@@ -52,7 +52,7 @@ test('put property returns thing response', async () => {
 });
 
 test('post action returns thing response', async () => {
-    const response = await request(app.callback())
+    const response = await request(app.koa.callback())
         .post('/things/testthing/actions/testaction');
 
     expect(response.status).toBe(200);

@@ -55,16 +55,16 @@ jest.mock('fs');
 jest.mock('../../tools/OpenAPIEncoder');
 
 
-let app: Koa;
+let app: App;
 
 beforeEach(() => {
-    app = App.run();
+    app = new App();
     jest.clearAllMocks();
 });
 
 describe('post td', () => {
     test('post empty td returns error', async () => {
-        const response = await request(app.callback())
+        const response = await request(app.koa.callback())
             .post('/td/add')
             .send(null)
             .set('Content-Type', 'application/json');
@@ -74,7 +74,7 @@ describe('post td', () => {
     });
 
     test('post td adds thing and encodes openapi file', async () => {
-        const response = await request(app.callback())
+        const response = await request(app.koa.callback())
             .post('/td/add')
             .send(tdSample)
             .set('Content-Type', 'application/json');
@@ -82,17 +82,17 @@ describe('post td', () => {
         expect(response.status).toBe(200);
         expect(response.type).toBe('application/json');
 
-        expect(App.instance.things.things).toHaveLength(1);
+        expect(app.things.things).toHaveLength(1);
         expect(OpenAPIEncoder.encode).toHaveBeenCalled();
     });
 
     test('post td then get td returns encoded td', async () => {
-        await request(app.callback())
+        await request(app.koa.callback())
             .post('/td/add')
             .send(tdSample)
             .set('Content-Type', 'application/json');
 
-        const response = await request(app.callback())
+        const response = await request(app.koa.callback())
             .get('/td/mymasterled');
 
         expect(response.status).toBe(200);
@@ -103,7 +103,7 @@ describe('post td', () => {
 
 describe('post mozilla td', () => {
     test('post empty mozilla td returns error', async () => {
-        const response = await request(app.callback())
+        const response = await request(app.koa.callback())
             .post('/td/moz/add')
             .send(null)
             .set('Content-Type', 'application/json');
@@ -113,7 +113,7 @@ describe('post mozilla td', () => {
     });
 
     test('post mozilla td adds thing and encodes openapi file', async () => {
-        const response = await request(app.callback())
+        const response = await request(app.koa.callback())
             .post('/td/moz/add')
             .send(mozTDSample)
             .set('Content-Type', 'application/json');
@@ -121,17 +121,17 @@ describe('post mozilla td', () => {
         expect(response.status).toBe(200);
         expect(response.type).toBe('application/json');
 
-        expect(App.instance.things.things).toHaveLength(1);
+        expect(app.things.things).toHaveLength(1);
         expect(OpenAPIEncoder.encode).toHaveBeenCalled();
     });
 
     test('post mozilla td then get td returns encoded td', async () => {
-        await request(app.callback())
+        await request(app.koa.callback())
             .post('/td/moz/add')
             .send(mozTDSample)
             .set('Content-Type', 'application/json');
 
-        const response = await request(app.callback())
+        const response = await request(app.koa.callback())
             .get('/td/moz/virtual-on-off-color-light');
 
         expect(response.status).toBe(200);
@@ -142,7 +142,7 @@ describe('post mozilla td', () => {
 
 describe('get td', () => {
     test('get td without adding a thing first returns error', async () => {
-        const response = await request(app.callback())
+        const response = await request(app.koa.callback())
             .get('/td/counter');
 
         expect(response.status).toBe(400);
@@ -152,7 +152,7 @@ describe('get td', () => {
 
 describe('get mozilla td', () => {
     test('get mozilla td without adding a thing first returns error', async () => {
-        const response = await request(app.callback())
+        const response = await request(app.koa.callback())
             .get('/td/moz/counter');
 
         expect(response.status).toBe(400);

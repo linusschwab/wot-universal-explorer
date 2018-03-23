@@ -3,6 +3,7 @@ import * as bodyParser from "koa-bodyparser";
 import * as cors from "@koa/cors";
 import * as fs from "fs";
 
+import {Server} from "http";
 import {IndexController, TDController, ThingsController} from "./controllers";
 import {ThingsManager} from "./models/thing";
 import {MozillaTDParser, OpenAPIEncoder, TDParser} from "./tools";
@@ -11,20 +12,33 @@ import {MozillaTDParser, OpenAPIEncoder, TDParser} from "./tools";
 export class App {
 
     public koa: Koa;
+    public server: Server;
     public things: ThingsManager;
 
     static instance: App;
-    static url: string = 'http://localhost:5000';
+    static port: number;
+    static url: string;
 
-    public static run(): Koa {
+    public static run() {
         this.instance = new App();
-        return this.instance.koa;
+        this.port = Number(process.env.PORT) || 5000;
+        this.url = 'http://localhost:' + this.port;
+
+        this.instance.server = this.instance.koa.listen(this.port);
+        this.instance.importTD();
+
+        console.log('Server listening on port ' + this.port);
     }
 
     constructor() {
         this.koa = new Koa();
         this.things = new ThingsManager();
 
+        this.setupMiddleware();
+        this.setupRoutes();
+    }
+
+    private setupMiddleware() {
         // Mount logger
         this.koa.use(async (ctx, next) => {
             const start = Date.now();
@@ -44,12 +58,10 @@ export class App {
             ctx.set('Content-Type', 'application/json');
             await next();
         });
-
-        // Create routes
-        this.routes();
     }
 
-    private routes() {
+    private setupRoutes() {
+        // Create routes
         const td = new TDController(this.things);
         this.koa.use(td.router.routes());
 
@@ -61,7 +73,7 @@ export class App {
         this.koa.use(index.router.routes());
     }
 
-    public importTD() {
+    private importTD() {
         // Parse td files to things
         const tdPath = '../public/td/';
         fs.readdirSync(tdPath).forEach(file => {
