@@ -11,12 +11,15 @@ export class Thing {
 
     public base: string;
     public interactions: InteractionPattern[];
+    public subscribers: any; // TODO
+    public websocket: any;
 
     constructor(name: string, type: string, base = '') {
         this.name = name;
         this.type = type;
         this.base = base;
         this.interactions = [];
+        this.subscribers = [];
     }
 
     public async readProperty(name: string): Promise<any> {
@@ -49,7 +52,19 @@ export class Thing {
         }
     }
 
-    public async subcribeToEvent(name: string): Promise<any> {
+    public async subcribeTo(name: string): Promise<any> {
+        // TODO: Implement
+    }
+
+    public async unsubscribeFrom(name: string): Promise<any> {
+        // TODO: Implement
+    }
+
+    public async subscribe(): Promise<any> {
+        // TODO: Implement
+    }
+
+    public async unsubscribe(): Promise<any> {
         // TODO: Implement
     }
 

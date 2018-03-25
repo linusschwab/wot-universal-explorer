@@ -1,7 +1,8 @@
 import * as getSlug from "speakingurl";
 import {Thing} from "./Thing";
 import {InteractionPattern} from "../interactions";
-import {ThingError} from "../../tools/errors/ThingError";
+import {ThingError, TimeoutError} from "../../tools/errors";
+import {type} from "os";
 
 
 export class ThingsManager {
@@ -10,6 +11,8 @@ export class ThingsManager {
 
     constructor() {
         this.things = [];
+
+        setInterval(this.pollData.bind(this), 2000);
     }
 
     public addThing(thing: Thing): boolean {
@@ -70,5 +73,30 @@ export class ThingsManager {
         }
 
         return true;
+    }
+
+    private pollData() {
+        for (let thing of this.things) {
+            for (let event of thing.events) {
+                try {
+                    event.update();
+                } catch (e) {
+                    this.handlePollError(e);
+                }
+            }
+            for (let property of thing.properties) {
+                try {
+                    property.update();
+                } catch (e) {
+                    this.handlePollError(e);
+                }
+            }
+        }
+    }
+
+    private handlePollError(e: Error) {
+        if (e !instanceof TimeoutError) {
+            throw e;
+        }
     }
 }

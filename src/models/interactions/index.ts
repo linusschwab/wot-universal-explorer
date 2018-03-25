@@ -1,3 +1,4 @@
+export {InteractionData} from './InteractionData';
 export {InteractionPattern} from './InteractionPattern';
 export {Action} from './Action';
 export {Event} from './Event';

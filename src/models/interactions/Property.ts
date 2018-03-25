@@ -2,6 +2,7 @@ import {InteractionPattern} from "./InteractionPattern";
 import {DataSchema} from "../schema";
 import {Operation} from "../links/Operation";
 import {InteractionError} from "../../tools/errors";
+import {InteractionData} from "./InteractionData";
 
 
 export class Property extends InteractionPattern {
@@ -28,6 +29,13 @@ export class Property extends InteractionPattern {
             return this.links[0].execute(data);
         }
         throw new InteractionError('Property is not writable');
+    }
+
+    public async update() {
+        if (this.observable) {
+            const data = new InteractionData(await this.read());
+            this.notifySubscribers(data);
+        }
     }
 
     public toString() {
