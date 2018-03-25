@@ -1,7 +1,7 @@
 import {InteractionPattern} from "./InteractionPattern";
 import {DataSchema} from "../schema";
 import {Operation} from "../links/Operation";
-import {InteractionError} from "../../tools/errors";
+import {InteractionError, TimeoutError} from "../../tools/errors";
 import {InteractionData} from "./InteractionData";
 
 
@@ -33,8 +33,14 @@ export class Property extends InteractionPattern {
 
     public async update() {
         if (this.observable) {
-            const data = new InteractionData(await this.read());
-            this.notifySubscribers(data);
+            try {
+                const data = new InteractionData(await this.read());
+                this.notifySubscribers(data);
+            } catch (e) {
+                if (e !instanceof TimeoutError) {
+                    throw e;
+                }
+            }
         }
     }
 

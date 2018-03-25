@@ -26,7 +26,7 @@
         ]
       },
       "writable": false,
-      "observable": true,
+      "observable": false,
       "form": [
         {
            "href": "report",
@@ -77,6 +77,33 @@
         {
            "href":"toggle",
            "mediaType":"application/json"
+        }
+      ]
+    },
+    {
+      "@type": ["Event"],
+      "name": "change",
+      "schema": {
+        "type" : "object",
+        "field": [
+            {
+                "name": "power",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            {
+                "name": "relay",
+                "schema": {
+                    "type": "boolean"
+                }
+            }
+        ]
+      },
+      "form": [
+        {
+           "href": "report",
+           "mediaType": "application/json"
         }
       ]
     }

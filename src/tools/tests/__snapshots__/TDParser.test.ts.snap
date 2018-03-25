@@ -20,10 +20,12 @@ Array [
       "type": "number",
       "writable": false,
     },
+    "subscribers": Array [],
     "thing": Thing {
       "base": "coap:///www.example.com:5683/temp/",
       "interactions": [Circular],
       "name": "myTempSensor",
+      "subscribers": Array [],
       "type": "Sensor",
     },
     "writable": false,
@@ -46,16 +48,19 @@ Array [
       "type": "number",
       "writable": true,
     },
+    "subscribers": Array [],
     "thing": Thing {
       "base": "coap:///www.example.com:5683/temp/",
       "interactions": [Circular],
       "name": "myTempSensor",
+      "subscribers": Array [],
       "type": "Sensor",
     },
     "writable": true,
   },
   Event {
     "base": "coap:///www.example.com:5683/temp/",
+    "data": Array [],
     "links": Array [
       HTTPLink {
         "host": "coap:///www.example.com:5683/temp/",
@@ -71,15 +76,18 @@ Array [
       "type": "number",
       "writable": false,
     },
+    "subscribers": Array [],
     "thing": Thing {
       "base": "coap:///www.example.com:5683/temp/",
       "interactions": [Circular],
       "name": "myTempSensor",
+      "subscribers": Array [],
       "type": "Sensor",
     },
   },
   Event {
     "base": "coap:///www.example.com:5683/temp/",
+    "data": Array [],
     "links": Array [
       HTTPLink {
         "host": "coap:///www.example.com:5683/temp/",
@@ -95,10 +103,12 @@ Array [
       "type": "number",
       "writable": false,
     },
+    "subscribers": Array [],
     "thing": Thing {
       "base": "coap:///www.example.com:5683/temp/",
       "interactions": [Circular],
       "name": "myTempSensor",
+      "subscribers": Array [],
       "type": "Sensor",
     },
   },

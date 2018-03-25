@@ -21,7 +21,7 @@ export class ThingsController extends BaseController {
         router.get('/:name/properties/:property', this.getProperty.bind(this));
         router.put('/:name/properties/:property', this.putProperty.bind(this));
         router.post('/:name/actions/:action', this.postAction.bind(this));
-        router.post('/:name/events/:event', this.postEvent.bind(this));
+        router.get('/:name/events/:event', this.getEvent.bind(this));
 
         return router;
     }
@@ -72,13 +72,18 @@ export class ThingsController extends BaseController {
         }
     }
 
-    public async postEvent(ctx: Context) {
+    public async getEvent(ctx: Context) {
         let event = ctx.params['event'];
+        let timestamp = ctx.query['timestamp'] ? ctx.query['timestamp'] : 0;
 
-        // TODO: Implement
+        let thing = await this.getThing(ctx);
 
-        ctx.body = 'Not implemented yet';
-        ctx.status = 200;
+        try {
+            ctx.body = await thing.getEventData(event, timestamp * 1000);
+            ctx.status = 200;
+        } catch (e) {
+            await this.handleError(ctx, e);
+        }
     }
 
     private async handleError(ctx: Context, e: Error) {

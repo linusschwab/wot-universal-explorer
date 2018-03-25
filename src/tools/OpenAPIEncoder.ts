@@ -1,4 +1,4 @@
-import {Thing, ThingsManager} from "../models/thing";
+import {ThingsManager} from "../models/thing";
 import {Operation} from "../models/links";
 import {DataSchema, InputSchema} from "../models/schema";
 import {Action, InteractionPattern, Property, Event} from "../models/interactions";
@@ -40,7 +40,7 @@ export class OpenAPIEncoder {
     private static servers() {
         return [
             {
-                "url": App.url + "/things",
+                "url": "http://localhost:5000/things", // TODO: App.url does not work...
                 "description": "Development server"
             }
         ]
@@ -94,6 +94,20 @@ export class OpenAPIEncoder {
                 'application/json',
                 requestSchema
             );
+        }
+
+        // Request parameters
+        if (o.interaction instanceof Event) {
+            operation['parameters'] = [
+                {
+                    name: "timestamp",
+                    in: "query",
+                    description: "Only return events newer than timestamp",
+                    schema: {
+                        type: "integer"
+                    }
+                }
+            ]
         }
 
         // Response

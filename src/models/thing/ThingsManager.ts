@@ -78,25 +78,11 @@ export class ThingsManager {
     private pollData() {
         for (let thing of this.things) {
             for (let event of thing.events) {
-                try {
-                    event.update();
-                } catch (e) {
-                    this.handlePollError(e);
-                }
+                event.update();
             }
             for (let property of thing.properties) {
-                try {
-                    property.update();
-                } catch (e) {
-                    this.handlePollError(e);
-                }
+                property.update();
             }
-        }
-    }
-
-    private handlePollError(e: Error) {
-        if (e !instanceof TimeoutError) {
-            throw e;
         }
     }
 }

@@ -2,15 +2,18 @@ import {InteractionPattern} from "./InteractionPattern";
 import {DataSchema} from "../schema";
 import {Operation} from "../links";
 import {InteractionData} from "./InteractionData";
+import {TimeoutError} from "../../tools/errors";
 
 
 export class Event extends InteractionPattern {
 
     public schema: DataSchema;
+    public data: InteractionData[];
 
     constructor(name: string, schema: DataSchema) {
         super(name);
         this.schema = schema;
+        this.data = [];
     }
 
     public async update() {
@@ -19,10 +22,30 @@ export class Event extends InteractionPattern {
             return;
         }
 
-        // TODO: Choose correct link
-        const data = new InteractionData(await this.links[0].execute());
-        this.data.push(data);
-        this.notifySubscribers(data);
+        try {
+            // TODO: Choose correct link
+            const data = new InteractionData(await this.links[0].execute());
+            this.data.push(data);
+            this.notifySubscribers(data);
+        } catch (e) {
+            if (e !instanceof TimeoutError) {
+                throw e;
+            }
+        }
+    }
+
+    public getData(newerThan: number = 0) {
+        if (!newerThan) {
+            return this.data;
+        }
+
+        let newData = [];
+        for (let data of this.data) {
+            if (data.timestamp > newerThan) {
+                newData.push(data);
+            }
+        }
+        return newData;
     }
 
     public toString() {
@@ -34,6 +57,6 @@ export class Event extends InteractionPattern {
     }
 
     public get operations(): Operation[] {
-        return [new Operation('post', 'Subscribe to ' + this.toString(), this)];
+        return [new Operation('get', 'List of ' + this.name + ' Event data', this)];
     }
 }

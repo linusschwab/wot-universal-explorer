@@ -16,15 +16,12 @@ export class InteractionPattern {
     public links: Link[];
     public url: string;
     public operations: Operation[];
-
     public subscribers: any; // TODO
-    public data: InteractionData[]; // TODO: Only for events get resource
 
     constructor(name: string) {
         this.name = name;
         this.links = [];
         this.subscribers = [];
-        this.data = [];
     }
 
     public registerLink(link: Link) {
@@ -41,8 +38,8 @@ export class InteractionPattern {
     }
 
     public async notifySubscribers(data: InteractionData) {
-        // TODO: Implement
-        console.log(data.toString());
+        // TODO: Implement (abstract definition, move to subclasses?)
+        //console.log(data.toString());
     }
 
     public toString() {

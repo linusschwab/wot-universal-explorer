@@ -10,7 +10,7 @@ exports[`thing with base, 1 writable property and 1 action 1`] = `
         \\"Thing\\"
     ],
     \\"name\\": \\"Testthing\\",
-    \\"base\\": \\"http://localhost:5000/things\\",
+    \\"base\\": \\"undefined/things\\",
     \\"interaction\\": [
         {
             \\"@type\\": [
@@ -58,7 +58,7 @@ exports[`thing without base, 1 property with multiple links 1`] = `
         \\"Thing\\"
     ],
     \\"name\\": \\"Testthing\\",
-    \\"base\\": \\"http://localhost:5000/things\\",
+    \\"base\\": \\"undefined/things\\",
     \\"interaction\\": [
         {
             \\"@type\\": [

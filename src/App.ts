@@ -15,9 +15,9 @@ export class App {
     public server: Server;
     public things: ThingsManager;
 
-    static instance: App;
-    static port: number;
-    static url: string;
+    public static instance: App;
+    public static port: number;
+    public static url: string;
 
     public static run() {
         this.instance = new App();

@@ -14,7 +14,8 @@ const mockResponse = 10;
     return {
         readProperty: () => {return mockResponse},
         writeProperty: () => {return mockResponse},
-        invokeAction: () => {return mockResponse}
+        invokeAction: () => {return mockResponse},
+        getEventData: () => {return mockResponse}
     };
 });
 
@@ -54,6 +55,15 @@ test('put property returns thing response', async () => {
 test('post action returns thing response', async () => {
     const response = await request(app.koa.callback())
         .post('/things/testthing/actions/testaction');
+
+    expect(response.status).toBe(200);
+    expect(response.type).toBe('application/json');
+    expect(response.body).toBe(mockResponse);
+});
+
+test('get event returns thing response', async () => {
+    const response = await request(app.koa.callback())
+        .get('/things/testthing/events/testevent');
 
     expect(response.status).toBe(200);
     expect(response.type).toBe('application/json');

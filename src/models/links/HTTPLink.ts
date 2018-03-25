@@ -1,5 +1,5 @@
 import {Link} from "./Link";
-import {Action, Property} from "../interactions";
+import {Action, Event, Property} from "../interactions";
 import {RequestError, TimeoutError} from "../../tools/errors";
 import axios, {AxiosInstance} from 'axios';
 
@@ -34,8 +34,11 @@ export class HTTPLink extends Link {
         if (this.interaction instanceof Property) {
             return this.executeProperty(data);
         }
-        if (this.interaction instanceof Action) {
+        else if (this.interaction instanceof Action) {
             return this.executeAction(data);
+        }
+        else if (this.interaction instanceof Event) {
+            return this.executeEvent();
         }
     }
 
@@ -79,6 +82,17 @@ export class HTTPLink extends Link {
             } else {
                 this.handleError(e);
             }
+        }
+        return response.data;
+    }
+
+    protected async executeEvent(): Promise<any> {
+        let response;
+        try {
+            // Poll data
+            response = await this.http.get(this.toString());
+        } catch (e) {
+            this.handleError(e);
         }
         return response.data;
     }

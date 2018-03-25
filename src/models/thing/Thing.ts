@@ -52,6 +52,16 @@ export class Thing {
         }
     }
 
+    public async getEventData(name: string, newerThan: number = 0): Promise<any> {
+        let interaction = this.getInteraction(name);
+
+        if (interaction instanceof Event) {
+            return interaction.getData(newerThan);
+        } else {
+            throw new InteractionError('No event with name ' + name);
+        }
+    }
+
     public async subcribeTo(name: string): Promise<any> {
         // TODO: Implement
     }
