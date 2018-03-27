@@ -12,7 +12,7 @@ export class ThingsManager {
     constructor() {
         this.things = [];
 
-        setInterval(this.pollData.bind(this), 2000);
+        setInterval(this.pollData.bind(this), 1000);
     }
 
     public addThing(thing: Thing): boolean {

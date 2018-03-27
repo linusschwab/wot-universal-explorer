@@ -25,13 +25,26 @@ export class Event extends InteractionPattern {
         try {
             // TODO: Choose correct link
             const data = new InteractionData(await this.links[0].execute());
-            this.data.push(data);
-            this.notifySubscribers(data);
+
+            // Check if data changed
+            if (this.data.length == 0 || !data.equals(this.data[this.data.length-1])) {
+                this.storeData(data);
+                this.notifySubscribers(data);
+            }
         } catch (e) {
             if (e !instanceof TimeoutError) {
                 throw e;
             }
         }
+    }
+
+    private async storeData(data: InteractionData) {
+        // Delete old items if too many
+        if (this.data.length > 1000) {
+            this.data.splice(0, 1);
+        }
+
+        this.data.push(data);
     }
 
     public getData(newerThan: number = 0) {

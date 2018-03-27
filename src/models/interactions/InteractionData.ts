@@ -15,6 +15,10 @@ export class InteractionData {
         }
     }
 
+    public equals(data: InteractionData) {
+        return JSON.stringify(this.data) === JSON.stringify(data.data);
+    }
+
     get time() {
         return new Date(this.timestamp).toLocaleTimeString('de-CH');
     }
