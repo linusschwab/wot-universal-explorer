@@ -52,11 +52,11 @@ export class Thing {
         }
     }
 
-    public async getEventData(name: string, newerThan: number = 0): Promise<any> {
+    public async getEventData(name: string, newerThan: number = 0, limit: number = 0): Promise<any> {
         let interaction = this.getInteraction(name);
 
         if (interaction instanceof Event) {
-            return interaction.getData(newerThan);
+            return interaction.getData(newerThan, limit);
         } else {
             throw new InteractionError('No event with name ' + name);
         }

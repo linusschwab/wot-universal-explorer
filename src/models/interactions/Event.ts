@@ -47,18 +47,18 @@ export class Event extends InteractionPattern {
         this.data.push(data);
     }
 
-    public getData(newerThan: number = 0) {
-        if (!newerThan) {
-            return this.data;
-        }
-
-        let newData = [];
-        for (let data of this.data) {
-            if (data.timestamp > newerThan) {
-                newData.push(data);
+    public getData(newerThan: number = 0, limit: number = 0) {
+        let newData: InteractionData[] = [];
+        if (newerThan > 0) {
+            for (let data of this.data) {
+                if (data.timestamp > newerThan) {
+                    newData.push(data);
+                }
             }
+        } else {
+            newData = this.data;
         }
-        return newData;
+        return newData.slice(-limit);
     }
 
     public toString() {

@@ -98,16 +98,7 @@ export class OpenAPIEncoder {
 
         // Request parameters
         if (o.interaction instanceof Event) {
-            operation['parameters'] = [
-                {
-                    name: "timestamp",
-                    in: "query",
-                    description: "Only return events newer than timestamp",
-                    schema: {
-                        type: "integer"
-                    }
-                }
-            ]
+            operation['parameters'] = this.eventsRequestParameters();
         }
 
         // Response
@@ -217,5 +208,26 @@ export class OpenAPIEncoder {
                 }
             }
         }
+    }
+
+    private static eventsRequestParameters() {
+        return [
+            {
+                "name": "timestamp",
+                "in": "query",
+                "description": "Only return events newer than timestamp",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            {
+                "name": "limit",
+                "in": "query",
+                "description": "Max number of events to return (default: 10)",
+                "schema": {
+                    "type": "integer"
+                }
+            }
+        ]
     }
 }

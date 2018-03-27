@@ -75,11 +75,13 @@ export class ThingsController extends BaseController {
     public async getEvent(ctx: Context) {
         let event = ctx.params['event'];
         let timestamp = ctx.query['timestamp'] ? ctx.query['timestamp'] : 0;
+        let limit = ctx.query['limit'] ? ctx.query['limit'] : 10; // Default limit
 
         let thing = await this.getThing(ctx);
 
         try {
-            ctx.body = await thing.getEventData(event, timestamp * 1000);
+            // TODO: return data with date instead of (javascript) timestamp
+            ctx.body = await thing.getEventData(event, timestamp * 1000, limit);
             ctx.status = 200;
         } catch (e) {
             await this.handleError(ctx, e);
