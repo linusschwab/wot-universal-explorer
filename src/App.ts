@@ -17,6 +17,11 @@ export class App {
     public wss: WebSocket.Server;
     public things: ThingsManager;
 
+    // TODO: Introduce controller manager?
+    private tdController: TDController;
+    private indexController: IndexController;
+    private thingsController: ThingsController;
+
     public static instance: App;
     public static port: number;
     public static url: string;
@@ -27,7 +32,6 @@ export class App {
         this.url = 'http://localhost:' + this.port;
 
         this.instance.server = this.instance.koa.listen(this.port);
-        this.instance.wss = new WebSocket.Server({ port: 8080 });
         this.instance.setupWebsocket();
         this.instance.importTD();
 
@@ -39,6 +43,7 @@ export class App {
         this.things = new ThingsManager();
 
         this.setupMiddleware();
+        this.setupControllers();
         this.setupRoutes();
     }
 
@@ -64,28 +69,23 @@ export class App {
         });
     }
 
+    private setupControllers() {
+        this.tdController = new TDController(this.things);
+        this.thingsController = new ThingsController(this.things);
+        this.indexController = new IndexController();
+    }
+
     private setupRoutes() {
-        // Create routes
-        const td = new TDController(this.things);
-        this.koa.use(td.router.routes());
-
-        const things = new ThingsController(this.things);
-        this.koa.use(things.router.routes());
-
+        this.koa.use(this.tdController.router.routes());
+        this.koa.use(this.thingsController.router.routes());
         // Must be defined last (generic route to serve static files)
-        const index = new IndexController();
-        this.koa.use(index.router.routes());
+        this.koa.use(this.indexController.router.routes());
     }
 
     private setupWebsocket() {
+        this.wss = new WebSocket.Server({ port: 8080 });
         this.wss.on('connection', (ws, req) => {
-
-            ws.on('message', message => {
-                console.log(req.url);
-                console.log('received: %s', message);
-            });
-
-            ws.send('connected');
+            this.thingsController.wsConnection(ws, req);
         });
     }
 

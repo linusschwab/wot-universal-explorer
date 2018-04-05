@@ -71,7 +71,7 @@ export class Thing {
     }
 
     public async subscribe(): Promise<any> {
-        // TODO: Implement
+        // TODO: Implement (subscribe to all?)
     }
 
     public async unsubscribe(): Promise<any> {

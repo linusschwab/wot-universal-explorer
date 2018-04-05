@@ -1,7 +1,10 @@
 import * as Router from "koa-router";
+import * as WebSocket from "ws";
+import * as http from "http";
+
 import {Context} from "koa";
 import {ThingsManager} from "../models/thing";
-import {InteractionError, RequestError, TimeoutError} from "../tools/errors";
+import {InteractionError, RequestError, ThingError, TimeoutError} from "../tools/errors";
 import {BaseController} from "./BaseController";
 
 
@@ -26,8 +29,34 @@ export class ThingsController extends BaseController {
         return router;
     }
 
-    public websocket() {
-        
+    public async wsConnection(ws: WebSocket, req: http.IncomingMessage) {
+        try {
+            const thing = await this.wsGetThing(req);
+
+            ws.on('message', message => this.wsParseMessage(message));
+
+            ws.on('error', () => {
+                // TODO: Remove subscriber
+            });
+            ws.on('close', () => {
+                // TODO: Remove subscriber
+            });
+
+            ws.send('connected to ' + thing.name);
+        } catch (e) {
+            if (e instanceof ThingError) {
+                ws.send(JSON.stringify({
+                    messageType: 'error',
+                    data: {
+                        status: '404',
+                        message: e.message
+                    }
+                }));
+                ws.close();
+            } else {
+                throw e;
+            }
+        }
     }
 
     public async getThings(ctx: Context) {
@@ -108,5 +137,20 @@ export class ThingsController extends BaseController {
         } else {
             throw e;
         }
+    }
+
+    private async wsGetThing(req: http.IncomingMessage) {
+        // Match first part of path
+        let path = req.url.match(/\/(.*?)(?:\/|$)/g);
+
+        if (path && path.length == 1) {
+            let name = path[0];
+            return this.things.getThing(name);
+        }
+        throw new ThingError('Invalid thing name');
+    }
+
+    private async wsParseMessage(message: WebSocket.Data) {
+        console.log(message);
     }
 }
