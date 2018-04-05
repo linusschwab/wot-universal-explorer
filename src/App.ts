@@ -1,6 +1,7 @@
 import * as Koa from "koa";
 import * as bodyParser from "koa-bodyparser";
 import * as cors from "@koa/cors";
+import * as WebSocket from "ws";
 import * as fs from "fs";
 
 import {Server} from "http";
@@ -13,6 +14,7 @@ export class App {
 
     public koa: Koa;
     public server: Server;
+    public wss: WebSocket.Server;
     public things: ThingsManager;
 
     public static instance: App;
@@ -25,6 +27,8 @@ export class App {
         this.url = 'http://localhost:' + this.port;
 
         this.instance.server = this.instance.koa.listen(this.port);
+        this.instance.wss = new WebSocket.Server({ port: 8080 });
+        this.instance.setupWebsocket();
         this.instance.importTD();
 
         console.log('Server listening on port ' + this.port);
@@ -71,6 +75,18 @@ export class App {
         // Must be defined last (generic route to serve static files)
         const index = new IndexController();
         this.koa.use(index.router.routes());
+    }
+
+    private setupWebsocket() {
+        this.wss.on('connection', (ws, req) => {
+
+            ws.on('message', message => {
+                console.log(req.url);
+                console.log('received: %s', message);
+            });
+
+            ws.send('connected');
+        });
     }
 
     private importTD() {

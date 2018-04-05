@@ -26,6 +26,10 @@ export class ThingsController extends BaseController {
         return router;
     }
 
+    public websocket() {
+        
+    }
+
     public async getThings(ctx: Context) {
         // TODO: Return more than names? Available interactions?
         ctx.body = this.things.getThingsNames();
@@ -58,6 +62,10 @@ export class ThingsController extends BaseController {
         }
     }
 
+    public async wsSubscribeProperty() {
+
+    }
+
     public async postAction(ctx: Context) {
         let action = ctx.params['action'];
         let data = ctx.request.body;
@@ -86,6 +94,10 @@ export class ThingsController extends BaseController {
         } catch (e) {
             await this.handleError(ctx, e);
         }
+    }
+
+    public async wsSubscribeEvent() {
+
     }
 
     private async handleError(ctx: Context, e: Error) {

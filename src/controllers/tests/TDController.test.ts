@@ -145,7 +145,7 @@ describe('get td', () => {
         const response = await request(app.koa.callback())
             .get('/td/counter');
 
-        expect(response.status).toBe(400);
+        expect(response.status).toBe(404);
         expect(response.type).toBe('text/plain');
     });
 });
@@ -155,7 +155,7 @@ describe('get mozilla td', () => {
         const response = await request(app.koa.callback())
             .get('/td/moz/counter');
 
-        expect(response.status).toBe(400);
+        expect(response.status).toBe(404);
         expect(response.type).toBe('text/plain');
     });
 });
