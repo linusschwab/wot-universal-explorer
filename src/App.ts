@@ -8,6 +8,7 @@ import {Server} from "http";
 import {IndexController, TDController, ThingsController} from "./controllers";
 import {ThingsManager} from "./models/thing";
 import {MozillaTDParser, OpenAPIEncoder, TDParser} from "./tools";
+import {ControllerManager} from "./controllers/ControllerManager";
 
 
 export class App {
@@ -15,12 +16,9 @@ export class App {
     public koa: Koa;
     public server: Server;
     public wss: WebSocket.Server;
-    public things: ThingsManager;
 
-    // TODO: Introduce controller manager?
-    private tdController: TDController;
-    private indexController: IndexController;
-    private thingsController: ThingsController;
+    public things: ThingsManager;
+    public controllers: ControllerManager;
 
     public static instance: App;
     public static port: number;
@@ -41,9 +39,9 @@ export class App {
     constructor() {
         this.koa = new Koa();
         this.things = new ThingsManager();
+        this.controllers = new ControllerManager(this.things);
 
         this.setupMiddleware();
-        this.setupControllers();
         this.setupRoutes();
     }
 
@@ -69,17 +67,11 @@ export class App {
         });
     }
 
-    private setupControllers() {
-        this.tdController = new TDController(this.things);
-        this.thingsController = new ThingsController(this.things);
-        this.indexController = new IndexController();
-    }
-
     private setupRoutes() {
-        this.koa.use(this.tdController.router.routes());
-        this.koa.use(this.thingsController.router.routes());
+        this.koa.use(this.controllers.td.router.routes());
+        this.koa.use(this.controllers.things.router.routes());
         // Must be defined last (generic route to serve static files)
-        this.koa.use(this.indexController.router.routes());
+        this.koa.use(this.controllers.index.router.routes());
     }
 
     private setupWebsocket() {
