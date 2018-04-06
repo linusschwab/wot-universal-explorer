@@ -5,10 +5,9 @@ import * as WebSocket from "ws";
 import * as fs from "fs";
 
 import {Server} from "http";
-import {IndexController, TDController, ThingsController} from "./controllers";
 import {ThingsManager} from "./models/thing";
 import {MozillaTDParser, OpenAPIEncoder, TDParser} from "./tools";
-import {ControllerManager} from "./controllers/ControllerManager";
+import {ControllerManager} from "./controllers";
 
 
 export class App {
@@ -30,7 +29,7 @@ export class App {
         this.url = 'http://localhost:' + this.port;
 
         this.instance.server = this.instance.koa.listen(this.port);
-        this.instance.setupWebsocket();
+        this.instance.setupWebSocket();
         this.instance.importTD();
 
         console.log('Server listening on port ' + this.port);
@@ -74,11 +73,9 @@ export class App {
         this.koa.use(this.controllers.index.router.routes());
     }
 
-    private setupWebsocket() {
+    private setupWebSocket() {
         this.wss = new WebSocket.Server({ port: 8080 });
-        this.wss.on('connection', (ws, req) => {
-            this.thingsController.wsConnection(ws, req);
-        });
+        this.wss.on('connection', (ws, req) => this.controllers.things.wsConnection(ws, req));
     }
 
     private importTD() {
