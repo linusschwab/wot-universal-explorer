@@ -1,0 +1,16 @@
+coverage:
+  precision: 2
+  round: down
+  range: 50...100
+
+  status:
+    project:
+      enabled: yes
+      target: 70%
+      threshold: 5%
+    patch: true
+    changes: false
+
+comment:
+  layout: "header, diff"
+  behavior: default  # update if exists else create new
