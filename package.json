@@ -45,7 +45,10 @@
       "json",
       "node"
     ],
-    "coverageDirectory": "./coverage/",
-    "collectCoverage": true
+    "collectCoverage": true,
+    "coverageDirectory": "./coverage",
+    "coverageReporters": [
+      "text-summary", "json", "lcov"
+    ]
   }
 }
