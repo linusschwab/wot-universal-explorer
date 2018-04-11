@@ -1,7 +1,13 @@
 {
   "name": "wot-universal-explorer",
-  "version": "0.0.1",
+  "description": "Universal Explorer for the Web of Things",
+  "version": "0.5",
   "author": "Linus Schwab",
+  "license": "MIT",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/linusschwab/wot-universal-explorer.git"
+  },
   "main": "run.js",
   "scripts": {
     "test": "jest"
