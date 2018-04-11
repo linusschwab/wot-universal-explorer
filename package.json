@@ -44,9 +44,7 @@
       "json",
       "node"
     ],
-    "collectCoverage": true,
-    "coverageReporters": [
-      "text-summary"
-    ]
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
   }
 }
