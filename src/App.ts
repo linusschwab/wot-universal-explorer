@@ -19,20 +19,18 @@ export class App {
     public things: ThingsManager;
     public controllers: ControllerManager;
 
+    public static port = Number(process.env.PORT) || 5000;
+    public static url = 'http://localhost:' + App.port;
     public static instance: App;
-    public static port: number;
-    public static url: string;
 
     public static run() {
-        this.instance = new App();
-        this.port = Number(process.env.PORT) || 5000;
-        this.url = 'http://localhost:' + this.port;
+        App.instance = new App();
 
-        this.instance.server = this.instance.koa.listen(this.port);
-        this.instance.setupWebSocket();
-        this.instance.importTD();
+        App.instance.server = App.instance.koa.listen(App.port);
+        App.instance.setupWebSocket();
+        App.instance.importTD();
 
-        console.log('Server listening on port ' + this.port);
+        console.log('Server listening on port ' + App.port);
     }
 
     constructor() {

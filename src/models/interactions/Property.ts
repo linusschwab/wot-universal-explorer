@@ -20,13 +20,13 @@ export class Property extends InteractionPattern {
 
     public async read() {
         // TODO: Choose correct link
-        return this.links[0].execute();
+        return await this.links[0].execute();
     }
 
     public async write(data: any) {
         if (this.writable) {
             // TODO: Choose correct link
-            return this.links[0].execute(data);
+            return await this.links[0].execute(data);
         }
         throw new InteractionError('Property is not writable');
     }

@@ -8,11 +8,11 @@ Object {
   "name": "Virtual On/Off Color Light",
   "properties": Object {
     "color": Object {
-      "href": "undefined/things/virtual-on-off-color-light/properties/color",
+      "href": "http://localhost:5000/things/virtual-on-off-color-light/properties/color",
       "type": "string",
     },
     "on": Object {
-      "href": "undefined/things/virtual-on-off-color-light/properties/on",
+      "href": "http://localhost:5000/things/virtual-on-off-color-light/properties/on",
       "type": "boolean",
     },
   },
@@ -29,7 +29,7 @@ Object {
   "@type": Array [
     "Lamp",
   ],
-  "base": "undefined/things",
+  "base": "http://localhost:5000/things",
   "interaction": Array [
     Object {
       "@type": Array [

@@ -13,16 +13,16 @@ export class OpenAPIEncoder {
             if (value instanceof ThingsManager) {
                 return {
                     "openapi": "3.0.0",
-                    "info": this.info(),
-                    "servers": this.servers(),
-                    "paths": this.paths(value),
+                    "info": OpenAPIEncoder.info(),
+                    "servers": OpenAPIEncoder.servers(),
+                    "paths": OpenAPIEncoder.paths(value),
                 }
             }
             if (value instanceof InteractionPattern) {
-                return this.operations(value);
+                return OpenAPIEncoder.operations(value);
             }
             if (value instanceof Operation) {
-                return this.operation(value);
+                return OpenAPIEncoder.operation(value);
             }
 
             return value;
@@ -40,7 +40,7 @@ export class OpenAPIEncoder {
     private static servers() {
         return [
             {
-                "url": "http://localhost:5000/things", // TODO: App.url does not work...
+                "url": App.url + "/things",
                 "description": "Development server"
             }
         ]
@@ -87,9 +87,9 @@ export class OpenAPIEncoder {
         };
 
         // Request body
-        let requestSchema: DataSchema = this.requestSchema(o);
+        let requestSchema: DataSchema = OpenAPIEncoder.requestSchema(o);
         if (requestSchema) {
-            operation['requestBody'] = this.requestBody(
+            operation['requestBody'] = OpenAPIEncoder.requestBody(
                 o.interaction.toString(),
                 'application/json',
                 requestSchema
@@ -98,15 +98,15 @@ export class OpenAPIEncoder {
 
         // Request parameters
         if (o.interaction instanceof Event) {
-            operation['parameters'] = this.eventsRequestParameters();
+            operation['parameters'] = OpenAPIEncoder.eventsRequestParameters();
         }
 
         // Response
-        let responseSchema: DataSchema = this.responseSchema(o);
+        let responseSchema: DataSchema = OpenAPIEncoder.responseSchema(o);
         if (responseSchema) {
             operation['responses']['200']['content'] = {
                 ['application/json']: {
-                    "schema": this.schema(responseSchema)
+                    "schema": OpenAPIEncoder.schema(responseSchema)
                 }
             };
         }
@@ -155,9 +155,9 @@ export class OpenAPIEncoder {
 
     private static schema(data: DataSchema | DataSchema[]) {
         if (!isArray(data) && data.isSimpleType()) {
-            return this.schemaSimpleData(data);
+            return OpenAPIEncoder.schemaSimpleData(data);
         } else {
-            return this.schemaStructuredData(data);
+            return OpenAPIEncoder.schemaStructuredData(data);
         }
     }
 
@@ -204,7 +204,7 @@ export class OpenAPIEncoder {
             "required": "true",
             "content": {
                 [mediaType]: {
-                    "schema": this.schema(data)
+                    "schema": OpenAPIEncoder.schema(data)
                 }
             }
         }

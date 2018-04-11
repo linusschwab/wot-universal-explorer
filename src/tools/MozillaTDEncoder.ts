@@ -8,7 +8,7 @@ export class MozillaTDEncoder {
     public static encode(thing: Thing) {
         return JSON.stringify(thing, (key: string, value: Object) => {
             if (value instanceof Thing) {
-                return this.thing(value);
+                return MozillaTDEncoder.thing(value);
             }
 
             return value;
@@ -21,9 +21,9 @@ export class MozillaTDEncoder {
             "name": thing.name,
             "type": thing.type,
             "href": "",
-            "properties": this.properties(thing.properties),
-            "actions": this.actions(thing.actions),
-            "events": this.events(thing.events)
+            "properties": MozillaTDEncoder.properties(thing.properties),
+            "actions": MozillaTDEncoder.actions(thing.actions),
+            "events": MozillaTDEncoder.events(thing.events)
         };
     }
 

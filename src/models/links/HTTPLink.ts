@@ -32,13 +32,13 @@ export class HTTPLink extends Link {
 
     public async execute(data: any = null): Promise<any> {
         if (this.interaction instanceof Property) {
-            return this.executeProperty(data);
+            return await this.executeProperty(data);
         }
         else if (this.interaction instanceof Action) {
-            return this.executeAction(data);
+            return await this.executeAction(data);
         }
         else if (this.interaction instanceof Event) {
-            return this.executeEvent();
+            return await this.executeEvent();
         }
     }
 
