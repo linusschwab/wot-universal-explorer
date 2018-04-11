@@ -1,6 +1,6 @@
 import {InteractionPattern} from "./InteractionPattern";
 import {DataSchema} from "../schema";
-import {Operation} from "../links/Operation";
+import {Operation} from "../links";
 import {InteractionError, TimeoutError} from "../../tools/errors";
 import {InteractionData} from "./InteractionData";
 

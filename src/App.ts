@@ -1,20 +1,19 @@
 import * as Koa from "koa";
 import * as bodyParser from "koa-bodyparser";
 import * as cors from "@koa/cors";
-import * as WebSocket from "ws";
 import * as fs from "fs";
 
 import {Server} from "http";
 import {ThingsManager} from "./models/thing";
 import {MozillaTDParser, OpenAPIEncoder, TDParser} from "./tools";
-import {ControllerManager} from "./controllers";
+import {ControllerManager, WebSocketManager} from "./controllers";
 
 
 export class App {
 
     public koa: Koa;
     public server: Server;
-    public wss: WebSocket.Server;
+    public ws: WebSocketManager;
 
     public things: ThingsManager;
     public controllers: ControllerManager;
@@ -27,7 +26,7 @@ export class App {
         App.instance = new App();
 
         App.instance.server = App.instance.koa.listen(App.port);
-        App.instance.setupWebSocket();
+        App.instance.ws = new WebSocketManager(App.instance.controllers, App.instance.things);
         App.instance.importTD();
 
         console.log('Server listening on port ' + App.port);
@@ -69,11 +68,6 @@ export class App {
         this.koa.use(this.controllers.things.router.routes());
         // Must be defined last (generic route to serve static files)
         this.koa.use(this.controllers.index.router.routes());
-    }
-
-    private setupWebSocket() {
-        this.wss = new WebSocket.Server({ port: 8080 });
-        this.wss.on('connection', (ws, req) => this.controllers.things.wsConnection(ws, req));
     }
 
     private importTD() {
