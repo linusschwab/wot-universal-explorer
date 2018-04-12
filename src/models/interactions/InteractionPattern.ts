@@ -16,7 +16,7 @@ export class InteractionPattern {
     public links: Link[];
     public url: string;
     public operations: Operation[];
-    public subscribers: any; // TODO
+    public subscribers: WebSocket[];
 
     constructor(name: string) {
         this.name = name;
@@ -29,11 +29,11 @@ export class InteractionPattern {
         link.interaction = this;
     }
 
-    public async subscribe() {
+    public async subscribe(ws: WebSocket) {
         // TODO: Implement
     }
 
-    public async unsubscribe() {
+    public async unsubscribe(ws: WebSocket) {
         // TODO: Implement
     }
 

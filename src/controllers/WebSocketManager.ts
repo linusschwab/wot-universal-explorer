@@ -25,7 +25,7 @@ export class WebSocketManager {
         try {
             const thing = this.getThing(req);
 
-            ws.on('message', async (data) => this.handleMessage(ws, data, thing));
+            ws.on('message', async (data) => this.handleMessage(thing, ws, data));
 
             ws.on('error', () => {
                 // TODO: Remove subscriber
@@ -34,16 +34,16 @@ export class WebSocketManager {
                 // TODO: Remove subscriber
             });
 
-            ws.send('connected to ' + thing.name);
+            ws.send('Connected to ' + thing.name);
         } catch (e) {
             this.handleError(ws, e);
         }
     }
 
-    private handleMessage(ws: WebSocket, data: WebSocket.Data, thing: Thing) {
+    private handleMessage(thing: Thing, ws: WebSocket, data: WebSocket.Data) {
         try {
             const message = this.parseMessage(data);
-            this.controllers.things.wsRoutes(ws, message, thing);
+            this.controllers.things.wsRoutes(thing, ws, message);
         } catch (e) {
             this.handleError(ws, e);
         }

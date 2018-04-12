@@ -11,8 +11,8 @@ export class Thing {
 
     public base: string;
     public interactions: InteractionPattern[];
-    public subscribers: any; // TODO
-    public websocket: any;
+    public subscribers: WebSocket[];
+    public websocket: any; // TODO (Mozilla WebSocket)
 
     constructor(name: string, type: string, base = '') {
         this.name = name;
@@ -23,51 +23,53 @@ export class Thing {
     }
 
     public async readProperty(name: string): Promise<any> {
-        let interaction = this.getInteraction(name);
-
-        if (interaction instanceof Property) {
-            return interaction.read();
-        } else {
-            throw new InteractionError('No property with name ' + name);
-        }
+        const property = this.getProperty(name);
+        return property.read();
     }
 
     public async writeProperty(name: string, data: any): Promise<any> {
-        let interaction = this.getInteraction(name);
+        const property = this.getProperty(name);
+        return property.write(data);
+    }
 
-        if (interaction instanceof Property) {
-            return interaction.write(data);
-        } else {
-            throw new InteractionError('No property with name ' + name);
-        }
+    public async subscribeToProperty(name: string, ws: WebSocket): Promise<any> {
+        const property = this.getProperty(name);
+        property.subscribe(ws);
+    }
+
+    public async unsubscribeFromProperty(name: string, ws: WebSocket): Promise<any> {
+        const property = this.getProperty(name);
+        property.unsubscribe(ws);
     }
 
     public async invokeAction(name: string, data: any = null): Promise<any> {
-        let interaction = this.getInteraction(name);
+        const action = this.getAction(name);
+        return action.invoke(data);
+    }
 
-        if (interaction instanceof Action) {
-            return interaction.invoke(data);
-        } else {
-            throw new InteractionError('No action with name ' + name);
-        }
+    public async subscribeToAction(name: string, ws: WebSocket): Promise<any> {
+        const action = this.getAction(name);
+        action.subscribe(ws);
+    }
+
+    public async unsubscribeFromAction(name: string, ws: WebSocket): Promise<any> {
+        const action = this.getAction(name);
+        action.unsubscribe(ws);
     }
 
     public async getEventData(name: string, newerThan: number = 0, limit: number = 0): Promise<any> {
-        let interaction = this.getInteraction(name);
-
-        if (interaction instanceof Event) {
-            return interaction.getData(newerThan, limit);
-        } else {
-            throw new InteractionError('No event with name ' + name);
-        }
+        const event = this.getEvent(name);
+        return event.getData(newerThan, limit);
     }
 
-    public async subcribeTo(name: string): Promise<any> {
-        // TODO: Implement
+    public async subscribeToEvent(name: string, ws: WebSocket): Promise<any> {
+        const event = this.getEvent(name);
+        event.subscribe(ws);
     }
 
-    public async unsubscribeFrom(name: string): Promise<any> {
-        // TODO: Implement
+    public async unsubscribeFromEvent(name: string, ws: WebSocket): Promise<any> {
+        const event = this.getEvent(name);
+        event.unsubscribe(ws);
     }
 
     public async subscribe(): Promise<any> {
@@ -91,6 +93,33 @@ export class Thing {
             }
         }
         throw new InteractionError('No interaction with name ' + name);
+    }
+
+    public getProperty(name: string): Property {
+        for (let property of this.properties) {
+            if (property.slug == getSlug(name)) {
+                return property;
+            }
+        }
+        throw new InteractionError('No property with name ' + name);
+    }
+
+    public getAction(name: string): Action {
+        for (let action of this.actions) {
+            if (action.slug == getSlug(name)) {
+                return action;
+            }
+        }
+        throw new InteractionError('No action with name ' + name);
+    }
+
+    public getEvent(name: string): Event {
+        for (let event of this.events) {
+            if (event.slug == getSlug(name)) {
+                return event;
+            }
+        }
+        throw new InteractionError('No event with name ' + name);
     }
 
     public toString() {

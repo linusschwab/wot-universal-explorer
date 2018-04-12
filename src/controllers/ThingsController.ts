@@ -28,15 +28,13 @@ export class ThingsController extends BaseController {
         return router;
     }
 
-    public wsRoutes(ws: WebSocket, message: any, thing: Thing) {
+    public wsRoutes(thing: Thing, ws: WebSocket, message: any) {
         switch(message.messageType) {
             case 'addEventSubscription':
-                console.log('addEventSubscription');
-                //this.wsSubscribeEvent(message.data);
+                this.wsSubscribeEvent(thing, message.data);
                 break;
             case 'addPropertySubscription':
-                console.log('addPropertySubscription');
-                //this.wsSubscribeProperty(message.data);
+                this.wsSubscribeProperty(thing, message.data);
                 break;
             default:
                 throw new RequestError('Unknown messageType');
@@ -75,8 +73,11 @@ export class ThingsController extends BaseController {
         }
     }
 
-    public async wsSubscribeProperty() {
-
+    public async wsSubscribeProperty(thing: Thing, data: any) {
+        for (let property in data) {
+            //thing.subcribeTo(property)
+        }
+        // TODO: Return confirmation on success?
     }
 
     public async postAction(ctx: Context) {
@@ -109,8 +110,8 @@ export class ThingsController extends BaseController {
         }
     }
 
-    public async wsSubscribeEvent() {
-
+    public async wsSubscribeEvent(thing: Thing, data: any) {
+        console.log(data);
     }
 
     private handleError(ctx: Context, e: Error) {
