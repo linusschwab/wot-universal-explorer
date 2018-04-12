@@ -1,4 +1,3 @@
-import * as Koa from "koa";
 import * as request from "supertest";
 import {App} from "../../App";
 import {Thing, ThingsManager} from "../../models/thing";

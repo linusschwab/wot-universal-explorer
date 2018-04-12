@@ -1,10 +1,9 @@
 import * as Router from "koa-router";
 import * as WebSocket from "ws";
-import * as http from "http";
 
 import {Context} from "koa";
 import {Thing, ThingsManager} from "../models/thing";
-import {InteractionError, RequestError, ThingError, TimeoutError} from "../tools/errors";
+import {InteractionError, RequestError, TimeoutError} from "../tools/errors";
 import {BaseController} from "./BaseController";
 
 
@@ -58,7 +57,7 @@ export class ThingsController extends BaseController {
             ctx.body = await thing.readProperty(property);
             ctx.status = 200;
         } catch (e) {
-            await this.handleError(ctx, e);
+            this.handleError(ctx, e);
         }
     }
 
@@ -72,7 +71,7 @@ export class ThingsController extends BaseController {
             ctx.body = await thing.writeProperty(property, data);
             ctx.status = 200;
         } catch (e) {
-            await this.handleError(ctx, e);
+            this.handleError(ctx, e);
         }
     }
 
@@ -90,7 +89,7 @@ export class ThingsController extends BaseController {
             ctx.body = await thing.invokeAction(action, data);
             ctx.status = 200;
         } catch (e) {
-            await this.handleError(ctx, e);
+            this.handleError(ctx, e);
         }
     }
 
@@ -106,7 +105,7 @@ export class ThingsController extends BaseController {
             ctx.body = await thing.getEventData(event, timestamp * 1000, limit);
             ctx.status = 200;
         } catch (e) {
-            await this.handleError(ctx, e);
+            this.handleError(ctx, e);
         }
     }
 
@@ -114,7 +113,7 @@ export class ThingsController extends BaseController {
 
     }
 
-    private async handleError(ctx: Context, e: Error) {
+    private handleError(ctx: Context, e: Error) {
         if (e instanceof InteractionError || e instanceof RequestError) {
             ctx.throw(400, e.message);
         } else if (e instanceof TimeoutError) {

@@ -1,6 +1,6 @@
 import * as WebSocket from "ws";
 import * as http from "http";
-import {ThingsManager} from "../models/thing";
+import {Thing, ThingsManager} from "../models/thing";
 import {ControllerManager} from "../controllers";
 import {RequestError, ThingError} from "../tools/errors";
 
@@ -23,16 +23,9 @@ export class WebSocketManager {
 
     public async connection(ws: WebSocket, req: http.IncomingMessage) {
         try {
-            const thing = await this.getThing(req);
+            const thing = this.getThing(req);
 
-            ws.on('message', async (data) => {
-                try {
-                    const message = await this.parseMessage(data);
-                    this.controllers.things.wsRoutes(ws, message, thing);
-                } catch (e) {
-                    this.handleError(ws, e);
-                }
-            });
+            ws.on('message', async (data) => this.handleMessage(ws, data, thing));
 
             ws.on('error', () => {
                 // TODO: Remove subscriber
@@ -47,18 +40,16 @@ export class WebSocketManager {
         }
     }
 
-    public async getThing(req: http.IncomingMessage) {
-        // Match first part of path
-        let path = req.url.match(/\/(.*?)(?:\/|$)/g);
-
-        if (path && path.length == 1) {
-            let name = path[0];
-            return this.things.getThing(name);
+    private handleMessage(ws: WebSocket, data: WebSocket.Data, thing: Thing) {
+        try {
+            const message = this.parseMessage(data);
+            this.controllers.things.wsRoutes(ws, message, thing);
+        } catch (e) {
+            this.handleError(ws, e);
         }
-        throw new ThingError('Invalid thing name');
     }
 
-    public async parseMessage(data: WebSocket.Data) {
+    public parseMessage(data: WebSocket.Data) {
         let message: any;
 
         try {
@@ -74,7 +65,18 @@ export class WebSocketManager {
         return message;
     }
 
-    public async handleError(ws: WebSocket, e: Error) {
+    public getThing(req: http.IncomingMessage) {
+        // Match first part of path
+        let path = req.url.match(/\/(.*?)(?:\/|$)/g);
+
+        if (path && path.length == 1) {
+            let name = path[0];
+            return this.things.getThing(name);
+        }
+        throw new ThingError('Invalid thing name');
+    }
+
+    public handleError(ws: WebSocket, e: Error) {
         if (e instanceof ThingError) {
             ws.send(JSON.stringify({
                 messageType: 'error',
