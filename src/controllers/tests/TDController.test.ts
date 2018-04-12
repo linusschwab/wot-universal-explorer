@@ -50,6 +50,7 @@ const mozTDSample = `{
 
 // Create mocks
 console.log = jest.fn();
+jest.mock('ws');
 jest.mock('fs');
 jest.mock('../../tools/OpenAPIEncoder');
 

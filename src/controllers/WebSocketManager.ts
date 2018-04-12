@@ -2,7 +2,7 @@ import * as WebSocket from "ws";
 import * as http from "http";
 import {Thing, ThingsManager} from "../models/thing";
 import {ControllerManager} from "../controllers";
-import {RequestError, ThingError} from "../tools/errors";
+import {InteractionError, RequestError, ThingError} from "../tools/errors";
 
 
 export class WebSocketManager {
@@ -36,7 +36,7 @@ export class WebSocketManager {
 
             ws.send('Connected to ' + thing.name);
         } catch (e) {
-            this.handleError(ws, e);
+            WebSocketManager.handleError(ws, e);
         }
     }
 
@@ -45,7 +45,7 @@ export class WebSocketManager {
             const message = this.parseMessage(data);
             this.controllers.things.wsRoutes(thing, ws, message);
         } catch (e) {
-            this.handleError(ws, e);
+            WebSocketManager.handleError(ws, e);
         }
     }
 
@@ -76,7 +76,7 @@ export class WebSocketManager {
         throw new ThingError('Invalid thing name');
     }
 
-    public handleError(ws: WebSocket, e: Error) {
+    public static handleError(ws: WebSocket, e: Error) {
         if (e instanceof ThingError) {
             ws.send(JSON.stringify({
                 messageType: 'error',
@@ -86,7 +86,7 @@ export class WebSocketManager {
                 }
             }));
             ws.close();
-        } else if (e instanceof RequestError) {
+        } else if (e instanceof RequestError || e instanceof InteractionError) {
             ws.send(JSON.stringify({
                 messageType: 'error',
                 data: {

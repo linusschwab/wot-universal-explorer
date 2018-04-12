@@ -5,6 +5,7 @@ import {Thing, ThingsManager} from "../../models/thing";
 
 // Create mocks
 console.log = jest.fn();
+jest.mock('ws');
 jest.mock('../../models/thing/Thing');
 jest.mock('../../models/thing/ThingsManager');
 

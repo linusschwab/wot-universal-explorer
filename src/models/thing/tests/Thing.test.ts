@@ -1,3 +1,4 @@
+import * as WebSocket from "ws";
 import {Thing} from "../Thing";
 import {Action, Property, Event} from "../../interactions";
 import {InteractionError} from "../../../tools/errors";
@@ -5,6 +6,7 @@ import {Link} from "../../links";
 
 
 // Create mocks
+jest.mock('ws');
 jest.mock('../../links/Link');
 
 const mockResponse = 10;
@@ -91,10 +93,12 @@ describe('interaction getters', () => {
     });
 });
 
-describe('invoke interactions', () => {
-    const thing = new Thing('TestThing', 'Thing');
+describe('interactions', () => {
+    let thing: Thing;
 
-    beforeAll(() => {
+    beforeEach(() => {
+        thing = new Thing('TestThing', 'Thing');
+
         // Prepare interactions
         const property = new Property('TestProperty', null, true, true);
         property.registerLink(new Link(null));
@@ -104,9 +108,7 @@ describe('invoke interactions', () => {
         thing.registerInteraction(action);
         const event = new Event('TestEvent', null);
         thing.registerInteraction(event);
-    });
 
-    beforeEach(() => {
         jest.clearAllMocks();
     });
 
@@ -120,12 +122,12 @@ describe('invoke interactions', () => {
         expect(response).toBe(mockResponse);
     });
 
-    test('subscribe to property', async () => {
-        // TODO
-    });
-
-    test('unsubscribe from property', async () => {
-        // TODO
+    test('property subscribe and unsubscribe', () => {
+        const ws = new WebSocket(null);
+        thing.subscribeToProperty('TestProperty', ws);
+        expect(thing.subscribers.includes(ws)).toBeTruthy();
+        thing.unsubscribeFromProperty('TestProperty', ws);
+        expect(thing.subscribers.includes(ws)).toBeFalsy();
     });
 
     test('invoke action', async () => {
@@ -133,12 +135,12 @@ describe('invoke interactions', () => {
         expect(response).toBe(mockResponse);
     });
 
-    test('subscribe to action', async () => {
-        // TODO
-    });
-
-    test('unsubscribe from action', async () => {
-        // TODO
+    test('action subscribe and unsubscribe', () => {
+        const ws = new WebSocket(null);
+        thing.subscribeToAction('TestAction', ws);
+        expect(thing.subscribers.includes(ws)).toBeTruthy();
+        thing.unsubscribeFromAction('TestAction', ws);
+        expect(thing.subscribers.includes(ws)).toBeFalsy();
     });
 
     test('get event data', async () => {
@@ -146,11 +148,19 @@ describe('invoke interactions', () => {
         expect(response).toEqual([]);
     });
 
-    test('subscribe to event', async () => {
-        // TODO
+    test('event subscribe and unsubscribe', () => {
+        const ws = new WebSocket(null);
+        thing.subscribeToEvent('TestEvent', ws);
+        expect(thing.subscribers.includes(ws)).toBeTruthy();
+        thing.unsubscribeFromEvent('TestEvent', ws);
+        expect(thing.subscribers.includes(ws)).toBeFalsy();
     });
 
-    test('unsubscribe from event', async () => {
-        // TODO
+    test('subscribe and unsubscribe', () => {
+        const ws = new WebSocket(null);
+        thing.subscribe(ws);
+        expect(thing.subscribers.includes(ws)).toBeTruthy();
+        thing.unsubscribe(ws);
+        expect(thing.subscribers.includes(ws)).toBeFalsy();
     });
 });

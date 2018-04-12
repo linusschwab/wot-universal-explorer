@@ -5,6 +5,7 @@ import {Context} from "koa";
 import {Thing, ThingsManager} from "../models/thing";
 import {InteractionError, RequestError, TimeoutError} from "../tools/errors";
 import {BaseController} from "./BaseController";
+import {WebSocketManager} from "./WebSocketManager";
 
 
 export class ThingsController extends BaseController {
@@ -30,11 +31,14 @@ export class ThingsController extends BaseController {
 
     public wsRoutes(thing: Thing, ws: WebSocket, message: any) {
         switch(message.messageType) {
-            case 'addEventSubscription':
-                this.wsSubscribeEvent(thing, message.data);
-                break;
             case 'addPropertySubscription':
-                this.wsSubscribeProperty(thing, message.data);
+                this.wsSubscribeProperty(thing, ws, message);
+                break;
+            case 'addActionSubscription':
+                this.wsSubscribeAction(thing, ws, message);
+                break;
+            case 'addEventSubscription':
+                this.wsSubscribeEvent(thing, ws, message);
                 break;
             default:
                 throw new RequestError('Unknown messageType');
@@ -73,11 +77,21 @@ export class ThingsController extends BaseController {
         }
     }
 
-    public async wsSubscribeProperty(thing: Thing, data: any) {
-        for (let property in data) {
-            //thing.subcribeTo(property)
+    public async wsSubscribeProperty(thing: Thing, ws: WebSocket, message: any) {
+        for (let property in message.data) {
+            try {
+                thing.subscribeToProperty(property, ws);
+                ws.send(JSON.stringify({
+                    messageType: message.messageType,
+                    data: {
+                        status: '200',
+                        message: 'Subscribed to property ' + property
+                    }
+                }));
+            } catch (e) {
+                WebSocketManager.handleError(ws, e);
+            }
         }
-        // TODO: Return confirmation on success?
     }
 
     public async postAction(ctx: Context) {
@@ -91,6 +105,23 @@ export class ThingsController extends BaseController {
             ctx.status = 200;
         } catch (e) {
             this.handleError(ctx, e);
+        }
+    }
+
+    public async wsSubscribeAction(thing: Thing, ws: WebSocket, message: any) {
+        for (let action in message.data) {
+            try {
+                thing.subscribeToAction(action, ws);
+                ws.send(JSON.stringify({
+                    messageType: message.messageType,
+                    data: {
+                        status: '200',
+                        message: 'Subscribed to action ' + action
+                    }
+                }));
+            } catch (e) {
+                WebSocketManager.handleError(ws, e);
+            }
         }
     }
 
@@ -110,8 +141,21 @@ export class ThingsController extends BaseController {
         }
     }
 
-    public async wsSubscribeEvent(thing: Thing, data: any) {
-        console.log(data);
+    public async wsSubscribeEvent(thing: Thing, ws: WebSocket, message: any) {
+        for (let event in message.data) {
+            try {
+                thing.subscribeToEvent(event, ws);
+                ws.send(JSON.stringify({
+                    messageType: message.messageType,
+                    data: {
+                        status: '200',
+                        message: 'Subscribed to event ' + event
+                    }
+                }));
+            } catch (e) {
+                WebSocketManager.handleError(ws, e);
+            }
+        }
     }
 
     private handleError(ctx: Context, e: Error) {

@@ -1,10 +1,11 @@
+import * as WebSocket from "ws";
 import * as getSlug from "speakingurl";
+
 import {Link, Operation} from "../links";
 import {Thing} from "../thing";
 import {InteractionData} from "./InteractionData";
 
 
-// TODO: Change to abstract
 export class InteractionPattern {
 
     public name: string;
@@ -29,12 +30,21 @@ export class InteractionPattern {
         link.interaction = this;
     }
 
-    public async subscribe(ws: WebSocket) {
-        // TODO: Implement
+    public subscribe(ws: WebSocket) {
+        if (this.subscribers.includes(ws)) {
+            return;
+            // TODO: Throw error if already subscribed?
+        }
+
+        this.subscribers.push(ws);
     }
 
-    public async unsubscribe(ws: WebSocket) {
-        // TODO: Implement
+    public unsubscribe(ws: WebSocket) {
+        if (this.subscribers.includes(ws)) {
+            let index = this.subscribers.indexOf(ws);
+            this.subscribers.splice(index, 1);
+        }
+        // TODO: Throw error if not subscribed?
     }
 
     public async notifySubscribers(data: InteractionData) {

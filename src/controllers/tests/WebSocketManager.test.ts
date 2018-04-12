@@ -1,8 +1,13 @@
+import * as http from "http";
+
 import {WebSocketManager} from "../WebSocketManager";
 import {Thing, ThingsManager} from "../../models/thing";
 import {ControllerManager} from "../ControllerManager";
 import {RequestError, ThingError} from "../../tools/errors";
-import * as http from "http";
+
+
+// Create mocks
+jest.mock('ws');
 
 
 let things: ThingsManager = new ThingsManager();

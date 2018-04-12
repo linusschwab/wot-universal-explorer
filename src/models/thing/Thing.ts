@@ -1,4 +1,6 @@
+import * as WebSocket from "ws";
 import * as getSlug from "speakingurl";
+
 import {Action, InteractionPattern, Property, Event} from "../interactions";
 import {InteractionError} from "../../tools/errors";
 
@@ -11,15 +13,13 @@ export class Thing {
 
     public base: string;
     public interactions: InteractionPattern[];
-    public subscribers: WebSocket[];
-    public websocket: any; // TODO (Mozilla WebSocket)
+    public websocket: any; // TODO (Mozilla gateway WebSocket)
 
     constructor(name: string, type: string, base = '') {
         this.name = name;
         this.type = type;
         this.base = base;
         this.interactions = [];
-        this.subscribers = [];
     }
 
     public async readProperty(name: string): Promise<any> {
@@ -32,12 +32,12 @@ export class Thing {
         return property.write(data);
     }
 
-    public async subscribeToProperty(name: string, ws: WebSocket): Promise<any> {
+    public subscribeToProperty(name: string, ws: WebSocket) {
         const property = this.getProperty(name);
         property.subscribe(ws);
     }
 
-    public async unsubscribeFromProperty(name: string, ws: WebSocket): Promise<any> {
+    public unsubscribeFromProperty(name: string, ws: WebSocket) {
         const property = this.getProperty(name);
         property.unsubscribe(ws);
     }
@@ -47,12 +47,12 @@ export class Thing {
         return action.invoke(data);
     }
 
-    public async subscribeToAction(name: string, ws: WebSocket): Promise<any> {
+    public subscribeToAction(name: string, ws: WebSocket) {
         const action = this.getAction(name);
         action.subscribe(ws);
     }
 
-    public async unsubscribeFromAction(name: string, ws: WebSocket): Promise<any> {
+    public unsubscribeFromAction(name: string, ws: WebSocket) {
         const action = this.getAction(name);
         action.unsubscribe(ws);
     }
@@ -62,22 +62,26 @@ export class Thing {
         return event.getData(newerThan, limit);
     }
 
-    public async subscribeToEvent(name: string, ws: WebSocket): Promise<any> {
+    public subscribeToEvent(name: string, ws: WebSocket) {
         const event = this.getEvent(name);
         event.subscribe(ws);
     }
 
-    public async unsubscribeFromEvent(name: string, ws: WebSocket): Promise<any> {
+    public unsubscribeFromEvent(name: string, ws: WebSocket) {
         const event = this.getEvent(name);
         event.unsubscribe(ws);
     }
 
-    public async subscribe(): Promise<any> {
-        // TODO: Implement (subscribe to all?)
+    public subscribe(ws: WebSocket) {
+        for (let interaction of this.interactions) {
+            interaction.subscribe(ws);
+        }
     }
 
-    public async unsubscribe(): Promise<any> {
-        // TODO: Implement
+    public unsubscribe(ws: WebSocket) {
+        for (let interaction of this.interactions) {
+            interaction.unsubscribe(ws);
+        }
     }
 
     public registerInteraction(interaction: InteractionPattern) {
@@ -164,6 +168,18 @@ export class Thing {
             }
         }
         return links;
+    }
+
+    get subscribers() {
+        let subscribers: WebSocket[] = [];
+        for (let interaction of this.interactions) {
+            for (let ws of interaction.subscribers) {
+                if (!subscribers.includes(ws)) {
+                    subscribers.push(ws);
+                }
+            }
+        }
+        return subscribers;
     }
 
     get slug() {
