@@ -40,7 +40,7 @@ export class WebSocketManager {
         }
     }
 
-    private handleMessage(thing: Thing, ws: WebSocket, data: WebSocket.Data) {
+    public handleMessage(thing: Thing, ws: WebSocket, data: WebSocket.Data) {
         try {
             const message = this.parseMessage(data);
             this.controllers.things.wsRoutes(thing, ws, message);
@@ -74,6 +74,16 @@ export class WebSocketManager {
             return this.things.getThing(name);
         }
         throw new ThingError('Invalid thing name');
+    }
+
+    public static confirm(ws: WebSocket, type: any, message: string) {
+        ws.send(JSON.stringify({
+            messageType: type,
+            data: {
+                status: '200',
+                message: message
+            }
+        }));
     }
 
     public static handleError(ws: WebSocket, e: Error) {

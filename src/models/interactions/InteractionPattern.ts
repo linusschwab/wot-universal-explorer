@@ -4,9 +4,10 @@ import * as getSlug from "speakingurl";
 import {Link, Operation} from "../links";
 import {Thing} from "../thing";
 import {InteractionData} from "./InteractionData";
+import {InteractionError} from "../../tools/errors";
 
 
-export class InteractionPattern {
+export abstract class InteractionPattern {
 
     public name: string;
     public description: string;
@@ -32,19 +33,19 @@ export class InteractionPattern {
 
     public subscribe(ws: WebSocket) {
         if (this.subscribers.includes(ws)) {
-            return;
-            // TODO: Throw error if already subscribed?
+            throw new InteractionError('Already subscribed to interaction');
         }
 
         this.subscribers.push(ws);
     }
 
     public unsubscribe(ws: WebSocket) {
-        if (this.subscribers.includes(ws)) {
-            let index = this.subscribers.indexOf(ws);
-            this.subscribers.splice(index, 1);
+        if (!this.subscribers.includes(ws)) {
+            throw new InteractionError('Not subscribed to interaction');
         }
-        // TODO: Throw error if not subscribed?
+
+        let index = this.subscribers.indexOf(ws);
+        this.subscribers.splice(index, 1);
     }
 
     public async notifySubscribers(data: InteractionData) {
@@ -52,9 +53,7 @@ export class InteractionPattern {
         //console.log(data.toString());
     }
 
-    public toString() {
-        return 'Interaction ' + this.name ;
-    }
+    public abstract toString(): string;
 
     get slug() {
         return getSlug(this.name);

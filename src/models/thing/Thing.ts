@@ -74,13 +74,25 @@ export class Thing {
 
     public subscribe(ws: WebSocket) {
         for (let interaction of this.interactions) {
-            interaction.subscribe(ws);
+            try {
+                interaction.subscribe(ws);
+            } catch (e) {
+                if (!(e instanceof InteractionError)) {
+                    throw e;
+                }
+            }
         }
     }
 
     public unsubscribe(ws: WebSocket) {
         for (let interaction of this.interactions) {
-            interaction.unsubscribe(ws);
+            try {
+                interaction.unsubscribe(ws);
+            } catch (e) {
+                if (!(e instanceof InteractionError)) {
+                    throw e;
+                }
+            }
         }
     }
 

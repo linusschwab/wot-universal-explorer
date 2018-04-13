@@ -31,14 +31,29 @@ export class ThingsController extends BaseController {
 
     public wsRoutes(thing: Thing, ws: WebSocket, message: any) {
         switch(message.messageType) {
+            case 'addSubscription':
+                this.wsSubscribe(thing, ws, message);
+                break;
+            case 'removeSubscription':
+                this.wsUnsubscribe(thing, ws, message);
+                break;
             case 'addPropertySubscription':
                 this.wsSubscribeProperty(thing, ws, message);
+                break;
+            case 'removePropertySubscription':
+                this.wsUnsubscribeProperty(thing, ws, message);
                 break;
             case 'addActionSubscription':
                 this.wsSubscribeAction(thing, ws, message);
                 break;
+            case 'removeActionSubscription':
+                this.wsUnsubscribeAction(thing, ws, message);
+                break;
             case 'addEventSubscription':
                 this.wsSubscribeEvent(thing, ws, message);
+                break;
+            case 'removeEventSubscription':
+                this.wsUnsubscribeEvent(thing, ws, message);
                 break;
             default:
                 throw new RequestError('Unknown messageType');
@@ -48,6 +63,16 @@ export class ThingsController extends BaseController {
     public async getThings(ctx: Context) {
         // TODO: Return more than names? Available interactions?
         ctx.body = this.things.getThingsNames();
+    }
+
+    public async wsSubscribe(thing: Thing, ws: WebSocket, message: any) {
+        thing.subscribe(ws);
+        WebSocketManager.confirm(ws, message.messageType, 'Subscribed to all interactions');
+    }
+
+    public async wsUnsubscribe(thing: Thing, ws: WebSocket, message: any) {
+        thing.unsubscribe(ws);
+        WebSocketManager.confirm(ws, message.messageType, 'Unsubscribed from all interactions');
     }
 
     public async getProperty(ctx: Context) {
@@ -81,13 +106,18 @@ export class ThingsController extends BaseController {
         for (let property in message.data) {
             try {
                 thing.subscribeToProperty(property, ws);
-                ws.send(JSON.stringify({
-                    messageType: message.messageType,
-                    data: {
-                        status: '200',
-                        message: 'Subscribed to property ' + property
-                    }
-                }));
+                WebSocketManager.confirm(ws, message.messageType, 'Subscribed to property ' + property);
+            } catch (e) {
+                WebSocketManager.handleError(ws, e);
+            }
+        }
+    }
+
+    public async wsUnsubscribeProperty(thing: Thing, ws: WebSocket, message: any) {
+        for (let property in message.data) {
+            try {
+                thing.unsubscribeFromProperty(property, ws);
+                WebSocketManager.confirm(ws, message.messageType, 'Unsubscribed from property ' + property);
             } catch (e) {
                 WebSocketManager.handleError(ws, e);
             }
@@ -112,13 +142,18 @@ export class ThingsController extends BaseController {
         for (let action in message.data) {
             try {
                 thing.subscribeToAction(action, ws);
-                ws.send(JSON.stringify({
-                    messageType: message.messageType,
-                    data: {
-                        status: '200',
-                        message: 'Subscribed to action ' + action
-                    }
-                }));
+                WebSocketManager.confirm(ws, message.messageType, 'Subscribed to action ' + action);
+            } catch (e) {
+                WebSocketManager.handleError(ws, e);
+            }
+        }
+    }
+
+    public async wsUnsubscribeAction(thing: Thing, ws: WebSocket, message: any) {
+        for (let action in message.data) {
+            try {
+                thing.unsubscribeFromAction(action, ws);
+                WebSocketManager.confirm(ws, message.messageType, 'Unsubscribed from action ' + action);
             } catch (e) {
                 WebSocketManager.handleError(ws, e);
             }
@@ -145,13 +180,18 @@ export class ThingsController extends BaseController {
         for (let event in message.data) {
             try {
                 thing.subscribeToEvent(event, ws);
-                ws.send(JSON.stringify({
-                    messageType: message.messageType,
-                    data: {
-                        status: '200',
-                        message: 'Subscribed to event ' + event
-                    }
-                }));
+                WebSocketManager.confirm(ws, message.messageType, 'Subscribed to event ' + event);
+            } catch (e) {
+                WebSocketManager.handleError(ws, e);
+            }
+        }
+    }
+
+    public async wsUnsubscribeEvent(thing: Thing, ws: WebSocket, message: any) {
+        for (let event in message.data) {
+            try {
+                thing.unsubscribeFromEvent(event, ws);
+                WebSocketManager.confirm(ws, message.messageType, 'Unsubscribed from event ' + event);
             } catch (e) {
                 WebSocketManager.handleError(ws, e);
             }

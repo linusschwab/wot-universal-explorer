@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`subscriptions subscribe to action 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "{\\"messageType\\":\\"addActionSubscription\\",\\"data\\":{\\"status\\":\\"200\\",\\"message\\":\\"Subscribed to action testAction\\"}}",
+    ],
+  ],
+}
+`;
+
+exports[`subscriptions subscribe to all 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "{\\"messageType\\":\\"addSubscription\\",\\"data\\":{\\"status\\":\\"200\\",\\"message\\":\\"Subscribed to all interactions\\"}}",
+    ],
+  ],
+}
+`;
+
+exports[`subscriptions subscribe to event 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "{\\"messageType\\":\\"addEventSubscription\\",\\"data\\":{\\"status\\":\\"200\\",\\"message\\":\\"Subscribed to event testEvent\\"}}",
+    ],
+  ],
+}
+`;
+
+exports[`subscriptions subscribe to property 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "{\\"messageType\\":\\"addPropertySubscription\\",\\"data\\":{\\"status\\":\\"200\\",\\"message\\":\\"Subscribed to property testProperty\\"}}",
+    ],
+  ],
+}
+`;
+
+exports[`subscriptions unsubscribe from action 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "{\\"messageType\\":\\"removeActionSubscription\\",\\"data\\":{\\"status\\":\\"200\\",\\"message\\":\\"Unsubscribed from action testAction\\"}}",
+    ],
+  ],
+}
+`;
+
+exports[`subscriptions unsubscribe from all 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "{\\"messageType\\":\\"removeSubscription\\",\\"data\\":{\\"status\\":\\"200\\",\\"message\\":\\"Unsubscribed from all interactions\\"}}",
+    ],
+  ],
+}
+`;
+
+exports[`subscriptions unsubscribe from event 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "{\\"messageType\\":\\"removeEventSubscription\\",\\"data\\":{\\"status\\":\\"200\\",\\"message\\":\\"Unsubscribed from event testEvent\\"}}",
+    ],
+  ],
+}
+`;
+
+exports[`subscriptions unsubscribe from property 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "{\\"messageType\\":\\"removePropertySubscription\\",\\"data\\":{\\"status\\":\\"200\\",\\"message\\":\\"Unsubscribed from property testProperty\\"}}",
+    ],
+  ],
+}
+`;

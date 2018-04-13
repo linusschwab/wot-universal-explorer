@@ -10,8 +10,8 @@ import {RequestError, ThingError} from "../../tools/errors";
 jest.mock('ws');
 
 
-let things: ThingsManager = new ThingsManager();
-let controllers: ControllerManager = new ControllerManager(things);
+let things = new ThingsManager();
+let controllers = new ControllerManager(things);
 const ws = new WebSocketManager(controllers, things);
 
 beforeEach(() => {

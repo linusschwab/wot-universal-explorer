@@ -94,6 +94,7 @@ describe('interaction getters', () => {
 });
 
 describe('interactions', () => {
+    const ws = new WebSocket(null);
     let thing: Thing;
 
     beforeEach(() => {
@@ -123,10 +124,20 @@ describe('interactions', () => {
     });
 
     test('property subscribe and unsubscribe', () => {
-        const ws = new WebSocket(null);
         thing.subscribeToProperty('TestProperty', ws);
         expect(thing.subscribers.includes(ws)).toBeTruthy();
         thing.unsubscribeFromProperty('TestProperty', ws);
+        expect(thing.subscribers.includes(ws)).toBeFalsy();
+    });
+
+    test('subscribe to non-observable property throws error', () => {
+        const property2 = new Property('TestProperty2', null, true, false);
+        property2.registerLink(new Link(null));
+        thing.registerInteraction(property2);
+
+        expect(() => {
+            thing.subscribeToProperty('TestProperty2', ws);
+        }).toThrowError(InteractionError);
         expect(thing.subscribers.includes(ws)).toBeFalsy();
     });
 
@@ -136,7 +147,6 @@ describe('interactions', () => {
     });
 
     test('action subscribe and unsubscribe', () => {
-        const ws = new WebSocket(null);
         thing.subscribeToAction('TestAction', ws);
         expect(thing.subscribers.includes(ws)).toBeTruthy();
         thing.unsubscribeFromAction('TestAction', ws);
@@ -149,18 +159,30 @@ describe('interactions', () => {
     });
 
     test('event subscribe and unsubscribe', () => {
-        const ws = new WebSocket(null);
         thing.subscribeToEvent('TestEvent', ws);
         expect(thing.subscribers.includes(ws)).toBeTruthy();
         thing.unsubscribeFromEvent('TestEvent', ws);
         expect(thing.subscribers.includes(ws)).toBeFalsy();
     });
 
-    test('subscribe and unsubscribe', () => {
-        const ws = new WebSocket(null);
+    test('subscribe and unsubscribe from all', () => {
         thing.subscribe(ws);
         expect(thing.subscribers.includes(ws)).toBeTruthy();
         thing.unsubscribe(ws);
         expect(thing.subscribers.includes(ws)).toBeFalsy();
+    });
+
+    test('subscribe to interaction and unsubscribe from all', () => {
+        thing.subscribeToEvent('TestEvent', ws);
+        expect(thing.subscribers.includes(ws)).toBeTruthy();
+        thing.unsubscribe(ws);
+        expect(thing.subscribers.includes(ws)).toBeFalsy();
+    });
+
+    test('subscribe to all and unsubscribe from one interaction', () => {
+        thing.subscribe(ws);
+        expect(thing.subscribers.includes(ws)).toBeTruthy();
+        thing.unsubscribeFromEvent('TestEvent', ws);
+        expect(thing.subscribers.includes(ws)).toBeTruthy();
     });
 });

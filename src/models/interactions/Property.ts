@@ -3,6 +3,7 @@ import {DataSchema} from "../schema";
 import {Operation} from "../links";
 import {InteractionError, TimeoutError} from "../../tools/errors";
 import {InteractionData} from "./InteractionData";
+import * as WebSocket from "ws";
 
 
 export class Property extends InteractionPattern {
@@ -42,6 +43,13 @@ export class Property extends InteractionPattern {
                 }
             }
         }
+    }
+
+    public subscribe(ws: WebSocket) {
+        if (!this.observable) {
+            throw new InteractionError('Property is not observable');
+        }
+        super.subscribe(ws);
     }
 
     public toString() {
