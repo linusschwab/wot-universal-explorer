@@ -1,9 +1,10 @@
+import * as WebSocket from "ws";
+
 import {InteractionPattern} from "./InteractionPattern";
 import {DataSchema} from "../schema";
 import {Operation} from "../links";
 import {InteractionError, TimeoutError} from "../../tools/errors";
 import {InteractionData} from "./InteractionData";
-import * as WebSocket from "ws";
 
 
 export class Property extends InteractionPattern {
@@ -21,7 +22,7 @@ export class Property extends InteractionPattern {
 
     public async read() {
         // TODO: Choose correct link
-        return await this.links[0].execute();
+        return await this.links[0].execute(null);
     }
 
     public async write(data: any) {
@@ -36,7 +37,12 @@ export class Property extends InteractionPattern {
         if (this.observable) {
             try {
                 const data = new InteractionData(await this.read());
-                this.notifySubscribers(data);
+
+                // Check if data changed
+                if (this.newData(data)) {
+                    this.storeData(data);
+                    this.notifySubscribers(data);
+                }
             } catch (e) {
                 if (e !instanceof TimeoutError) {
                     throw e;
@@ -51,6 +57,15 @@ export class Property extends InteractionPattern {
         }
         super.subscribe(ws);
     }
+
+    public async notifySubscribers(data: InteractionData) {
+        for (let ws of this.subscribers) {
+            ws.send(JSON.stringify({
+                messageType: 'propertyStatus',
+                data: data.toString()
+            }));
+        }
+    };
 
     public toString() {
         return 'Property ' + this.name;

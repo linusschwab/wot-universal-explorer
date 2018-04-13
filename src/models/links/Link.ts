@@ -1,6 +1,6 @@
 import {InteractionPattern} from "../interactions";
 
-export class Link {
+export abstract class Link {
 
     public href: string;
     public host: string;
@@ -13,9 +13,7 @@ export class Link {
         this.mediaType = mediaType;
     }
 
-    public async execute(data: any = null) {
-
-    }
+    public abstract async execute(data: any): Promise<any>;
 
     public toString() {
         if (this.host) {

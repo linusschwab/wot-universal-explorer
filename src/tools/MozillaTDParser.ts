@@ -1,7 +1,6 @@
 import {Thing} from "../models/thing";
 import {Property} from "../models/interactions";
 import {DataSchema} from "../models/schema";
-import {HTTPLink} from "../models/links";
 import {MozillaHTTPLink} from "../models/links/MozillaHTTPLink";
 
 

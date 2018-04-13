@@ -1,7 +1,7 @@
 import {Link} from "./Link";
 
 
-export class COAPLink extends Link {
+export abstract class COAPLink extends Link {
 
     // TODO
 

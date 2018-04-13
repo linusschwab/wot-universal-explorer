@@ -18,11 +18,14 @@ export abstract class InteractionPattern {
     public links: Link[];
     public url: string;
     public operations: Operation[];
+
+    public data: InteractionData[];
     public subscribers: WebSocket[];
 
     constructor(name: string) {
         this.name = name;
         this.links = [];
+        this.data = [];
         this.subscribers = [];
     }
 
@@ -48,9 +51,19 @@ export abstract class InteractionPattern {
         this.subscribers.splice(index, 1);
     }
 
-    public async notifySubscribers(data: InteractionData) {
-        // TODO: Implement (abstract definition, move to subclasses?)
-        //console.log(data.toString());
+    public abstract async notifySubscribers(data: InteractionData): Promise<void>;
+
+    public async storeData(data: InteractionData) {
+        // Delete old items if too many
+        if (this.data.length > 1000) {
+            this.data.splice(0, 1);
+        }
+
+        this.data.push(data);
+    }
+
+    public newData(data: InteractionData): boolean {
+        return this.data.length == 0 || !data.equals(this.data[this.data.length-1])
     }
 
     public abstract toString(): string;

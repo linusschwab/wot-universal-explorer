@@ -4,6 +4,7 @@ exports[`td with base, 2 properties and 2 events 1`] = `
 Array [
   Property {
     "base": "coap:///www.example.com:5683/temp/",
+    "data": Array [],
     "links": Array [
       HTTPLink {
         "host": "coap:///www.example.com:5683/temp/",
@@ -31,6 +32,7 @@ Array [
   },
   Property {
     "base": "coap:///www.example.com:5683/temp/",
+    "data": Array [],
     "links": Array [
       HTTPLink {
         "host": "coap:///www.example.com:5683/temp/",

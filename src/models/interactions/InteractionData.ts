@@ -9,10 +9,10 @@ export class InteractionData {
     }
 
     public toString() {
-        return {
+        return JSON.stringify({
             time: this.date,
-            data: this.data
-        }
+            value: this.data
+        });
     }
 
     public equals(data: InteractionData) {

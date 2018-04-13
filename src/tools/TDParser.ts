@@ -2,6 +2,7 @@ import {Thing} from "../models/thing";
 import {Action, Event, InteractionPattern, Property} from "../models/interactions";
 import {DataSchema, InputSchema, OutputSchema} from "../models/schema";
 import {HTTPLink} from "../models/links";
+import {InteractionError} from "./errors";
 
 
 export class TDParser {
@@ -44,8 +45,7 @@ export class TDParser {
             case 'Event':
                 return this.parseEvent(iobj);
             default:
-                let name = iobj.name;
-                return new InteractionPattern(name);
+                throw new InteractionError('Unknown interaction type ' + type);
         }
     }
 
