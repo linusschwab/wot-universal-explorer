@@ -32,13 +32,13 @@ export class HTTPLink extends Link {
 
     public async execute(data: any = null): Promise<any> {
         if (this.interaction instanceof Property) {
-            return await this.executeProperty(data);
+            return this.executeProperty(data);
         }
         else if (this.interaction instanceof Action) {
-            return await this.executeAction(data);
+            return this.executeAction(data);
         }
         else if (this.interaction instanceof Event) {
-            return await this.executeEvent();
+            return this.executeEvent();
         }
     }
 
@@ -98,7 +98,7 @@ export class HTTPLink extends Link {
     }
 
     private handleError(e: any) {
-        if (e.code === 'ECONNABORTED') {
+        if (e.code === 'ECONNABORTED' || e.code === 'EHOSTUNREACH') {
             throw new TimeoutError('Remote thing did not respond');
         } else if (e.response && e.response.status === 400) {
             throw new RequestError('Request data schema not correct');

@@ -14,9 +14,9 @@ export class Event extends InteractionPattern {
         this.schema = schema;
     }
 
-    public async read() {
+    public async poll() {
         // TODO: Choose correct link
-        return await this.links[0].execute(null);
+        return this.links[0].execute(null);
     }
 
     public async update() {
@@ -26,7 +26,7 @@ export class Event extends InteractionPattern {
         }
 
         try {
-            const data = new InteractionData(await this.read());
+            const data = new InteractionData(await this.poll());
 
             // Check if data changed
             if (this.newData(data)) {
@@ -34,7 +34,7 @@ export class Event extends InteractionPattern {
                 this.notifySubscribers(data);
             }
         } catch (e) {
-            if (e !instanceof TimeoutError) {
+            if (e instanceof TimeoutError === false) {
                 throw e;
             }
         }

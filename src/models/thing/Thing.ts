@@ -77,7 +77,7 @@ export class Thing {
             try {
                 interaction.subscribe(ws);
             } catch (e) {
-                if (!(e instanceof InteractionError)) {
+                if (e instanceof InteractionError === false) {
                     throw e;
                 }
             }
@@ -89,7 +89,7 @@ export class Thing {
             try {
                 interaction.unsubscribe(ws);
             } catch (e) {
-                if (!(e instanceof InteractionError)) {
+                if (e instanceof InteractionError === false) {
                     throw e;
                 }
             }

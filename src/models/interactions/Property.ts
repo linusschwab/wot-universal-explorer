@@ -22,13 +22,13 @@ export class Property extends InteractionPattern {
 
     public async read() {
         // TODO: Choose correct link
-        return await this.links[0].execute(null);
+        return this.links[0].execute(null);
     }
 
     public async write(data: any) {
         if (this.writable) {
             // TODO: Choose correct link
-            return await this.links[0].execute(data);
+            return this.links[0].execute(data);
         }
         throw new InteractionError('Property is not writable');
     }
@@ -44,7 +44,7 @@ export class Property extends InteractionPattern {
                     this.notifySubscribers(data);
                 }
             } catch (e) {
-                if (e !instanceof TimeoutError) {
+                if (e instanceof TimeoutError === false) {
                     throw e;
                 }
             }
