@@ -6,7 +6,7 @@ import axios, {AxiosInstance} from 'axios';
 
 export class HTTPLink extends Link {
 
-    protected http: AxiosInstance;
+    public http: AxiosInstance;
 
     constructor(href: string, host = '', mediaType = '') {
         super(href, host, mediaType);

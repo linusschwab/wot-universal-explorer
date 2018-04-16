@@ -2,7 +2,7 @@ import * as WebSocket from "ws";
 import {Thing} from "../Thing";
 import {Action, Property, Event} from "../../interactions";
 import {InteractionError} from "../../../tools/errors";
-import {Link} from "../../links";
+import {HTTPLink} from "../../links";
 
 
 // Create mocks
@@ -10,7 +10,7 @@ jest.mock('ws');
 jest.mock('../../links/Link');
 
 const mockResponse = 10;
-(<any>Link).mockImplementation(() => {
+(<any>HTTPLink).mockImplementation(() => {
     return {
         execute: () => {return mockResponse}
     };
@@ -102,10 +102,10 @@ describe('interactions', () => {
 
         // Prepare interactions
         const property = new Property('TestProperty', null, true, true);
-        property.registerLink(new Link(null));
+        property.registerLink(new HTTPLink(null));
         thing.registerInteraction(property);
         const action = new Action('TestAction', null, null);
-        action.registerLink(new Link(null));
+        action.registerLink(new HTTPLink(null));
         thing.registerInteraction(action);
         const event = new Event('TestEvent', null);
         thing.registerInteraction(event);
@@ -132,7 +132,7 @@ describe('interactions', () => {
 
     test('subscribe to non-observable property throws error', () => {
         const property2 = new Property('TestProperty2', null, true, false);
-        property2.registerLink(new Link(null));
+        property2.registerLink(new HTTPLink(null));
         thing.registerInteraction(property2);
 
         expect(() => {

@@ -1,6 +1,6 @@
 import {Thing} from "../models/thing";
 import {Action, Event, Property} from "../models/interactions";
-import {App} from "../App";
+import {App} from "../app";
 
 
 export class MozillaTDEncoder {

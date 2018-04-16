@@ -1,5 +1,5 @@
 import * as request from "supertest";
-import {App} from "../../App";
+import {App} from "../../app";
 import {OpenAPIEncoder} from "../../tools";
 
 

@@ -1,7 +1,7 @@
 import * as request from "supertest";
 import * as WebSocket from "ws";
 
-import {App} from "../../App";
+import {App} from "../../app";
 import {Thing, ThingsManager} from "../../models/thing";
 import {WebSocketManager} from "../WebSocketManager";
 import {ControllerManager} from "../ControllerManager";
@@ -47,7 +47,6 @@ beforeAll(() => {
     }));
     mockWs = new MockWebSocket();
 });
-
 
 beforeEach(() => {
     jest.clearAllMocks();

@@ -4,9 +4,9 @@ import * as cors from "@koa/cors";
 import * as fs from "fs";
 
 import {Server} from "http";
-import {ThingsManager} from "./models/thing";
-import {MozillaTDParser, OpenAPIEncoder, TDParser} from "./tools";
-import {ControllerManager, WebSocketManager} from "./controllers";
+import {ThingsManager} from "../models/thing";
+import {MozillaTDParser, OpenAPIEncoder, TDParser} from "../tools";
+import {ControllerManager, WebSocketManager} from "../controllers";
 
 
 export class App {

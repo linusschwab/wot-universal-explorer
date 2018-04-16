@@ -1,7 +1,7 @@
 import {Thing} from "../models/thing";
 import {Action, InteractionPattern, Property, Event} from "../models/interactions";
 import {DataSchema} from "../models/schema";
-import {App} from "../App";
+import {App} from "../app";
 
 
 export class TDEncoder {
