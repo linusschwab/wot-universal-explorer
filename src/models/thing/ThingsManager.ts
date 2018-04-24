@@ -3,6 +3,7 @@ import {Thing} from "./Thing";
 import {InteractionPattern} from "../interactions";
 import {ThingError, TimeoutError} from "../../tools/errors";
 import {type} from "os";
+import {MozillaThing} from "./MozillaThing";
 
 
 export class ThingsManager {
@@ -77,6 +78,10 @@ export class ThingsManager {
 
     private pollData() {
         for (let thing of this.things) {
+            if (thing instanceof MozillaThing) {
+                continue;
+            }
+
             for (let event of thing.events) {
                 event.update();
             }

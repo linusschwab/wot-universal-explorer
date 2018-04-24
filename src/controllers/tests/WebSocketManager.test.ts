@@ -23,7 +23,7 @@ describe('parse message', () => {
         const data = JSON.stringify("");
 
         expect(() => {
-            ws.parseMessage(data)
+            WebSocketManager.parseMessage(data)
         }).toThrowError(RequestError);
     });
 
@@ -33,7 +33,7 @@ describe('parse message', () => {
         });
 
         expect(() => {
-            ws.parseMessage(data)
+            WebSocketManager.parseMessage(data)
         }).toThrowError(RequestError);
     });
 
@@ -46,7 +46,7 @@ describe('parse message', () => {
         };
         const message = JSON.stringify(data);
 
-        expect(ws.parseMessage(message)).toEqual(data);
+        expect(WebSocketManager.parseMessage(message)).toEqual(data);
     });
 });
 

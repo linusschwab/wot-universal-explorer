@@ -3,6 +3,13 @@ import {MozillaTDParser} from "../MozillaTDParser";
 import {Action, Property} from "../../models/interactions";
 
 
+// Create mocks
+jest.mock('ws');
+
+beforeEach(() => {
+    jest.clearAllMocks();
+});
+
 test('simple td with 2 properties', () => {
     const tdLight = fs.readFileSync(__dirname + '/__data__/mozilla-td-sample-virtual-light.json', 'utf8');
     const thing = MozillaTDParser.parse(tdLight);
@@ -17,13 +24,13 @@ test('simple td with 2 properties', () => {
     expect(propertyOn).toBeInstanceOf(Property);
     expect(propertyOn.name).toBe('on');
     expect(propertyOn.links).toHaveLength(1);
-    expect(propertyOn.links[0].toString()).toBe('/things/virtual-things-0/properties/on');
+    expect(propertyOn.links[0].toString()).toBe('/properties/on');
 
     const propertyColor = thing.interactions[1];
     expect(propertyColor).toBeInstanceOf(Property);
     expect(propertyColor.name).toBe('color');
     expect(propertyColor.links).toHaveLength(1);
-    expect(propertyColor.links[0].toString()).toBe('/things/virtual-things-0/properties/color');
+    expect(propertyColor.links[0].toString()).toBe('/properties/color');
 
     // Data schema
     const propertyOnSchema = (<Property>propertyOn).schema;

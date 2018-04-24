@@ -33,20 +33,24 @@ export class Property extends InteractionPattern {
         throw new InteractionError('Property is not writable');
     }
 
-    public async update() {
+    public async update(data: InteractionData = null) {
         if (this.observable) {
-            try {
-                const data = new InteractionData(await this.read());
+            return;
+        }
 
-                // Check if data changed
-                if (this.newData(data)) {
-                    this.storeData(data);
-                    this.notifySubscribers(data);
-                }
-            } catch (e) {
-                if (e instanceof TimeoutError === false) {
-                    throw e;
-                }
+        try {
+            if (data === null) {
+                data = new InteractionData(await this.read());
+            }
+
+            // Check if data changed
+            if (this.newData(data)) {
+                this.storeData(data);
+                this.notifySubscribers(data);
+            }
+        } catch (e) {
+            if (e instanceof TimeoutError === false) {
+                throw e;
             }
         }
     }
@@ -62,7 +66,9 @@ export class Property extends InteractionPattern {
         for (let ws of this.subscribers) {
             ws.send(JSON.stringify({
                 messageType: 'propertyStatus',
-                data: data.toString()
+                data: {
+                    [this.name]: data.data
+                }
             }));
         }
     };

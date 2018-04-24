@@ -1,4 +1,4 @@
-import {Thing} from "../models/thing";
+import {MozillaThing} from "../models/thing";
 import {Property} from "../models/interactions";
 import {DataSchema} from "../models/schema";
 import {MozillaHTTPLink} from "../models/links/MozillaHTTPLink";
@@ -15,13 +15,13 @@ export class MozillaTDParser {
             obj = td;
         }
 
-        let thing = new Thing(obj.name, obj.type);
+        let thing = new MozillaThing(obj.name, obj.type, process.env.MOZ_BASE + obj.href);
         thing.description = obj.description;
 
         for (let [name, pobj] of Object.entries(obj.properties)) {
-            let property = this.parseProperty(name, pobj);
+            let property = MozillaTDParser.parseProperty(name, pobj);
 
-            let link = new MozillaHTTPLink(pobj.href);
+            let link = MozillaTDParser.parseLink(obj.href, (<any>pobj).href);
             property.registerLink(link);
 
             thing.registerInteraction(property);
@@ -30,9 +30,14 @@ export class MozillaTDParser {
         return thing;
     }
 
+    private static parseLink(base: string, href: string) {
+        let url = href.replace(base, '');
+        return new MozillaHTTPLink(url);
+    }
+
     private static parseProperty(name: string, pobj: any) {
         // TODO: include unit in data schema? (celsius, percentage, ...)
         let schema = new DataSchema(pobj.type, true, false);
-        return new Property(name, schema, true, false);
+        return new Property(name, schema, true, true);
     }
 }

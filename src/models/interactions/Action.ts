@@ -30,7 +30,9 @@ export class Action extends InteractionPattern {
         for (let ws of this.subscribers) {
             ws.send(JSON.stringify({
                 messageType: 'action',
-                data: data.toString()
+                data: {
+                    [this.name]: data.data
+                }
             }));
         }
     };

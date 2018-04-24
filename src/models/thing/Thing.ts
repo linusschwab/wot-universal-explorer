@@ -13,7 +13,6 @@ export class Thing {
 
     public base: string;
     public interactions: InteractionPattern[];
-    public websocket: any; // TODO (Mozilla gateway WebSocket)
 
     constructor(name: string, type: string, base = '') {
         this.name = name;

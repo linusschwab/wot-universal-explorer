@@ -11,7 +11,7 @@ export class WebSocketManager {
     private controllers: ControllerManager;
     private things: ThingsManager;
 
-    public static port = 8080;
+    public static port = 5001;
 
     constructor(controllers: ControllerManager, things: ThingsManager) {
         this.controllers = controllers;
@@ -42,14 +42,25 @@ export class WebSocketManager {
 
     public handleMessage(thing: Thing, ws: WebSocket, data: WebSocket.Data) {
         try {
-            const message = this.parseMessage(data);
+            const message = WebSocketManager.parseMessage(data);
             this.controllers.things.wsRoutes(thing, ws, message);
         } catch (e) {
             WebSocketManager.handleError(ws, e);
         }
     }
 
-    public parseMessage(data: WebSocket.Data) {
+    public getThing(req: http.IncomingMessage) {
+        // Match first part of path
+        let path = req.url.match(/\/(.*?)(?:\/|$)/g);
+
+        if (path && path.length == 1) {
+            let name = path[0];
+            return this.things.getThing(name);
+        }
+        throw new ThingError('Invalid thing name');
+    }
+
+    public static parseMessage(data: WebSocket.Data) {
         let message: any;
 
         try {
@@ -63,17 +74,6 @@ export class WebSocketManager {
         }
 
         return message;
-    }
-
-    public getThing(req: http.IncomingMessage) {
-        // Match first part of path
-        let path = req.url.match(/\/(.*?)(?:\/|$)/g);
-
-        if (path && path.length == 1) {
-            let name = path[0];
-            return this.things.getThing(name);
-        }
-        throw new ThingError('Invalid thing name');
     }
 
     public static confirm(ws: WebSocket, type: any, message: string) {

@@ -19,14 +19,11 @@ export class Event extends InteractionPattern {
         return this.links[0].execute(null);
     }
 
-    public async update() {
-        // Only poll if regular event link
-        if (this.links.length === 0) {
-            return;
-        }
-
+    public async update(data: InteractionData = null) {
         try {
-            const data = new InteractionData(await this.poll());
+            if (data === null) {
+                data = new InteractionData(await this.poll());
+            }
 
             // Check if data changed
             if (this.newData(data)) {
@@ -58,7 +55,9 @@ export class Event extends InteractionPattern {
         for (let ws of this.subscribers) {
             ws.send(JSON.stringify({
                 messageType: 'event',
-                data: data.toString()
+                data: {
+                    [this.name]: data.data
+                }
             }));
         }
     };

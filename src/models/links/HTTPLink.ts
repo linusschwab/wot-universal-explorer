@@ -98,7 +98,7 @@ export class HTTPLink extends Link {
     }
 
     private handleError(e: any) {
-        if (e.code === 'ECONNABORTED' || e.code === 'EHOSTUNREACH') {
+        if (e.code === 'ECONNABORTED' || e.code === 'EHOSTUNREACH' || e.code === 'ENETUNREACH') {
             throw new TimeoutError('Remote thing did not respond');
         } else if (e.response && e.response.status === 400) {
             throw new RequestError('Request data schema not correct');
