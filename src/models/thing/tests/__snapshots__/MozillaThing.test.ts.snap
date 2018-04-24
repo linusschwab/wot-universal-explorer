@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`property status update sends websocket notification 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "{\\"messageType\\":\\"propertyStatus\\",\\"data\\":{\\"on\\":false}}",
+    ],
+  ],
+}
+`;

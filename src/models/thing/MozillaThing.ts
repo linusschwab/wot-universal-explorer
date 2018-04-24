@@ -20,13 +20,18 @@ export class MozillaThing extends Thing {
             wsUrl += '?jwt=' + process.env.MOZ_AUTH;
         }
 
-        // TODO: Handle error(s)
-        this.ws = new WebSocket(wsUrl);
+        try {
+            this.ws = new WebSocket(wsUrl);
+        } catch (e) {
+            // TODO: Improve error handling?
+            console.error('Could not connect to ' + this.name + ' WebSocket');
+            return;
+        }
 
         this.ws.on('message', data => this.wsHandleMessage(data));
     }
 
-    public wsHandleMessage(data: WebSocket.Data) {
+    public async wsHandleMessage(data: WebSocket.Data) {
         let message: any;
         try {
             message = WebSocketManager.parseMessage(data);
