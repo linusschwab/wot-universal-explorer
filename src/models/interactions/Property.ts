@@ -34,7 +34,7 @@ export class Property extends InteractionPattern {
     }
 
     public async update(data: InteractionData = null) {
-        if (this.observable) {
+        if (!this.observable) {
             return;
         }
 
