@@ -28,10 +28,10 @@ export class WebSocketManager {
             ws.on('message', async (data) => this.handleMessage(thing, ws, data));
 
             ws.on('error', () => {
-                // TODO: Remove subscriber
+                thing.unsubscribe(ws);
             });
             ws.on('close', () => {
-                // TODO: Remove subscriber
+                thing.unsubscribe(ws);
             });
 
             ws.send('Connected to ' + thing.name);

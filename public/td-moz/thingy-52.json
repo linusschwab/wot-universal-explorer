@@ -1,0 +1,70 @@
+{
+  "name":"WoT Thingy",
+  "href":"http://192.168.0.4:8888",
+  "type":"thing",
+  "properties":{
+    "temperature":{
+      "type":"number",
+      "unit":"celsius",
+      "description":"An ambient temperature sensor",
+      "href":"/properties/temperature"
+    },
+    "pressure":{
+      "type":"number",
+      "unit":"hectopascal",
+      "href":"/properties/pressure"
+    },
+    "humidity":{
+      "type":"number",
+      "unit":"percent",
+      "href":"/properties/humidity"
+    },
+    "gas":{
+      "type":"object",
+      "href":"/properties/gas"
+    },
+    "color":{
+      "type":"object",
+      "href":"/properties/color"
+    },
+    "luminosity":{
+      "type":"number",
+      "unit":"lux",
+      "href":"/properties/luminosity"
+    },
+    "battery":{
+      "type":"number",
+      "unit":"percent",
+      "href":"/properties/battery"
+    },
+    "ledcolor":{
+      "type":"string",
+      "href":"/properties/ledcolor"
+    }
+  },
+  "actions":{
+
+  },
+  "events":{
+
+  },
+  "links":[
+    {
+      "rel":"properties",
+      "href":"/properties"
+    },
+    {
+      "rel":"actions",
+      "href":"/actions"
+    },
+    {
+      "rel":"events",
+      "href":"/events"
+    },
+    {
+      "rel":"alternate",
+      "href":"ws://192.168.0.4:8888/"
+    }
+  ],
+  "description":"A WoT-connected Thingy:52"
+}

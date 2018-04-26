@@ -3,11 +3,13 @@ import {HTTPLink} from "./HTTPLink";
 
 export class MozillaHTTPLink extends HTTPLink {
 
-    constructor(href: string) {
-        // TODO: Relative URL detection
-        super(href, process.env.MOZ_BASE, 'application/json');
+    constructor(href: string, host = process.env.MOZ_BASE) {
+        super(href, host, 'application/json');
 
-        this.http.defaults.headers.common['Authorization'] = 'Bearer ' + process.env.MOZ_AUTH;
+        // Mozilla gateway
+        if (host === process.env.MOZ_BASE) {
+            this.http.defaults.headers.common['Authorization'] = 'Bearer ' + process.env.MOZ_AUTH;
+        }
     }
 
     protected async executeProperty(data: any): Promise<any> {

@@ -14,20 +14,15 @@ export class MozillaThing extends Thing {
         this.setupWebSocket();
     }
 
-    private setupWebSocket() {
+    private async setupWebSocket() {
         let wsUrl = this.base.replace('http://', 'ws://');
         if (this.base.includes(process.env.MOZ_BASE)) {
             wsUrl += '?jwt=' + process.env.MOZ_AUTH;
         }
 
-        try {
-            this.ws = new WebSocket(wsUrl);
-        } catch (e) {
-            // TODO: Improve error handling?
-            console.error('Could not connect to ' + this.name + ' WebSocket');
-            return;
-        }
+        this.ws = new WebSocket(wsUrl);
 
+        this.ws.on('error', e => this.wsHandleError(e));
         this.ws.on('message', data => this.wsHandleMessage(data));
     }
 
@@ -50,5 +45,9 @@ export class MozillaThing extends Thing {
                 }
             }
         }
+    }
+
+    private async wsHandleError(e: Error) {
+        console.error('Could not connect to ' + this.name + ' WebSocket (' + e.message + ')');
     }
 }
