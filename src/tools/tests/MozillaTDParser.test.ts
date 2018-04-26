@@ -6,6 +6,12 @@ import {Action, Property} from "../../models/interactions";
 // Create mocks
 jest.mock('ws');
 
+
+beforeAll(() => {
+    process.env.MOZ_BASE = 'http://mozilla-gateway.base';
+    process.env.MOZ_AUTH = 'MozillaGatewayToken';
+});
+
 beforeEach(() => {
     jest.clearAllMocks();
 });
@@ -24,13 +30,13 @@ test('simple td with 2 properties', () => {
     expect(propertyOn).toBeInstanceOf(Property);
     expect(propertyOn.name).toBe('on');
     expect(propertyOn.links).toHaveLength(1);
-    expect(propertyOn.links[0].toString()).toBe('/properties/on');
+    expect(propertyOn.links[0].toString()).toBe('http://mozilla-gateway.base/things/virtual-things-0/properties/on');
 
     const propertyColor = thing.interactions[1];
     expect(propertyColor).toBeInstanceOf(Property);
     expect(propertyColor.name).toBe('color');
     expect(propertyColor.links).toHaveLength(1);
-    expect(propertyColor.links[0].toString()).toBe('/properties/color');
+    expect(propertyColor.links[0].toString()).toBe('http://mozilla-gateway.base/things/virtual-things-0/properties/color');
 
     // Data schema
     const propertyOnSchema = (<Property>propertyOn).schema;

@@ -16,13 +16,13 @@ export class MozillaTDParser {
         }
 
         const base = MozillaTDParser.parseBase(obj.href);
-        let thing = new MozillaThing(obj.name, obj.type, base);
+        const thing = new MozillaThing(obj.name, obj.type, base);
         thing.description = obj.description;
 
         for (let [name, pobj] of Object.entries(obj.properties)) {
             let property = MozillaTDParser.parseProperty(name, pobj);
 
-            let link = new MozillaHTTPLink((<any>pobj).href, base);
+            let link = MozillaTDParser.parseLink((<any>pobj).href, base);
             property.registerLink(link);
 
             thing.registerInteraction(property);
@@ -37,6 +37,13 @@ export class MozillaTDParser {
         } else {
             return process.env.MOZ_BASE + base;
         }
+    }
+
+    private static parseLink(href: string, base: string) {
+        let tdBase = base.replace(process.env.MOZ_BASE, '');
+        let url = href.replace(tdBase, '');
+
+        return new MozillaHTTPLink(url, base);
     }
 
     private static parseProperty(name: string, pobj: any) {
