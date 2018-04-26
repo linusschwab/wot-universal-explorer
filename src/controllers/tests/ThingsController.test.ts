@@ -107,7 +107,7 @@ describe('subscriptions', () => {
 
     test('subscribe to all', async () => {
         await wsManager.handleMessage(mockThing, mockWs, JSON.stringify({
-            "messageType": "addSubscription",
+            "messageType": "subscribe",
             "data": {}
         }));
         expect(mockThing.subscribe).toHaveBeenCalledTimes(1);
@@ -116,75 +116,65 @@ describe('subscriptions', () => {
 
     test('unsubscribe from all', async () => {
         await wsManager.handleMessage(mockThing, mockWs, JSON.stringify({
-            "messageType": "removeSubscription",
+            "messageType": "unsubscribe",
             "data": {}
         }));
         expect(mockThing.unsubscribe).toHaveBeenCalledTimes(1);
         expect(mockWs.send).toMatchSnapshot()
     });
 
-    test('subscribe to property', async () => {
+    test('subscribe to interaction', async () => {
         await wsManager.handleMessage(mockThing, mockWs, JSON.stringify({
-            "messageType": "addPropertySubscription",
+            "messageType": "addSubscription",
             "data": {
-                "testProperty": {}
+                "property": "testProperty"
             }
         }));
+
         expect(mockThing.subscribeToProperty).toHaveBeenCalledTimes(1);
         expect(mockWs.send).toMatchSnapshot()
     });
 
-    test('unsubscribe from property', async () => {
+    test('unsubscribe from interaction', async () => {
         await wsManager.handleMessage(mockThing, mockWs, JSON.stringify({
-            "messageType": "removePropertySubscription",
+            "messageType": "removeSubscription",
             "data": {
-                "testProperty": {}
+                "property": "testProperty"
             }
         }));
+
         expect(mockThing.unsubscribeFromProperty).toHaveBeenCalledTimes(1);
         expect(mockWs.send).toMatchSnapshot()
     });
 
-    test('subscribe to action', async () => {
+    test('subscribe to multiple interactions', async () => {
         await wsManager.handleMessage(mockThing, mockWs, JSON.stringify({
-            "messageType": "addActionSubscription",
+            "messageType": "addSubscription",
             "data": {
-                "testAction": {}
+                "property": ["testProperty1", "testProperty2"],
+                "action": "testAction",
+                "event": ["testEvent1", "testEvent2"]
             }
         }));
+
+        expect(mockThing.subscribeToProperty).toHaveBeenCalledTimes(2);
         expect(mockThing.subscribeToAction).toHaveBeenCalledTimes(1);
+        expect(mockThing.subscribeToEvent).toHaveBeenCalledTimes(2);
         expect(mockWs.send).toMatchSnapshot()
     });
 
-    test('unsubscribe from action', async () => {
+    test('unsubscribe from multiple interactions', async () => {
         await wsManager.handleMessage(mockThing, mockWs, JSON.stringify({
-            "messageType": "removeActionSubscription",
+            "messageType": "removeSubscription",
             "data": {
-                "testAction": {}
+                "property": ["testProperty1", "testProperty2"],
+                "action": ["testAction1", "testAction2"],
+                "event": "testEvent"
             }
         }));
-        expect(mockThing.unsubscribeFromAction).toHaveBeenCalledTimes(1);
-        expect(mockWs.send).toMatchSnapshot()
-    });
 
-    test('subscribe to event', async () => {
-        await wsManager.handleMessage(mockThing, mockWs, JSON.stringify({
-            "messageType": "addEventSubscription",
-            "data": {
-                "testEvent": {}
-            }
-        }));
-        expect(mockThing.subscribeToEvent).toHaveBeenCalledTimes(1);
-        expect(mockWs.send).toMatchSnapshot()
-    });
-
-    test('unsubscribe from event', async () => {
-        await wsManager.handleMessage(mockThing, mockWs, JSON.stringify({
-            "messageType": "removeEventSubscription",
-            "data": {
-                "testEvent": {}
-            }
-        }));
+        expect(mockThing.unsubscribeFromProperty).toHaveBeenCalledTimes(2);
+        expect(mockThing.unsubscribeFromAction).toHaveBeenCalledTimes(2);
         expect(mockThing.unsubscribeFromEvent).toHaveBeenCalledTimes(1);
         expect(mockWs.send).toMatchSnapshot()
     });

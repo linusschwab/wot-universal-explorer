@@ -85,6 +85,16 @@ export class WebSocketManager {
         }));
     }
 
+    public static reject(ws: WebSocket, message: string) {
+        ws.send(JSON.stringify({
+            messageType: 'error',
+            data: {
+                status: '400',
+                message: message
+            }
+        }));
+    }
+
     public static handleError(ws: WebSocket, e: Error) {
         if (e instanceof ThingError) {
             ws.send(JSON.stringify({
@@ -96,13 +106,7 @@ export class WebSocketManager {
             }));
             ws.close();
         } else if (e instanceof RequestError || e instanceof InteractionError) {
-            ws.send(JSON.stringify({
-                messageType: 'error',
-                data: {
-                    status: '400',
-                    message: e.message
-                }
-            }));
+            WebSocketManager.reject(ws, e.message);
         } else {
             throw e;
         }

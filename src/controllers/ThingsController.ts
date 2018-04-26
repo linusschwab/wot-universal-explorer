@@ -6,6 +6,7 @@ import {Thing, ThingsManager} from "../models/thing";
 import {InteractionError, RequestError, TimeoutError} from "../tools/errors";
 import {BaseController} from "./BaseController";
 import {WebSocketManager} from "./WebSocketManager";
+import {isArray} from "util";
 
 
 export class ThingsController extends BaseController {
@@ -31,29 +32,17 @@ export class ThingsController extends BaseController {
 
     public wsRoutes(thing: Thing, ws: WebSocket, message: any) {
         switch(message.messageType) {
-            case 'addSubscription':
+            case 'subscribe':
                 this.wsSubscribe(thing, ws, message);
                 break;
-            case 'removeSubscription':
+            case 'unsubscribe':
                 this.wsUnsubscribe(thing, ws, message);
                 break;
-            case 'addPropertySubscription':
-                this.wsSubscribeProperty(thing, ws, message);
+            case 'addSubscription':
+                this.wsAddSubscription(thing, ws, message);
                 break;
-            case 'removePropertySubscription':
-                this.wsUnsubscribeProperty(thing, ws, message);
-                break;
-            case 'addActionSubscription':
-                this.wsSubscribeAction(thing, ws, message);
-                break;
-            case 'removeActionSubscription':
-                this.wsUnsubscribeAction(thing, ws, message);
-                break;
-            case 'addEventSubscription':
-                this.wsSubscribeEvent(thing, ws, message);
-                break;
-            case 'removeEventSubscription':
-                this.wsUnsubscribeEvent(thing, ws, message);
+            case 'removeSubscription':
+                this.wsRemoveSubscription(thing, ws, message);
                 break;
             default:
                 throw new RequestError('Unknown messageType');
@@ -65,15 +54,6 @@ export class ThingsController extends BaseController {
         ctx.body = this.things.getThingsNames();
     }
 
-    public async wsSubscribe(thing: Thing, ws: WebSocket, message: any) {
-        thing.subscribe(ws);
-        WebSocketManager.confirm(ws, message.messageType, 'Subscribed to all interactions');
-    }
-
-    public async wsUnsubscribe(thing: Thing, ws: WebSocket, message: any) {
-        thing.unsubscribe(ws);
-        WebSocketManager.confirm(ws, message.messageType, 'Unsubscribed from all interactions');
-    }
 
     public async getProperty(ctx: Context) {
         let property = ctx.params['property'];
@@ -102,28 +82,6 @@ export class ThingsController extends BaseController {
         }
     }
 
-    public async wsSubscribeProperty(thing: Thing, ws: WebSocket, message: any) {
-        for (let property in message.data) {
-            try {
-                thing.subscribeToProperty(property, ws);
-                WebSocketManager.confirm(ws, message.messageType, 'Subscribed to property ' + property);
-            } catch (e) {
-                WebSocketManager.handleError(ws, e);
-            }
-        }
-    }
-
-    public async wsUnsubscribeProperty(thing: Thing, ws: WebSocket, message: any) {
-        for (let property in message.data) {
-            try {
-                thing.unsubscribeFromProperty(property, ws);
-                WebSocketManager.confirm(ws, message.messageType, 'Unsubscribed from property ' + property);
-            } catch (e) {
-                WebSocketManager.handleError(ws, e);
-            }
-        }
-    }
-
     public async postAction(ctx: Context) {
         let action = ctx.params['action'];
         let data = ctx.request.body;
@@ -135,28 +93,6 @@ export class ThingsController extends BaseController {
             ctx.status = 200;
         } catch (e) {
             this.handleError(ctx, e);
-        }
-    }
-
-    public async wsSubscribeAction(thing: Thing, ws: WebSocket, message: any) {
-        for (let action in message.data) {
-            try {
-                thing.subscribeToAction(action, ws);
-                WebSocketManager.confirm(ws, message.messageType, 'Subscribed to action ' + action);
-            } catch (e) {
-                WebSocketManager.handleError(ws, e);
-            }
-        }
-    }
-
-    public async wsUnsubscribeAction(thing: Thing, ws: WebSocket, message: any) {
-        for (let action in message.data) {
-            try {
-                thing.unsubscribeFromAction(action, ws);
-                WebSocketManager.confirm(ws, message.messageType, 'Unsubscribed from action ' + action);
-            } catch (e) {
-                WebSocketManager.handleError(ws, e);
-            }
         }
     }
 
@@ -176,22 +112,84 @@ export class ThingsController extends BaseController {
         }
     }
 
-    public async wsSubscribeEvent(thing: Thing, ws: WebSocket, message: any) {
-        for (let event in message.data) {
+    public async wsSubscribe(thing: Thing, ws: WebSocket, message: any) {
+        thing.subscribe(ws);
+        WebSocketManager.confirm(ws, message.messageType, 'Subscribed to all interactions');
+    }
+
+    public async wsUnsubscribe(thing: Thing, ws: WebSocket, message: any) {
+        thing.unsubscribe(ws);
+        WebSocketManager.confirm(ws, message.messageType, 'Unsubscribed from all interactions');
+    }
+
+    public async wsAddSubscription(thing: Thing, ws: WebSocket, message: any) {
+        if (message.data.hasOwnProperty('property') || message.data.hasOwnProperty('action') || message.data.hasOwnProperty('event')) {
+            if (message.data.hasOwnProperty('property')) {
+                this.wsSubscribeTo(thing, ws, message.data['property'], 'property');
+            }
+            if (message.data.hasOwnProperty('action')) {
+                this.wsSubscribeTo(thing, ws, message.data['action'], 'action');
+            }
+            if (message.data.hasOwnProperty('event')) {
+                this.wsSubscribeTo(thing, ws, message.data['event'], 'event');
+            }
+        } else {
+            WebSocketManager.reject(ws, 'No interactions specified to subscribe to');
+        }
+    }
+
+    public async wsRemoveSubscription(thing: Thing, ws: WebSocket, message: any) {
+        if (message.data.hasOwnProperty('property') || message.data.hasOwnProperty('action') || message.data.hasOwnProperty('event')) {
+            if (message.data.hasOwnProperty('property')) {
+                this.wsUnsubscribeFrom(thing, ws, message.data['property'], 'property');
+            }
+            if (message.data.hasOwnProperty('action')) {
+                this.wsUnsubscribeFrom(thing, ws, message.data['action'], 'action');
+            }
+            if (message.data.hasOwnProperty('event')) {
+                this.wsUnsubscribeFrom(thing, ws, message.data['event'], 'event');
+            }
+        } else {
+            WebSocketManager.reject(ws, 'No interactions specified to unsubscribe from');
+        }
+    }
+
+    private wsSubscribeTo(thing: Thing, ws: WebSocket, interactions: string | string[], type: string) {
+        if (!isArray(interactions)) {
+            interactions = [interactions];
+        }
+
+        for (let interaction of interactions) {
             try {
-                thing.subscribeToEvent(event, ws);
-                WebSocketManager.confirm(ws, message.messageType, 'Subscribed to event ' + event);
+                if (type === 'property') {
+                    thing.subscribeToProperty(interaction, ws);
+                } else if (type === 'action') {
+                    thing.subscribeToAction(interaction, ws);
+                } else if (type === 'event') {
+                    thing.subscribeToEvent(interaction, ws);
+                }
+                WebSocketManager.confirm(ws, 'addSubscription', 'Subscribed to ' + type + ' ' + interaction);
             } catch (e) {
                 WebSocketManager.handleError(ws, e);
             }
         }
     }
 
-    public async wsUnsubscribeEvent(thing: Thing, ws: WebSocket, message: any) {
-        for (let event in message.data) {
+    private wsUnsubscribeFrom(thing: Thing, ws: WebSocket, interactions: string | string[], type: string) {
+        if (!isArray(interactions)) {
+            interactions = [interactions];
+        }
+
+        for (let interaction of interactions) {
             try {
-                thing.unsubscribeFromEvent(event, ws);
-                WebSocketManager.confirm(ws, message.messageType, 'Unsubscribed from event ' + event);
+                if (type === 'property') {
+                    thing.unsubscribeFromProperty(interaction, ws);
+                } else if (type === 'action') {
+                    thing.unsubscribeFromAction(interaction, ws);
+                } else if (type === 'event') {
+                    thing.unsubscribeFromEvent(interaction, ws);
+                }
+                WebSocketManager.confirm(ws, 'removeSubscription', 'Unsubscribed from ' + type + ' ' + interaction);
             } catch (e) {
                 WebSocketManager.handleError(ws, e);
             }
