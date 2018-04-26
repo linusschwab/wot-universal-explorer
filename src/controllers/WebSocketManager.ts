@@ -1,5 +1,6 @@
 import * as WebSocket from "ws";
 import * as http from "http";
+import {Server} from "http";
 import {Thing, ThingsManager} from "../models/thing";
 import {ControllerManager} from "../controllers";
 import {InteractionError, RequestError, ThingError} from "../tools/errors";
@@ -11,13 +12,11 @@ export class WebSocketManager {
     private controllers: ControllerManager;
     private things: ThingsManager;
 
-    public static port = 5001;
-
-    constructor(controllers: ControllerManager, things: ThingsManager) {
+    constructor(server: Server, controllers: ControllerManager, things: ThingsManager) {
         this.controllers = controllers;
         this.things = things;
 
-        this.server = new WebSocket.Server({ port: WebSocketManager.port });
+        this.server = new WebSocket.Server({ server });
         this.server.on('connection', (ws, req) => this.connection(ws, req));
     }
 

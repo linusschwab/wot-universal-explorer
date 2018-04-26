@@ -26,10 +26,10 @@ export class App {
         App.instance = new App();
 
         App.instance.server = App.instance.koa.listen(App.port);
-        App.instance.ws = new WebSocketManager(App.instance.controllers, App.instance.things);
+        App.instance.ws = new WebSocketManager(App.instance.server, App.instance.controllers, App.instance.things);
         App.instance.importTD();
 
-        console.log('Server listening on port ' + App.port + ' (WebSocket on port ' + WebSocketManager.port + ')');
+        console.log('Server listening on port ' + App.port);
     }
 
     constructor() {

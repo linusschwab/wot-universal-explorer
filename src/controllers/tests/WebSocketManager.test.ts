@@ -12,7 +12,7 @@ jest.mock('ws');
 
 let things = new ThingsManager();
 let controllers = new ControllerManager(things);
-const ws = new WebSocketManager(controllers, things);
+const ws = new WebSocketManager(null, controllers, things);
 
 beforeEach(() => {
     jest.clearAllMocks();

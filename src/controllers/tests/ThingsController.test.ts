@@ -102,7 +102,7 @@ describe('subscriptions', () => {
     beforeEach(() => {
         const things = new ThingsManager();
         const controllers = new ControllerManager(things);
-        wsManager = new WebSocketManager(controllers, things);
+        wsManager = new WebSocketManager(null, controllers, things);
     });
 
     test('subscribe to all', async () => {
