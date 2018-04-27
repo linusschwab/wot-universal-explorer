@@ -19,7 +19,7 @@ export class IndexController extends BaseController {
     }
 
     public async getSwaggerUI(ctx: Context) {
-        const rootPath = '../public/swagger-ui/';
+        const rootPath = './public/swagger-ui/';
 
         if (ctx.path === '/') {
             await send(ctx, 'index.html', {root: rootPath});

@@ -10,6 +10,7 @@
   },
   "main": "run.js",
   "scripts": {
+    "start": "tsc && node dist/run.js",
     "test": "jest"
   },
   "dependencies": {

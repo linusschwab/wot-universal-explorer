@@ -72,7 +72,7 @@ export class App {
 
     private importTD() {
         // Parse td files to things
-        const tdPath = '../public/td/';
+        const tdPath = './public/td/';
         fs.readdirSync(tdPath).forEach(file => {
             let td = fs.readFileSync(tdPath + file, 'utf8');
             let thing = TDParser.parse(td);
@@ -80,16 +80,18 @@ export class App {
         });
 
         // Parse moz-td files to things
-        const mozTDPath = '../public/td-moz/';
-        fs.readdirSync(mozTDPath).forEach(file => {
-            let td = fs.readFileSync(mozTDPath + file, 'utf8');
-            let thing = MozillaTDParser.parse(td);
-            this.things.addThing(thing);
-        });
+        if (process.env.MOZ_BASE !== undefined && process.env.MOZ_AUTH !== undefined) {
+            const mozTDPath = './public/td-moz/';
+            fs.readdirSync(mozTDPath).forEach(file => {
+                let td = fs.readFileSync(mozTDPath + file, 'utf8');
+                let thing = MozillaTDParser.parse(td);
+                this.things.addThing(thing);
+            });
+        }
 
         // Generate openapi file from things
         let json = OpenAPIEncoder.encode(this.things);
-        fs.writeFile('../public/swagger-ui/openapi.json', json, 'utf8', (err) => {
+        fs.writeFile('./public/swagger-ui/openapi.json', json, 'utf8', (err) => {
             if (err) {
                 console.log(err.message);
             }
