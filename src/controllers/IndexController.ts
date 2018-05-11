@@ -13,18 +13,16 @@ export class IndexController extends BaseController {
     public routes(): Router {
         const router = new Router();
 
-        router.get('/*', this.getSwaggerUI.bind(this));
+        router.get('/*', this.getIndex.bind(this));
 
         return router;
     }
 
-    public async getSwaggerUI(ctx: Context) {
-        const rootPath = './public/swagger-ui/';
-
-        if (ctx.path === '/') {
-            await send(ctx, 'index.html', {root: rootPath});
+    public async getIndex(ctx: Context) {
+        if (ctx.path.startsWith('/demo')) {
+            await send(ctx, ctx.path, {root: './public', index: 'index.html'});
         } else {
-            await send(ctx, ctx.path, {root: rootPath});
+            await send(ctx, ctx.path, {root: './public/swagger-ui/', index: 'index.html'});
         }
     }
 }
