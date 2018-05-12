@@ -1,7 +1,7 @@
 const base = 'ws://localhost:5000';
 
 class MyStromSwitch {
-    constructor(onPowerChange, onRelayChange) {
+    constructor(onChange) {
         this.ws = new WebSocket(base + '/mystrom-switch');
         this.ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
@@ -10,13 +10,13 @@ class MyStromSwitch {
                 const power = Math.round(message.data.change.power * 100) / 100;
                 if (this.power !== power) {
                     this.power = power;
-                    onPowerChange(power);
+                    onChange('power', power);
                 }
 
                 const relay = message.data.change.relay;
                 if (this.relay !== relay) {
                     this.relay = relay;
-                    onRelayChange(relay);
+                    onChange('relay', relay);
                 }
             } else {
                 console.log(message);

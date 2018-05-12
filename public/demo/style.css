@@ -1,17 +1,33 @@
+@font-face{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 400;
+    src: local('Roboto'), local('Roboto-Regular'), url(/demo/fonts/roboto.woff2) format('woff2');
+}
+
+body {
+    font-family: Roboto, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1rem;
+}
+
 #mystrom-switch {
     position: relative;
+    max-width: 235px;
+    max-height: 352px;
 }
 
 #mystrom-switch .power {
     position: absolute;
-    left: 105px;
-    top: 214px;
+    left: 44.68%;
+    top: 60.79%;
 }
 
 #mystrom-switch .relay {
     position: absolute;
-    left: 42px;
-    bottom: 42px;
+    left: 17.87%;
+    bottom: 11.93%;
 
     height: 10px;
     width: 10px;

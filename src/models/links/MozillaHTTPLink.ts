@@ -7,7 +7,7 @@ export class MozillaHTTPLink extends HTTPLink {
         super(href, host, 'application/json');
 
         // Mozilla gateway
-        if (host === process.env.MOZ_BASE) {
+        if (host && host.includes(process.env.MOZ_BASE)) {
             this.http.defaults.headers.common['Authorization'] = 'Bearer ' + process.env.MOZ_AUTH;
         }
     }
