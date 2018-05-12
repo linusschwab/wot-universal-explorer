@@ -44,6 +44,12 @@ export class ThingsController extends BaseController {
             case 'removeSubscription':
                 this.wsRemoveSubscription(thing, ws, message);
                 break;
+            case 'setProperty':
+                this.wsSetProperty(thing, ws, message);
+                break;
+            case 'requestAction':
+                this.wsRequestAction(thing, ws, message);
+                break;
             default:
                 throw new RequestError('Unknown messageType');
         }
@@ -151,6 +157,19 @@ export class ThingsController extends BaseController {
             }
         } else {
             WebSocketManager.reject(ws, 'No interactions specified to unsubscribe from');
+        }
+    }
+
+    public async wsSetProperty(thing: Thing, ws: WebSocket, message: any) {
+        for (let property in message.data) {
+            await thing.writeProperty(property, message.data[property]);
+        }
+    }
+
+    public async wsRequestAction(thing: Thing, ws: WebSocket, message: any) {
+        for (let action in message.data) {
+            let data = message.data[action] ? message.data[action] : null;
+            await thing.invokeAction(action, data);
         }
     }
 

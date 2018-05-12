@@ -2,8 +2,8 @@ const base = 'ws://localhost:5000';
 
 class MyStromSwitch {
     constructor(onPowerChange, onRelayChange) {
-        const ws = new WebSocket(base + '/mystrom-switch');
-        ws.onmessage = (event) => {
+        this.ws = new WebSocket(base + '/mystrom-switch');
+        this.ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
 
             if (message.hasOwnProperty('messageType') && message.messageType === 'event') {
@@ -23,11 +23,18 @@ class MyStromSwitch {
             }
         };
 
-        ws.onopen = () => {
-            ws.send(JSON.stringify({
+        this.ws.onopen = () => {
+            this.ws.send(JSON.stringify({
                 'messageType': 'addSubscription',
                 'data': {'event': 'change'}
             }));
         };
+    }
+
+    toggle() {
+        this.ws.send(JSON.stringify({
+            'messageType': 'requestAction',
+            'data': {'toggle': {}}
+        }));
     }
 }

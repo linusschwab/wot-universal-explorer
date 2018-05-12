@@ -1,6 +1,58 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`subscriptions subscribe to all 1`] = `
+exports[`websocket interactions request action 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "testAction",
+      Object {},
+    ],
+  ],
+}
+`;
+
+exports[`websocket interactions request multiple actions 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "testAction",
+      Object {},
+    ],
+    Array [
+      "testAction2",
+      "data",
+    ],
+  ],
+}
+`;
+
+exports[`websocket interactions set multiple properties 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "testProperty",
+      "10",
+    ],
+    Array [
+      "testProperty2",
+      "20",
+    ],
+  ],
+}
+`;
+
+exports[`websocket interactions set property 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "testProperty",
+      "10",
+    ],
+  ],
+}
+`;
+
+exports[`websocket subscriptions subscribe to all 1`] = `
 [MockFunction] {
   "calls": Array [
     Array [
@@ -10,7 +62,7 @@ exports[`subscriptions subscribe to all 1`] = `
 }
 `;
 
-exports[`subscriptions subscribe to interaction 1`] = `
+exports[`websocket subscriptions subscribe to interaction 1`] = `
 [MockFunction] {
   "calls": Array [
     Array [
@@ -20,7 +72,7 @@ exports[`subscriptions subscribe to interaction 1`] = `
 }
 `;
 
-exports[`subscriptions subscribe to multiple interactions 1`] = `
+exports[`websocket subscriptions subscribe to multiple interactions 1`] = `
 [MockFunction] {
   "calls": Array [
     Array [
@@ -42,7 +94,7 @@ exports[`subscriptions subscribe to multiple interactions 1`] = `
 }
 `;
 
-exports[`subscriptions unsubscribe from all 1`] = `
+exports[`websocket subscriptions unsubscribe from all 1`] = `
 [MockFunction] {
   "calls": Array [
     Array [
@@ -52,7 +104,7 @@ exports[`subscriptions unsubscribe from all 1`] = `
 }
 `;
 
-exports[`subscriptions unsubscribe from interaction 1`] = `
+exports[`websocket subscriptions unsubscribe from interaction 1`] = `
 [MockFunction] {
   "calls": Array [
     Array [
@@ -62,7 +114,7 @@ exports[`subscriptions unsubscribe from interaction 1`] = `
 }
 `;
 
-exports[`subscriptions unsubscribe from multiple interactions 1`] = `
+exports[`websocket subscriptions unsubscribe from multiple interactions 1`] = `
 [MockFunction] {
   "calls": Array [
     Array [
