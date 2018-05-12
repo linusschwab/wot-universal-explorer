@@ -1,0 +1,90 @@
+@font-face{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    src: local('Roboto Light'), local('Roboto-Light'), url(/demo/fonts/roboto-light.woff2) format('woff2');
+}
+
+body {
+    font-family: Roboto, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+img {
+    width: 100%;
+}
+
+#title {
+    text-align: center;
+    font-size: 2.6rem;
+    padding: 30px 0;
+}
+
+#mystrom-switch {
+    position: relative;
+    max-width: 200px;
+}
+
+#mystrom-switch .power {
+    position: absolute;
+    left: 41.68%;
+    top: 58.79%;
+}
+
+#mystrom-switch .relay {
+    position: absolute;
+    left: 17.87%;
+    bottom: 11.93%;
+
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+}
+
+#hue-color-lamp {
+    position: relative;
+    max-width: 200px;
+}
+
+#hue-motion-sensor {
+    position: relative;
+    max-width: 200px;
+}
+
+#thingy-52 {
+    position: relative;
+    max-width: 200px;
+}
+
+/* Layout */
+.container {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 960px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+}
+
+.thing {
+    min-width: calc(25% - 60px);
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+}
