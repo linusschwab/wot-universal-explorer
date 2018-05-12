@@ -32,8 +32,6 @@ export class WebSocketManager {
             ws.on('close', () => {
                 thing.unsubscribe(ws);
             });
-
-            ws.send('Connected to ' + thing.name);
         } catch (e) {
             WebSocketManager.handleError(ws, e);
         }
