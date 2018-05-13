@@ -8,6 +8,7 @@ import {InteractionData} from "../interactions";
 export class MozillaThing extends Thing {
 
     public ws: WebSocket;
+    private wsReconnecting = false;
 
     constructor(name: string, type: string, base: string) {
         super(name, type, base);
@@ -22,8 +23,38 @@ export class MozillaThing extends Thing {
 
         this.ws = new WebSocket(wsUrl);
 
-        this.ws.on('error', e => this.wsHandleError(e));
+        this.ws.on('open', () => this.wsConnected());
+        this.ws.on('close', () => this.wsReconnect());
         this.ws.on('message', data => this.wsHandleMessage(data));
+        this.ws.on('error', e => this.wsHandleError(e));
+    }
+
+    public async wsConnected() {
+        if (this.wsReconnecting) {
+            console.log('\x1b[32m%s\x1b[0m', 'Connected to ' + this.name + ' WebSocket');
+            this.wsReconnecting = false;
+        }
+
+        // Subscribe to events
+        for (let event of this.events) {
+            this.ws.send(JSON.stringify({
+                "messageType": "addEventSubscription",
+                "data": {
+                    [event.name]: {}
+                }
+            }));
+        }
+    }
+
+    private async wsReconnect() {
+        if (!this.wsReconnecting) {
+            console.error('Lost connection to ' + this.name + ' WebSocket');
+            this.wsReconnecting = true;
+        }
+
+        setTimeout(() => {
+            this.setupWebSocket();
+        }, 5000)
     }
 
     public async wsHandleMessage(data: WebSocket.Data) {
@@ -44,10 +75,15 @@ export class MozillaThing extends Thing {
                     // Do nothing
                 }
             }
+        } else if (message.messageType === 'event') {
+            console.log(message);
         }
     }
 
     private async wsHandleError(e: Error) {
-        console.error('Could not connect to ' + this.name + ' WebSocket (' + e.message + ')');
+        if (!this.wsReconnecting) {
+            console.error('Could not connect to ' + this.name + ' WebSocket (' + e.message + ')');
+            this.wsReconnecting = true;
+        }
     }
 }
