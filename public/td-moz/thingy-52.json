@@ -1,12 +1,11 @@
 {
-  "name":"Thingy 52",
+  "name":"Thingy:52",
   "href":"http://192.168.0.4:8888",
   "type":"thing",
   "properties":{
     "temperature":{
       "type":"number",
       "unit":"celsius",
-      "description":"An ambient temperature sensor",
       "href":"/properties/temperature"
     },
     "pressure":{
@@ -43,10 +42,15 @@
     }
   },
   "actions":{
-
+    "ledoneshot":{
+      "href":"/actions/ledoneshot"
+    }
   },
   "events":{
-
+    "button":{
+      "type":"string",
+      "href":"/events/button"
+    }
   },
   "links":[
     {

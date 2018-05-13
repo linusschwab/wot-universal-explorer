@@ -1,5 +1,5 @@
 import {MozillaThing} from "../models/thing";
-import {Property} from "../models/interactions";
+import {Action, Event, Property} from "../models/interactions";
 import {DataSchema} from "../models/schema";
 import {MozillaHTTPLink} from "../models/links/MozillaHTTPLink";
 
@@ -28,14 +28,39 @@ export class MozillaTDParser {
             thing.registerInteraction(property);
         }
 
+        for (let [name, aobj] of Object.entries(obj.actions)) {
+            let action = MozillaTDParser.parseAction(name, aobj);
+
+            let link = MozillaTDParser.parseLink(MozillaTDParser.parseActionLink(obj.links), base);
+            action.registerLink(link);
+
+            thing.registerInteraction(action);
+        }
+
+        for (let [name, eobj] of Object.entries(obj.events)) {
+            let event = MozillaTDParser.parseEvent(name, eobj);
+
+            thing.registerInteraction(event);
+        }
+
         return thing;
     }
 
     private static parseBase(base: string) {
-        if (base.includes('http://')) {
+        if (base === undefined) {
+            return process.env.MOZ_BASE;
+        } else if (base.includes('http://')) {
             return base;
         } else {
             return process.env.MOZ_BASE + base;
+        }
+    }
+
+    private static parseActionLink(links: any[]) {
+        for (let link of links) {
+            if (link.hasOwnProperty('rel') && link.rel === 'actions') {
+                return link.href;
+            }
         }
     }
 
@@ -46,9 +71,19 @@ export class MozillaTDParser {
         return new MozillaHTTPLink(url, base);
     }
 
-    private static parseProperty(name: string, pobj: any) {
+    private static parseProperty(name: string, obj: any) {
         // TODO: include unit in data schema? (celsius, percentage, ...)
-        let schema = new DataSchema(pobj.type, true, false);
+        let schema = new DataSchema(obj.type, true, false);
         return new Property(name, schema, true, true);
+    }
+
+    private static parseAction(name: string, obj: any) {
+        // TODO: support input schema
+        return new Action(name, null, null)
+    }
+
+    private static parseEvent(name: string, obj: any) {
+        let schema = new DataSchema(obj.type, false, false);
+        return new Event(name, schema);
     }
 }

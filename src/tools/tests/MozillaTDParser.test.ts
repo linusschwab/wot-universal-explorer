@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import {MozillaTDParser} from "../MozillaTDParser";
-import {Action, Property} from "../../models/interactions";
+import {Action, Event, Property} from "../../models/interactions";
 
 
 // Create mocks
@@ -46,4 +46,44 @@ test('simple td with 2 properties', () => {
     const propertyColorSchema = (<Property>propertyColor).schema;
     expect(propertyColorSchema.type).toBe('string');
     expect(propertyColorSchema.writable).toBe(true);
+});
+
+test('td with 3 properties, 1 action and 1 event', () => {
+    const tdRaspberry = fs.readFileSync(__dirname + '/__data__/mozilla-td-sample-raspberrypi.json', 'utf8');
+    const thing = MozillaTDParser.parse(tdRaspberry);
+
+    // Basic data
+    expect(thing.name).toBe('WoT Pi');
+    expect(thing.type).toBe('thing');
+    expect(thing.interactions).toHaveLength(5);
+
+    // Interactions
+    const propertyTemperature = thing.interactions[0];
+    expect(propertyTemperature).toBeInstanceOf(Property);
+    expect(propertyTemperature.name).toBe('temperature');
+    expect(propertyTemperature.links).toHaveLength(1);
+    expect(propertyTemperature.links[0].toString()).toBe('http://mozilla-gateway.base/things/pi/properties/temperature');
+
+    const propertyHumidity = thing.interactions[1];
+    expect(propertyHumidity).toBeInstanceOf(Property);
+    expect(propertyHumidity.name).toBe('humidity');
+    expect(propertyHumidity.links).toHaveLength(1);
+    expect(propertyHumidity.links[0].toString()).toBe('http://mozilla-gateway.base/things/pi/properties/humidity');
+
+    const propertyLed = thing.interactions[2];
+    expect(propertyLed).toBeInstanceOf(Property);
+    expect(propertyLed.name).toBe('led');
+    expect(propertyLed.links).toHaveLength(1);
+    expect(propertyLed.links[0].toString()).toBe('http://mozilla-gateway.base/things/pi/properties/led');
+
+    const actionReboot = thing.interactions[3];
+    expect(actionReboot).toBeInstanceOf(Action);
+    expect(actionReboot.name).toBe('reboot');
+    expect(actionReboot.links).toHaveLength(1);
+    expect(actionReboot.links[0].toString()).toBe('http://mozilla-gateway.base/things/pi/actions');
+
+    const eventReboot = thing.interactions[4];
+    expect(eventReboot).toBeInstanceOf(Event);
+    expect(eventReboot.name).toBe('reboot');
+    expect(eventReboot.links).toHaveLength(0);
 });
