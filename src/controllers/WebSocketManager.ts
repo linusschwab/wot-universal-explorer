@@ -3,7 +3,7 @@ import * as http from "http";
 import {Server} from "http";
 import {Thing, ThingsManager} from "../models/thing";
 import {ControllerManager} from "../controllers";
-import {InteractionError, RequestError, ThingError} from "../tools/errors";
+import {InteractionError, RequestError, ThingError, TimeoutError} from "../tools/errors";
 
 
 export class WebSocketManager {
@@ -103,6 +103,14 @@ export class WebSocketManager {
                 }
             }));
             ws.close();
+        } else if (e instanceof TimeoutError) {
+            ws.send(JSON.stringify({
+                messageType: 'error',
+                data: {
+                    status: '408',
+                    message: e.message
+                }
+            }));
         } else if (e instanceof RequestError || e instanceof InteractionError) {
             WebSocketManager.reject(ws, e.message);
         } else {

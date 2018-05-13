@@ -182,6 +182,31 @@ describe('websocket', () => {
     });
 
     describe('interactions', () => {
+        test('get property', async () => {
+            await wsManager.handleMessage(mockThing, mockWs, JSON.stringify({
+                "messageType": "getProperty",
+                "data": {
+                    "testProperty": {}
+                }
+            }));
+
+            expect(mockThing.readProperty).toHaveBeenCalledTimes(1);
+            expect(mockThing.readProperty).toMatchSnapshot();
+        });
+
+        test('get multiple properties', async () => {
+            await wsManager.handleMessage(mockThing, mockWs, JSON.stringify({
+                "messageType": "getProperty",
+                "data": {
+                    "testProperty": {},
+                    "testProperty2": {}
+                }
+            }));
+
+            expect(mockThing.readProperty).toHaveBeenCalledTimes(2);
+            expect(mockThing.readProperty).toMatchSnapshot();
+        });
+
         test('set property', async () => {
             await wsManager.handleMessage(mockThing, mockWs, JSON.stringify({
                 "messageType": "setProperty",

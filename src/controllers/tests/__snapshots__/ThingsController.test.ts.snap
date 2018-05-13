@@ -1,5 +1,28 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`websocket interactions get multiple properties 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "testProperty",
+    ],
+    Array [
+      "testProperty2",
+    ],
+  ],
+}
+`;
+
+exports[`websocket interactions get property 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "testProperty",
+    ],
+  ],
+}
+`;
+
 exports[`websocket interactions request action 1`] = `
 [MockFunction] {
   "calls": Array [
@@ -27,6 +50,21 @@ exports[`websocket interactions request multiple actions 1`] = `
 `;
 
 exports[`websocket interactions set multiple properties 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "testProperty",
+      "10",
+    ],
+    Array [
+      "testProperty2",
+      "20",
+    ],
+  ],
+}
+`;
+
+exports[`websocket interactions set multiple properties 2`] = `
 [MockFunction] {
   "calls": Array [
     Array [

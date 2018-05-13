@@ -44,6 +44,9 @@ export class ThingsController extends BaseController {
             case 'removeSubscription':
                 this.wsRemoveSubscription(thing, ws, message);
                 break;
+            case 'getProperty':
+                this.wsGetProperty(thing, ws, message);
+                break;
             case 'setProperty':
                 this.wsSetProperty(thing, ws, message);
                 break;
@@ -160,16 +163,40 @@ export class ThingsController extends BaseController {
         }
     }
 
+    public async wsGetProperty(thing: Thing, ws: WebSocket, message: any) {
+        for (let property in message.data) {
+            try {
+                let response = await thing.readProperty(property);
+                ws.send(JSON.stringify({
+                    messageType: 'propertyStatus',
+                    data: {
+                        [property]: response
+                    }
+                }));
+            } catch (e) {
+                WebSocketManager.handleError(ws, e);
+            }
+        }
+    }
+
     public async wsSetProperty(thing: Thing, ws: WebSocket, message: any) {
         for (let property in message.data) {
-            await thing.writeProperty(property, message.data[property]);
+            try {
+                await thing.writeProperty(property, message.data[property]);
+            } catch (e) {
+                WebSocketManager.handleError(ws, e);
+            }
         }
     }
 
     public async wsRequestAction(thing: Thing, ws: WebSocket, message: any) {
         for (let action in message.data) {
             let data = message.data[action] ? message.data[action] : null;
-            await thing.invokeAction(action, data);
+            try {
+                await thing.invokeAction(action, data);
+            } catch (e) {
+                WebSocketManager.handleError(ws, e);
+            }
         }
     }
 
