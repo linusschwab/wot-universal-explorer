@@ -8,7 +8,7 @@
 body {
     font-family: Roboto, sans-serif;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 300;
     font-size: 1rem;
 }
 
@@ -38,14 +38,32 @@ img {
     left: 17.87%;
     bottom: 11.93%;
 
-    height: 10px;
     width: 10px;
+    height: 10px;
     border-radius: 50%;
 }
 
 #hue-color-lamp {
     position: relative;
     max-width: 200px;
+}
+
+#hue-color-lamp .color {
+    position: absolute;
+    left: calc(50% - 20px);
+    top: 10%;
+
+    width: 40px;
+    height: 40px;
+}
+
+#hue-color-lamp .click-toggle {
+    position: absolute;
+    left: 0;
+    top: 30%;
+
+    width: 100%;
+    height: 70%;
 }
 
 #hue-motion-sensor {
