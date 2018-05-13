@@ -64,21 +64,6 @@ exports[`websocket interactions set multiple properties 1`] = `
 }
 `;
 
-exports[`websocket interactions set multiple properties 2`] = `
-[MockFunction] {
-  "calls": Array [
-    Array [
-      "testProperty",
-      "10",
-    ],
-    Array [
-      "testProperty2",
-      "20",
-    ],
-  ],
-}
-`;
-
 exports[`websocket interactions set property 1`] = `
 [MockFunction] {
   "calls": Array [
