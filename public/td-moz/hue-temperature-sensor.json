@@ -1,0 +1,38 @@
+{
+  "name": "Hue Temperature Sensor",
+  "type": "",
+  "description": "",
+  "href": "/things/philips-hue-001788fffe401a06-sensors-2",
+  "properties": {
+    "temperature": {
+      "type": "number",
+      "unit": "celsius",
+      "href": "/things/philips-hue-001788fffe401a06-sensors-2/properties/temperature"
+    }
+  },
+  "actions": {},
+  "events": {},
+  "links": [
+    {
+      "rel": "properties",
+      "href": "/things/philips-hue-001788fffe401a06-sensors-2/properties"
+    },
+    {
+      "rel": "actions",
+      "href": "/things/philips-hue-001788fffe401a06-sensors-2/actions"
+    },
+    {
+      "rel": "events",
+      "href": "/things/philips-hue-001788fffe401a06-sensors-2/events"
+    },
+    {
+      "rel": "alternate",
+      "mediaType": "text/html",
+      "href": "/things/philips-hue-001788fffe401a06-sensors-2"
+    },
+    {
+      "rel": "alternate",
+      "href": "ws://192.168.0.4:8080/things/philips-hue-001788fffe401a06-sensors-2"
+    }
+  ]
+}

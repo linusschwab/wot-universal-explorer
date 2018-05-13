@@ -124,3 +124,73 @@ class HueColorLamp extends Thing {
         }));
     }
 }
+
+class HueMotionSensor extends Thing {
+    constructor(onChange) {
+        super(onChange, 'hue-motion-sensor');
+
+        this.ws.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+
+            if (message.hasOwnProperty('messageType') && message.messageType === 'propertyStatus') {
+                this.updateOn(message.data.on);
+            } else {
+                console.log(message);
+            }
+        };
+
+        this.ws.onopen = () => {
+            this.ws.send(JSON.stringify({
+                'messageType': 'addSubscription',
+                'data': {'property': 'on'}
+            }));
+
+            this.ws.send(JSON.stringify({
+                'messageType': 'getProperty',
+                'data': {'on': {}}
+            }));
+        };
+    }
+
+    updateOn(on) {
+        if (this.on !== on) {
+            this.on = on;
+            this.onChange('on', on);
+        }
+    }
+}
+
+class HueTemperatureSensor extends Thing {
+    constructor(onChange) {
+        super(onChange, 'hue-temperature-sensor');
+
+        this.ws.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+
+            if (message.hasOwnProperty('messageType') && message.messageType === 'propertyStatus') {
+                this.updateTemperature(message.data.temperature);
+            } else {
+                console.log(message);
+            }
+        };
+
+        this.ws.onopen = () => {
+            this.ws.send(JSON.stringify({
+                'messageType': 'addSubscription',
+                'data': {'property': 'temperature'}
+            }));
+
+            this.ws.send(JSON.stringify({
+                'messageType': 'getProperty',
+                'data': {'temperature': {}}
+            }));
+        };
+    }
+
+    updateTemperature(temperature) {
+        if (this.temperature !== temperature) {
+            this.temperature = temperature;
+            this.onChange('temperature', temperature);
+        }
+    }
+}

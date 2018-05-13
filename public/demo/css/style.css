@@ -29,8 +29,8 @@ img {
 
 #mystrom-switch .power {
     position: absolute;
-    left: 41.68%;
-    top: 58.79%;
+    left: 39%;
+    top: 59%;
 }
 
 #mystrom-switch .relay {
@@ -69,6 +69,22 @@ img {
 #hue-motion-sensor {
     position: relative;
     max-width: 200px;
+}
+
+#hue-motion-sensor .motion {
+    position: absolute;
+    left: calc(50% - 8px);
+    top: 19%;
+
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+}
+
+#hue-motion-sensor .temperature {
+    position: absolute;
+    left: 36%;
+    bottom: 12%;
 }
 
 #thingy-52 {
