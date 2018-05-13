@@ -76,7 +76,16 @@ export class MozillaThing extends Thing {
                 }
             }
         } else if (message.messageType === 'event') {
-            console.log(message);
+            for (let eventName in message.data) {
+                try {
+                    const event = this.getEvent(eventName);
+                    const payload = message.data[eventName];
+                    const data = new InteractionData(payload.hasOwnProperty('data') ? payload.data : payload);
+                    event.update(data);
+                } catch (e) {
+                    // Do nothing
+                }
+            }
         }
     }
 

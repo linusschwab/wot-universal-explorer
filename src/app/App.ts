@@ -29,7 +29,7 @@ export class App {
         App.instance.ws = new WebSocketManager(App.instance.server, App.instance.controllers, App.instance.things);
         App.instance.importTD();
 
-        console.log('Server listening on port ' + App.port);
+        console.log('\x1b[32m%s\x1b[0m', 'Server listening on port ' + App.port);
     }
 
     constructor() {

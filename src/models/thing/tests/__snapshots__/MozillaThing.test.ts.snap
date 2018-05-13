@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`event sends websocket notification 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "{\\"messageType\\":\\"event\\",\\"data\\":{\\"button\\":\\"Pressed\\"}}",
+    ],
+  ],
+}
+`;
+
 exports[`property status update sends websocket notification 1`] = `
 [MockFunction] {
   "calls": Array [

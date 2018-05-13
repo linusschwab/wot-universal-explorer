@@ -29,6 +29,15 @@ export class MozillaHTTPLink extends HTTPLink {
         }
     }
 
+    protected async executeAction(data: any): Promise<any> {
+        // Wrap data in action request
+        data = {
+            [this.interaction.name]: data
+        };
+
+        await super.executeAction(data);
+    }
+
     private isObject(obj: any) {
         return obj === Object(obj);
     }

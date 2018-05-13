@@ -1,5 +1,5 @@
 import MockAdapter from "axios-mock-adapter";
-import {Action, Event, Property} from "../../interactions";
+import {Action, Property} from "../../interactions";
 import {MozillaHTTPLink} from "../MozillaHTTPLink";
 
 
@@ -35,4 +35,11 @@ describe('execute property', () => {
         const response = await link.execute();
         expect(response).toEqual(mockResponse); // Unwrapped response
     });
+});
+
+test('invoke action', async () => {
+    link.interaction = new Action('test', null, null);
+    mock.onPost().reply(200, null);
+
+    await link.execute();
 });
