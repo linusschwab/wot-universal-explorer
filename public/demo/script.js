@@ -50,12 +50,10 @@ function onChangeThingy(type, value) {
         if (value < 800) {
             co2.style.background = '#76FF03';
         } else if (value < 1400) {
-            co2.style.background = '#FFC107';
+            co2.style.background = '#FFEA00';
         } else {
             co2.style.background = '#d50000';
         }
-    } else if (type === 'humidity') {
-        document.querySelector('#thingy-52 .humidity').textContent = value + '%';
     } else if (type === 'color') {
         // Set hue color from thingy sensor if button pressed
         if (thingy.button === 'Pressed') {

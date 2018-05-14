@@ -94,28 +94,13 @@ img {
 
 #thingy-52 .co2 {
     position: absolute;
-    left: 56%;
-    top: 5%;
+    left: 68%;
+    top: 8%;
 
-    color: #fff;
     font-size: 14px;
     line-height: 40px;
     padding-left: 5px;
     width: 35px;
-    height: 40px;
-    border-radius: 50%;
-}
-
-#thingy-52 .humidity {
-    position: absolute;
-    left: 31%;
-    top: 5%;
-
-    color: #fff;
-    background: #0d5aa7;
-    line-height: 40px;
-    padding-left: 6px;
-    width: 34px;
     height: 40px;
     border-radius: 50%;
 }
