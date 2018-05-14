@@ -87,7 +87,7 @@ function turnOnFanIfHighCo2(co2) {
     } else if (turnedOnCo2 && co2 < 1400) {
         myStrom.setRelay(false);
         turnedOnCo2 = false;
-        displayMessage('CO2 below 1400 ppm, turning off fan');
+        displayMessage('CO2 no longer above 1400 ppm, turning off fan');
     }
 }
 
