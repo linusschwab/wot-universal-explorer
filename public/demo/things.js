@@ -1,13 +1,31 @@
 class Thing {
     constructor(onChange, name) {
         this.onChange = onChange;
-        this.ws = new WebSocket('ws://localhost:5000/' + name);
+        this.url = 'ws://localhost:5000/' + name;
+        this.setup();
+    }
+
+    setup() {
+        this.ws = new WebSocket(this.url);
+
+        this.ws.onclose = () => this.reconnect();
+        this.ws.onerror = (event) => {};
+    }
+
+    reconnect() {
+        setTimeout(() => {
+            this.setup();
+        }, 5000)
     }
 }
 
 class MyStromSwitch extends Thing {
     constructor(onChange) {
         super(onChange, 'mystrom-switch');
+    }
+
+    setup() {
+        super.setup();
 
         this.ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
@@ -18,8 +36,8 @@ class MyStromSwitch extends Thing {
             } else if (message.hasOwnProperty('messageType') && message.messageType === 'propertyStatus') {
                 this.updatePower(Math.round(message.data.report.power * 100) / 100);
                 this.updateRelay(message.data.report.relay);
-            } else {
-                console.log(message);
+            } else if (message.hasOwnProperty('messageType') && message.messageType === 'error') {
+                console.error(message);
             }
         };
 
@@ -61,6 +79,10 @@ class MyStromSwitch extends Thing {
 class HueColorLamp extends Thing {
     constructor(onChange) {
         super(onChange, 'hue-color-lamp');
+    }
+
+    setup() {
+        super.setup();
 
         this.ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
@@ -70,11 +92,9 @@ class HueColorLamp extends Thing {
                     this.updateOn(message.data.on);
                 } else if (message.data.hasOwnProperty('color')) {
                     this.updateColor(message.data.color);
-                } else {
-                    console.log(message);
                 }
-            } else {
-                console.log(message);
+            } else if (message.hasOwnProperty('messageType') && message.messageType === 'error') {
+                console.error(message);
             }
         };
 
@@ -128,14 +148,18 @@ class HueColorLamp extends Thing {
 class HueMotionSensor extends Thing {
     constructor(onChange) {
         super(onChange, 'hue-motion-sensor');
+    }
+
+    setup() {
+        super.setup();
 
         this.ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
 
             if (message.hasOwnProperty('messageType') && message.messageType === 'propertyStatus') {
                 this.updateOn(message.data.on);
-            } else {
-                console.log(message);
+            } else if (message.hasOwnProperty('messageType') && message.messageType === 'error') {
+                console.error(message);
             }
         };
 
@@ -163,14 +187,18 @@ class HueMotionSensor extends Thing {
 class HueTemperatureSensor extends Thing {
     constructor(onChange) {
         super(onChange, 'hue-temperature-sensor');
+    }
+
+    setup() {
+        super.setup();
 
         this.ws.onmessage = (event) => {
             const message = JSON.parse(event.data);
 
             if (message.hasOwnProperty('messageType') && message.messageType === 'propertyStatus') {
                 this.updateTemperature(message.data.temperature);
-            } else {
-                console.log(message);
+            } else if (message.hasOwnProperty('messageType') && message.messageType === 'error') {
+                console.error(message);
             }
         };
 
@@ -191,6 +219,78 @@ class HueTemperatureSensor extends Thing {
         if (this.temperature !== temperature) {
             this.temperature = temperature;
             this.onChange('temperature', temperature);
+        }
+    }
+}
+
+class Thingy52 extends Thing {
+    constructor(onChange) {
+        super(onChange, 'thingy-52');
+    }
+
+    setup() {
+        super.setup();
+
+        this.ws.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+
+            if (message.hasOwnProperty('messageType') && message.messageType === 'propertyStatus') {
+                if (message.data.hasOwnProperty('gas')) {
+                    this.updateGas(message.data.gas);
+                } else if (message.data.hasOwnProperty('humidity')) {
+                    this.updateHumidity(message.data.humidity);
+                } else if (message.data.hasOwnProperty('color')) {
+                    this.updateColor(message.data.color);
+                }
+            } else if (message.hasOwnProperty('messageType') && message.messageType === 'event') {
+                this.updateButton(message.data.button);
+            } else if (message.hasOwnProperty('messageType') && message.messageType === 'error') {
+                console.error(message);
+            }
+        };
+
+        this.ws.onopen = () => {
+            this.ws.send(JSON.stringify({
+                'messageType': 'addSubscription',
+                'data': {
+                    'property': ['gas', 'humidity', 'color'],
+                    'event': 'button'
+                }
+            }));
+
+            this.ws.send(JSON.stringify({
+                'messageType': 'getProperty',
+                'data': {'gas': {}, 'humidity': {}, 'color': {}}
+            }));
+        };
+    }
+
+    updateGas(gas) {
+        let co2 = gas.eco2;
+        if (this.co2 !== co2) {
+            this.co2 = co2;
+            this.onChange('co2', co2);
+        }
+    }
+
+    updateHumidity(humidity) {
+        if (this.humidity !== humidity) {
+            this.humidity = humidity;
+            this.onChange('humidity', humidity);
+        }
+    }
+
+    updateColor(color) {
+        if (this.color !== color) {
+            this.color = color;
+            this.onChange('color', color);
+        }
+    }
+
+    updateButton(button) {
+        if (this.button !== button) {
+            this.button = button;
+            this.onChange('button', button);
         }
     }
 }
