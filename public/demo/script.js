@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Change listeners
 function onChangeMyStrom(type, value) {
     if (type === 'power') {
         document.querySelector('#mystrom-switch .power').textContent = (value === 0 ? '' : value + ' W');
@@ -37,6 +38,7 @@ function onChangeHueLamp(type, value) {
 
 function onChangeHueMotion(type, value) {
     document.querySelector('#hue-motion-sensor .motion').style.background = (value ? '#d50000' : '#d3d3d3');
+    turnOnHueLampIfMotion(value);
 }
 
 function onChangeHueTemperature(type, value) {
@@ -54,15 +56,37 @@ function onChangeThingy(type, value) {
         } else {
             co2.style.background = '#d50000';
         }
+        turnOnFanIfHighCo2(value);
     } else if (type === 'color') {
-        // Set hue color from thingy sensor if button pressed
-        if (thingy.button === 'Pressed') {
-            if (!hueLamp.on) {
-                hueLamp.toggle();
-            }
-            hueLamp.setColor(value);
-        }
+        setHueColorFromThingy(value);
     } else if (type === 'button') {
         document.querySelector('#thingy-52 .button').style.background = (value === 'Pressed' ? '#d50000' : '');
+    }
+}
+
+// Scenario
+let turnedOnMotion = false;
+function turnOnHueLampIfMotion(motion) {
+    if (motion && !hueLamp.on) {
+        hueLamp.toggle();
+        turnedOnMotion = true;
+    } else if (turnedOnMotion) {
+        hueLamp.toggle();
+        turnedOnMotion = false;
+    }
+}
+
+function turnOnFanIfHighCo2(co2) {
+    if (co2 >= 1400 && !myStrom.on) {
+        myStrom.toggle();
+    }
+}
+
+function setHueColorFromThingy(color) {
+    if (thingy.button === 'Pressed') {
+        if (!hueLamp.on) {
+            hueLamp.toggle();
+        }
+        hueLamp.setColor(color);
     }
 }
