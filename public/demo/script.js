@@ -70,9 +70,11 @@ function turnOnHueLampIfMotion(motion) {
     if (motion && !hueLamp.on) {
         hueLamp.toggle();
         turnedOnMotion = true;
+        displayMessage('Motion detected, turning on Hue lamp');
     } else if (turnedOnMotion) {
         hueLamp.toggle();
         turnedOnMotion = false;
+        displayMessage('No motion detected anymore, turning off Hue lamp');
     }
 }
 
@@ -81,9 +83,11 @@ function turnOnFanIfHighCo2(co2) {
     if (co2 >= 1400 && !myStrom.relay) {
         myStrom.setRelay(true);
         turnedOnCo2 = true;
+        displayMessage('CO2 above 1400 ppm, turning on fan');
     } else if (turnedOnCo2 && co2 < 1400) {
         myStrom.setRelay(false);
         turnedOnCo2 = false;
+        displayMessage('CO2 below 1400 ppm, turning off fan');
     }
 }
 
@@ -93,5 +97,19 @@ function setHueColorFromThingy(color) {
             hueLamp.toggle();
         }
         hueLamp.setColor(color);
+        displayMessage('Setting Hue lamp color to: ' + color);
     }
+}
+
+let messageTimeoutMs, timerId;
+function displayMessage(text) {
+    const message = document.querySelector('#message .text');
+    messageTimeoutMs = 5000;
+
+    message.textContent = text;
+
+    clearTimeout(timerId);
+    timerId = setInterval(() => {
+        message.textContent = '';
+    }, messageTimeoutMs);
 }
