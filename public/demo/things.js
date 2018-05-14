@@ -74,6 +74,13 @@ class MyStromSwitch extends Thing {
             'data': {'toggle': {}}
         }));
     }
+
+    setRelay(on) {
+        this.ws.send(JSON.stringify({
+            'messageType': 'requestAction',
+            'data': {[on ? 'on' : 'off']: {}}
+        }));
+    }
 }
 
 class HueColorLamp extends Thing {

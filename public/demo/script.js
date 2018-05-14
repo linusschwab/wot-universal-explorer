@@ -76,9 +76,14 @@ function turnOnHueLampIfMotion(motion) {
     }
 }
 
+let turnedOnCo2 = false;
 function turnOnFanIfHighCo2(co2) {
-    if (co2 >= 1400 && !myStrom.on) {
-        myStrom.toggle();
+    if (co2 >= 1400 && !myStrom.relay) {
+        myStrom.setRelay(true);
+        turnedOnCo2 = true;
+    } else if (turnedOnCo2 && co2 < 1400) {
+        myStrom.setRelay(false);
+        turnedOnCo2 = false;
     }
 }
 
