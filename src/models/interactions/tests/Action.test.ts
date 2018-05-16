@@ -54,5 +54,5 @@ test('url slug', () => {
     const action = new Action('Test Action', null, null);
     thing.registerInteraction(action);
 
-    expect(action.url).toBe('/test-thing/actions/test-action');
+    expect(action.url).toBe('/actions/test-action');
 });

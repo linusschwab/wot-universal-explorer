@@ -19,10 +19,18 @@ export class IndexController extends BaseController {
     }
 
     public async getIndex(ctx: Context) {
-        if (ctx.path.startsWith('/demo')) {
-            await send(ctx, ctx.path, {root: './public', index: 'index.html'});
-        } else {
-            await send(ctx, ctx.path, {root: './public/swagger-ui/', index: 'index.html'});
+        try {
+            if (ctx.path.startsWith('/demo')) {
+                await send(ctx, ctx.path, {root: './public', index: 'index.html'});
+            } else {
+                await send(ctx, ctx.path, {root: './public/swagger-ui/', index: 'index.html'});
+            }
+        } catch (e) {
+            if (e.code === 'ENOENT') {
+                ctx.throw(404);
+            } else {
+                throw e;
+            }
         }
     }
 }

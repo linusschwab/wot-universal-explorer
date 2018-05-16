@@ -4,15 +4,29 @@ exports[`post mozilla td post mozilla td then get td returns encoded td 1`] = `
 Object {
   "actions": Object {},
   "events": Object {},
-  "href": "",
+  "href": "http://localhost:5000/things/virtual-on-off-color-light",
+  "links": Array [
+    Object {
+      "href": "/actions",
+      "rel": "actions",
+    },
+    Object {
+      "href": "/events",
+      "rel": "events",
+    },
+    Object {
+      "href": "ws://localhost:5000/things/virtual-on-off-color-light",
+      "rel": "alternate",
+    },
+  ],
   "name": "Virtual On/Off Color Light",
   "properties": Object {
     "color": Object {
-      "href": "http://localhost:5000/things/virtual-on-off-color-light/properties/color",
+      "href": "/properties/color",
       "type": "string",
     },
     "on": Object {
-      "href": "http://localhost:5000/things/virtual-on-off-color-light/properties/on",
+      "href": "/properties/on",
       "type": "boolean",
     },
   },
@@ -29,7 +43,7 @@ Object {
   "@type": Array [
     "Lamp",
   ],
-  "base": "http://localhost:5000/things",
+  "base": "http://localhost:5000/things/mymasterled",
   "interaction": Array [
     Object {
       "@type": Array [
@@ -37,7 +51,7 @@ Object {
       ],
       "form": Array [
         Object {
-          "href": "/mymasterled/actions/mymasteronoff",
+          "href": "/actions/mymasteronoff",
           "mediaType": "application/json",
         },
       ],

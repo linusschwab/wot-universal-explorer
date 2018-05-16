@@ -67,7 +67,7 @@ export class Event extends InteractionPattern {
     }
 
     public get url() {
-        return '/' + this.thing.slug + '/events/' + this.slug;
+        return '/events/' + this.slug;
     }
 
     public get operations(): Operation[] {

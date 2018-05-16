@@ -83,5 +83,5 @@ test('url slug', () => {
     const property = new Property('Test Property', null, true, true);
     thing.registerInteraction(property);
 
-    expect(property.url).toBe('/test-thing/properties/test-property');
+    expect(property.url).toBe('/properties/test-property');
 });

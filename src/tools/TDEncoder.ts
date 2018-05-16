@@ -25,7 +25,7 @@ export class TDEncoder {
                 "https://w3c.github.io/wot/w3c-wot-common-context.jsonld"],
             "@type": [thing.type],
             "name": thing.name,
-            "base": App.url + '/things',
+            "base": App.url + '/things/' + thing.slug,
             "interaction": thing.interactions
         };
     }

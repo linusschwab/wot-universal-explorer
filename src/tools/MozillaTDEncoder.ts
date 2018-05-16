@@ -16,14 +16,14 @@ export class MozillaTDEncoder {
     }
 
     private static thing(thing: Thing) {
-        // TODO: href? Include in Thing?
         return {
             "name": thing.name,
             "type": thing.type,
-            "href": "",
+            "href": App.url + '/things/' + thing.slug,
             "properties": MozillaTDEncoder.properties(thing.properties),
             "actions": MozillaTDEncoder.actions(thing.actions),
-            "events": MozillaTDEncoder.events(thing.events)
+            "events": MozillaTDEncoder.events(thing.events),
+            "links": MozillaTDEncoder.links(thing)
         };
     }
 
@@ -33,7 +33,7 @@ export class MozillaTDEncoder {
             obj[property.name] = {
                 "type": property.schema.type,
                 "description": property.description,
-                "href": App.url + '/things' + property.url
+                "href": property.url
             };
 
             if (!property.description) {
@@ -46,9 +46,8 @@ export class MozillaTDEncoder {
     private static actions(actions: Action[]) {
         let obj: any = {};
         for (const action of actions) {
-            // TODO: Include href (as links object?)
             obj[action.name] = {
-                "description": action.description,
+                "description": action.description
             };
         }
         return obj;
@@ -57,11 +56,28 @@ export class MozillaTDEncoder {
     private static events(events: Event[]) {
         let obj: any = {};
         for (const event of events) {
-            // TODO: Include href (as links object?)
             obj[event.name] = {
                 "description": event.description,
+                "href": event.url
             };
         }
         return obj;
+    }
+
+    private static links(thing: Thing) {
+        return [
+            {
+                "rel": 'actions',
+                "href": '/actions'
+                },
+            {
+                "rel": 'events',
+                "href": '/events'
+            },
+            {
+                "rel": 'alternate',
+                "href": App.url.replace('http://', 'ws://') + '/things/' + thing.slug
+            }
+        ];
     }
 }

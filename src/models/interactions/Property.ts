@@ -78,7 +78,7 @@ export class Property extends InteractionPattern {
     }
 
     public get url() {
-        return '/' + this.thing.slug + '/properties/' + this.slug;
+        return '/properties/' + this.slug;
     }
 
     public get operations(): Operation[] {

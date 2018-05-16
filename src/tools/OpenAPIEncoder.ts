@@ -51,7 +51,7 @@ export class OpenAPIEncoder {
 
         // Add all interactions as paths
         for (let interaction of things.getInteractions()) {
-            obj[interaction.url] = interaction;
+            obj['/' + interaction.thing.slug + interaction.url] = interaction;
         }
 
         return obj

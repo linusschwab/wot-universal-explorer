@@ -66,5 +66,5 @@ test('url slug', () => {
     const event = new Event('Test Event', null);
     thing.registerInteraction(event);
 
-    expect(event.url).toBe('/test-thing/events/test-event');
+    expect(event.url).toBe('/events/test-event');
 });

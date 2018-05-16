@@ -101,15 +101,13 @@ function setHueColorFromThingy(color) {
     }
 }
 
-let messageTimeoutMs, timerId;
+let timerId;
 function displayMessage(text) {
     const message = document.querySelector('#message .text');
-    messageTimeoutMs = 5000;
-
     message.textContent = text;
 
     clearTimeout(timerId);
     timerId = setInterval(() => {
         message.textContent = '';
-    }, messageTimeoutMs);
+    }, 5000);
 }

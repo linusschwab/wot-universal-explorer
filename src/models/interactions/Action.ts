@@ -42,7 +42,7 @@ export class Action extends InteractionPattern {
     }
 
     public get url() {
-        return '/' + this.thing.slug + '/actions/' + this.slug;
+        return '/actions/' + this.slug;
     }
 
     public get operations(): Operation[] {
