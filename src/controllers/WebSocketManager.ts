@@ -1,9 +1,11 @@
 import * as WebSocket from "ws";
 import * as http from "http";
+
 import {Server} from "http";
 import {Thing, ThingsManager} from "../models/thing";
 import {ControllerManager} from "../controllers";
 import {InteractionError, RequestError, ThingError, TimeoutError} from "../tools/errors";
+import {Action, Event, InteractionData, InteractionPattern, Property} from "../models/interactions";
 
 
 export class WebSocketManager {
@@ -27,10 +29,10 @@ export class WebSocketManager {
             ws.on('message', async (data) => this.handleMessage(thing, ws, data));
 
             ws.on('error', () => {
-                thing.unsubscribe(ws);
+                thing.unsubscribe(this.controllers.things.wsCallbacks.get(ws));
             });
             ws.on('close', () => {
-                thing.unsubscribe(ws);
+                thing.unsubscribe(this.controllers.things.wsCallbacks.get(ws));
             });
         } catch (e) {
             WebSocketManager.handleError(ws, e);
@@ -71,6 +73,32 @@ export class WebSocketManager {
         }
 
         return message;
+    }
+
+    public static notify(ws: WebSocket, interaction: InteractionPattern, data: InteractionData) {
+        if (interaction instanceof Property) {
+            ws.send(JSON.stringify({
+                messageType: 'propertyStatus',
+                data: {
+                    [interaction.name]: data.data
+                }
+            }));
+        } else if (interaction instanceof Action) {
+            ws.send(JSON.stringify({
+                messageType: 'action',
+                data: {
+                    [interaction.name]: data.data
+                }
+            }));
+        } else if (interaction instanceof Event) {
+            ws.send(JSON.stringify({
+                messageType: 'event',
+                data: {
+                    [interaction.name]: data.data
+                }
+            }));
+        }
+
     }
 
     public static confirm(ws: WebSocket, type: any, message: string) {

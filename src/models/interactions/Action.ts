@@ -26,17 +26,6 @@ export class Action extends InteractionPattern {
         return response;
     }
 
-    public async notifySubscribers(data: InteractionData) {
-        for (let ws of this.subscribers) {
-            ws.send(JSON.stringify({
-                messageType: 'action',
-                data: {
-                    [this.name]: data.data
-                }
-            }));
-        }
-    };
-
     public toString() {
         return 'Action ' + this.name;
     }

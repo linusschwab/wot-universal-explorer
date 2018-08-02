@@ -1,45 +1,38 @@
-import * as WebSocket from "ws";
-
 import {MozillaThing} from "../MozillaThing";
 import {Property, Event} from "../../interactions";
 
 
 // Create mocks
 jest.mock('ws');
-let mockWs: WebSocket;
-
-beforeAll(() => {
-    // Mock implementations
-    const MockWebSocket = jest.fn<WebSocket>(() => ({
-        send: jest.fn()
-    }));
-    mockWs = new MockWebSocket();
-});
 
 beforeEach(() => {
     jest.clearAllMocks();
 });
 
-test('property status update sends websocket notification', async () => {
+test('property status update notifies subscribers', async () => {
     const thing = new MozillaThing('TestThing', 'Thing', 'http://localhost/');
     const property = new Property('on', null, false, true);
+    const callback = jest.fn();
     thing.registerInteraction(property);
-    thing.subscribeToProperty('on', mockWs);
+    thing.subscribeToProperty('on', callback);
 
     const data = '{"messageType": "propertyStatus", "data": {"on": false}}';
     await thing.wsHandleMessage(data);
 
-    expect(mockWs.send).toMatchSnapshot();
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback.mock.calls[0][1].data).toBe(false);
 });
 
-test('event sends websocket notification', async () => {
+test('event notifies subscribers', async () => {
     const thing = new MozillaThing('TestThing', 'Thing', 'http://localhost/');
     const event = new Event('button', null);
+    const callback = jest.fn();
     thing.registerInteraction(event);
-    thing.subscribeToEvent('button', mockWs);
+    thing.subscribeToEvent('button', callback);
 
     const data = '{"messageType": "event", "data": {"button": "Pressed"}}';
     await thing.wsHandleMessage(data);
 
-    expect(mockWs.send).toMatchSnapshot();
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback.mock.calls[0][1].data).toBe('Pressed');
 });

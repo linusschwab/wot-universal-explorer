@@ -31,7 +31,7 @@ export class OpenAPIEncoder {
 
     private static info() {
         return {
-            "version": "1.0",
+            "version": "1.0.0",
             "title": "Universal Explorer for the Web of Things",
             "description": "API to interact with things",
         };

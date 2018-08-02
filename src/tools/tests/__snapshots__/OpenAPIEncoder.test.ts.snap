@@ -4,7 +4,7 @@ exports[`encode multiple things 1`] = `
 "{
     \\"openapi\\": \\"3.0.0\\",
     \\"info\\": {
-        \\"version\\": \\"1.0\\",
+        \\"version\\": \\"1.0.0\\",
         \\"title\\": \\"Universal Explorer for the Web of Things\\",
         \\"description\\": \\"API to interact with things\\"
     },
@@ -182,7 +182,7 @@ exports[`encode one thing 1`] = `
 "{
     \\"openapi\\": \\"3.0.0\\",
     \\"info\\": {
-        \\"version\\": \\"1.0\\",
+        \\"version\\": \\"1.0.0\\",
         \\"title\\": \\"Universal Explorer for the Web of Things\\",
         \\"description\\": \\"API to interact with things\\"
     },

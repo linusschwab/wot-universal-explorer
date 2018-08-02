@@ -1,5 +1,3 @@
-import * as WebSocket from "ws";
-
 import {Thing} from "../../thing";
 import {Property} from "../Property";
 import {HTTPLink} from "../../links";
@@ -9,7 +7,6 @@ import {InteractionError} from "../../../tools/errors";
 
 const mockResponse = 10;
 let mockLink: HTTPLink;
-let mockWs: WebSocket;
 
 beforeAll(() => {
     // Mock implementations
@@ -17,11 +14,6 @@ beforeAll(() => {
         execute: jest.fn(() => {return mockResponse})
     }));
     mockLink = new MockHTTPLink();
-
-    const MockWebSocket = jest.fn<WebSocket>(() => ({
-        send: jest.fn()
-    }));
-    mockWs = new MockWebSocket();
 });
 
 beforeEach(() => {
@@ -57,15 +49,16 @@ test('write throws error for non-writable properties', async () => {
 
 test('update polls data, stores it and notifies subscribers', async () => {
     const property = new Property('Test Property', null, true, true);
+    const callback = jest.fn();
     property.registerLink(mockLink);
-    property.subscribe(mockWs);
+    property.subscribe(callback);
 
     await property.update();
 
     expect(mockLink.execute).toHaveBeenCalledTimes(1);
     expect(property.data).toHaveLength(1);
     expect(property.data[0].equals(new InteractionData(mockResponse)));
-    expect(mockWs.send).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledTimes(1);
 });
 
 test('update only works for observable properties', async () => {

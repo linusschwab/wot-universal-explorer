@@ -5,6 +5,7 @@ import {DataSchema} from "../schema";
 import {Operation} from "../links";
 import {InteractionError, TimeoutError} from "../../tools/errors";
 import {InteractionData} from "./InteractionData";
+import {ISubscriber} from "./ISubscriber";
 
 
 export class Property extends InteractionPattern {
@@ -55,23 +56,12 @@ export class Property extends InteractionPattern {
         }
     }
 
-    public subscribe(ws: WebSocket) {
+    public subscribe(subscriber: ISubscriber) {
         if (!this.observable) {
             throw new InteractionError('Property is not observable');
         }
-        super.subscribe(ws);
+        super.subscribe(subscriber);
     }
-
-    public async notifySubscribers(data: InteractionData) {
-        for (let ws of this.subscribers) {
-            ws.send(JSON.stringify({
-                messageType: 'propertyStatus',
-                data: {
-                    [this.name]: data.data
-                }
-            }));
-        }
-    };
 
     public toString() {
         return 'Property ' + this.name;

@@ -51,17 +51,6 @@ export class Event extends InteractionPattern {
         return newData.slice(-limit);
     }
 
-    public async notifySubscribers(data: InteractionData) {
-        for (let ws of this.subscribers) {
-            ws.send(JSON.stringify({
-                messageType: 'event',
-                data: {
-                    [this.name]: data.data
-                }
-            }));
-        }
-    };
-
     public toString() {
         return 'Event ' + this.name;
     }

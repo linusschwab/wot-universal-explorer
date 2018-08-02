@@ -1,7 +1,7 @@
 import * as WebSocket from "ws";
 import * as getSlug from "speakingurl";
 
-import {Action, InteractionPattern, Property, Event} from "../interactions";
+import {Action, InteractionPattern, Property, Event, ISubscriber} from "../interactions";
 import {InteractionError} from "../../tools/errors";
 
 
@@ -31,14 +31,14 @@ export class Thing {
         return property.write(data);
     }
 
-    public subscribeToProperty(name: string, ws: WebSocket) {
+    public subscribeToProperty(name: string, callback: ISubscriber) {
         const property = this.getProperty(name);
-        property.subscribe(ws);
+        property.subscribe(callback);
     }
 
-    public unsubscribeFromProperty(name: string, ws: WebSocket) {
+    public unsubscribeFromProperty(name: string, callback: ISubscriber) {
         const property = this.getProperty(name);
-        property.unsubscribe(ws);
+        property.unsubscribe(callback);
     }
 
     public async invokeAction(name: string, data: any = null): Promise<any> {
@@ -46,14 +46,14 @@ export class Thing {
         return action.invoke(data);
     }
 
-    public subscribeToAction(name: string, ws: WebSocket) {
+    public subscribeToAction(name: string, callback: ISubscriber) {
         const action = this.getAction(name);
-        action.subscribe(ws);
+        action.subscribe(callback);
     }
 
-    public unsubscribeFromAction(name: string, ws: WebSocket) {
+    public unsubscribeFromAction(name: string, callback: ISubscriber) {
         const action = this.getAction(name);
-        action.unsubscribe(ws);
+        action.unsubscribe(callback);
     }
 
     public async getEventData(name: string, newerThan: number = 0, limit: number = 0): Promise<any> {
@@ -61,20 +61,20 @@ export class Thing {
         return event.getData(newerThan, limit);
     }
 
-    public subscribeToEvent(name: string, ws: WebSocket) {
+    public subscribeToEvent(name: string, callback: ISubscriber) {
         const event = this.getEvent(name);
-        event.subscribe(ws);
+        event.subscribe(callback);
     }
 
-    public unsubscribeFromEvent(name: string, ws: WebSocket) {
+    public unsubscribeFromEvent(name: string, callback: ISubscriber) {
         const event = this.getEvent(name);
-        event.unsubscribe(ws);
+        event.unsubscribe(callback);
     }
 
-    public subscribe(ws: WebSocket) {
+    public subscribe(callback: ISubscriber) {
         for (let interaction of this.interactions) {
             try {
-                interaction.subscribe(ws);
+                interaction.subscribe(callback);
             } catch (e) {
                 if (e instanceof InteractionError === false) {
                     throw e;
@@ -83,10 +83,10 @@ export class Thing {
         }
     }
 
-    public unsubscribe(ws: WebSocket) {
+    public unsubscribe(callback: ISubscriber) {
         for (let interaction of this.interactions) {
             try {
-                interaction.unsubscribe(ws);
+                interaction.unsubscribe(callback);
             } catch (e) {
                 if (e instanceof InteractionError === false) {
                     throw e;
@@ -182,7 +182,7 @@ export class Thing {
     }
 
     get subscribers() {
-        let subscribers: WebSocket[] = [];
+        let subscribers: ISubscriber[] = [];
         for (let interaction of this.interactions) {
             for (let ws of interaction.subscribers) {
                 if (!subscribers.includes(ws)) {

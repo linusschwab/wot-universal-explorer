@@ -1,10 +1,10 @@
-import * as WebSocket from "ws";
 import * as getSlug from "speakingurl";
 
 import {Link, Operation} from "../links";
 import {Thing} from "../thing";
 import {InteractionData} from "./InteractionData";
 import {InteractionError} from "../../tools/errors";
+import {ISubscriber} from "./ISubscriber";
 
 
 export abstract class InteractionPattern {
@@ -20,7 +20,7 @@ export abstract class InteractionPattern {
     public operations: Operation[];
 
     public data: InteractionData[];
-    public subscribers: WebSocket[];
+    public subscribers: ISubscriber[];
 
     constructor(name: string) {
         this.name = name;
@@ -34,24 +34,28 @@ export abstract class InteractionPattern {
         link.interaction = this;
     }
 
-    public subscribe(ws: WebSocket) {
-        if (this.subscribers.includes(ws)) {
+    public subscribe(subscriber: ISubscriber) {
+        if (this.subscribers.includes(subscriber)) {
             throw new InteractionError('Already subscribed to interaction');
         }
 
-        this.subscribers.push(ws);
+        this.subscribers.push(subscriber);
     }
 
-    public unsubscribe(ws: WebSocket) {
-        if (!this.subscribers.includes(ws)) {
+    public unsubscribe(subscriber: ISubscriber) {
+        if (!this.subscribers.includes(subscriber)) {
             throw new InteractionError('Not subscribed to interaction');
         }
 
-        let index = this.subscribers.indexOf(ws);
+        let index = this.subscribers.indexOf(subscriber);
         this.subscribers.splice(index, 1);
     }
 
-    public abstract async notifySubscribers(data: InteractionData): Promise<void>;
+    public async notifySubscribers(data: InteractionData) {
+        for (let callback of this.subscribers) {
+            callback(this, data);
+        }
+    };
 
     public async storeData(data: InteractionData) {
         // Delete old items if too many
