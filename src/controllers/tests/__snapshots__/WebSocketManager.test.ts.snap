@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`error handling interaction error rejects message 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "{\\"messageType\\":\\"error\\",\\"data\\":{\\"status\\":\\"400\\",\\"message\\":\\"Error message\\"}}",
+    ],
+  ],
+}
+`;
+
+exports[`error handling request error rejects message 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "{\\"messageType\\":\\"error\\",\\"data\\":{\\"status\\":\\"400\\",\\"message\\":\\"Error message\\"}}",
+    ],
+  ],
+}
+`;
+
+exports[`error handling thing error sends error message and closes connection 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "{\\"messageType\\":\\"error\\",\\"data\\":{\\"status\\":\\"404\\",\\"message\\":\\"Error message\\"}}",
+    ],
+  ],
+}
+`;
+
+exports[`error handling timeout error sends error message 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "{\\"messageType\\":\\"error\\",\\"data\\":{\\"status\\":\\"408\\",\\"message\\":\\"Error message\\"}}",
+    ],
+  ],
+}
+`;
+
+exports[`subscriber notifications action notification sends correct message 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "{\\"messageType\\":\\"action\\",\\"data\\":{\\"Test Action\\":\\"Test Data\\"}}",
+    ],
+  ],
+}
+`;
+
+exports[`subscriber notifications event notification sends correct message 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "{\\"messageType\\":\\"event\\",\\"data\\":{\\"Test Event\\":\\"Test Data\\"}}",
+    ],
+  ],
+}
+`;
+
+exports[`subscriber notifications property notification sends correct message 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "{\\"messageType\\":\\"propertyStatus\\",\\"data\\":{\\"Test Property\\":\\"Test Data\\"}}",
+    ],
+  ],
+}
+`;

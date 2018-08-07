@@ -112,7 +112,7 @@ describe('websocket', () => {
                 "data": {}
             }));
             expect(mockThing.subscribe).toHaveBeenCalledTimes(1);
-            expect(mockWs.send).toMatchSnapshot()
+            expect(mockWs.send).toMatchSnapshot();
         });
 
         test('unsubscribe from all', async () => {
@@ -121,7 +121,7 @@ describe('websocket', () => {
                 "data": {}
             }));
             expect(mockThing.unsubscribe).toHaveBeenCalledTimes(1);
-            expect(mockWs.send).toMatchSnapshot()
+            expect(mockWs.send).toMatchSnapshot();
         });
 
         test('subscribe to interaction', async () => {
@@ -133,7 +133,7 @@ describe('websocket', () => {
             }));
 
             expect(mockThing.subscribeToProperty).toHaveBeenCalledTimes(1);
-            expect(mockWs.send).toMatchSnapshot()
+            expect(mockWs.send).toMatchSnapshot();
         });
 
         test('unsubscribe from interaction', async () => {
@@ -145,7 +145,7 @@ describe('websocket', () => {
             }));
 
             expect(mockThing.unsubscribeFromProperty).toHaveBeenCalledTimes(1);
-            expect(mockWs.send).toMatchSnapshot()
+            expect(mockWs.send).toMatchSnapshot();
         });
 
         test('subscribe to multiple interactions', async () => {
@@ -161,7 +161,7 @@ describe('websocket', () => {
             expect(mockThing.subscribeToProperty).toHaveBeenCalledTimes(2);
             expect(mockThing.subscribeToAction).toHaveBeenCalledTimes(1);
             expect(mockThing.subscribeToEvent).toHaveBeenCalledTimes(2);
-            expect(mockWs.send).toMatchSnapshot()
+            expect(mockWs.send).toMatchSnapshot();
         });
 
         test('unsubscribe from multiple interactions', async () => {
@@ -177,7 +177,7 @@ describe('websocket', () => {
             expect(mockThing.unsubscribeFromProperty).toHaveBeenCalledTimes(2);
             expect(mockThing.unsubscribeFromAction).toHaveBeenCalledTimes(2);
             expect(mockThing.unsubscribeFromEvent).toHaveBeenCalledTimes(1);
-            expect(mockWs.send).toMatchSnapshot()
+            expect(mockWs.send).toMatchSnapshot();
         });
     });
 
