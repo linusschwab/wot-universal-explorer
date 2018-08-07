@@ -29,10 +29,10 @@ export class WebSocketManager {
             ws.on('message', async (data) => this.handleMessage(thing, ws, data));
 
             ws.on('error', () => {
-                thing.unsubscribe(this.controllers.things.wsCallbacks.get(ws));
+                thing.unsubscribe(this.controllers.things.wsSubscribers.get(ws));
             });
             ws.on('close', () => {
-                thing.unsubscribe(this.controllers.things.wsCallbacks.get(ws));
+                thing.unsubscribe(this.controllers.things.wsSubscribers.get(ws));
             });
         } catch (e) {
             WebSocketManager.handleError(ws, e);
@@ -60,7 +60,7 @@ export class WebSocketManager {
     }
 
     public static parseMessage(data: WebSocket.Data) {
-        let message: any;
+        let message: string;
 
         try {
             message = JSON.parse(<string>data);

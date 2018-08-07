@@ -12,11 +12,11 @@ import {InteractionData, InteractionPattern, ISubscriber} from "../models/intera
 
 export class ThingsController extends BaseController {
 
-    public wsCallbacks: Map<WebSocket, ISubscriber>;
+    public wsSubscribers: Map<WebSocket, ISubscriber>;
 
     constructor(things: ThingsManager) {
         super(things);
-        this.wsCallbacks = new Map();
+        this.wsSubscribers = new Map();
     }
 
     public routes() {
@@ -66,7 +66,6 @@ export class ThingsController extends BaseController {
         // TODO: Return more than names? Available interactions?
         ctx.body = this.things.getThingsNames();
     }
-
 
     public async getProperty(ctx: Context) {
         let property = ctx.params['property'];
@@ -126,12 +125,12 @@ export class ThingsController extends BaseController {
     }
 
     public async wsSubscribe(thing: Thing, ws: WebSocket, message: any) {
-        thing.subscribe(this.wsCallback(ws));
+        thing.subscribe(this.wsSubscriber(ws));
         WebSocketManager.confirm(ws, message.messageType, 'Subscribed to all interactions');
     }
 
     public async wsUnsubscribe(thing: Thing, ws: WebSocket, message: any) {
-        thing.unsubscribe(this.wsCallback(ws));
+        thing.unsubscribe(this.wsSubscriber(ws));
         WebSocketManager.confirm(ws, message.messageType, 'Unsubscribed from all interactions');
     }
 
@@ -212,11 +211,11 @@ export class ThingsController extends BaseController {
         for (let interaction of interactions) {
             try {
                 if (type === 'property') {
-                    thing.subscribeToProperty(interaction, this.wsCallback(ws));
+                    thing.subscribeToProperty(interaction, this.wsSubscriber(ws));
                 } else if (type === 'action') {
-                    thing.subscribeToAction(interaction, this.wsCallback(ws));
+                    thing.subscribeToAction(interaction, this.wsSubscriber(ws));
                 } else if (type === 'event') {
-                    thing.subscribeToEvent(interaction, this.wsCallback(ws));
+                    thing.subscribeToEvent(interaction, this.wsSubscriber(ws));
                 }
                 WebSocketManager.confirm(ws, 'addSubscription', 'Subscribed to ' + type + ' ' + interaction);
             } catch (e) {
@@ -233,11 +232,11 @@ export class ThingsController extends BaseController {
         for (let interaction of interactions) {
             try {
                 if (type === 'property') {
-                    thing.unsubscribeFromProperty(interaction, this.wsCallback(ws));
+                    thing.unsubscribeFromProperty(interaction, this.wsSubscriber(ws));
                 } else if (type === 'action') {
-                    thing.unsubscribeFromAction(interaction, this.wsCallback(ws));
+                    thing.unsubscribeFromAction(interaction, this.wsSubscriber(ws));
                 } else if (type === 'event') {
-                    thing.unsubscribeFromEvent(interaction, this.wsCallback(ws));
+                    thing.unsubscribeFromEvent(interaction, this.wsSubscriber(ws));
                 }
                 WebSocketManager.confirm(ws, 'removeSubscription', 'Unsubscribed from ' + type + ' ' + interaction);
             } catch (e) {
@@ -246,17 +245,17 @@ export class ThingsController extends BaseController {
         }
     }
 
-    private wsCallback(ws: WebSocket) {
-        if (this.wsCallbacks.get(ws)) {
-            return this.wsCallbacks.get(ws);
+    private wsSubscriber(ws: WebSocket) {
+        if (this.wsSubscribers.get(ws)) {
+            return this.wsSubscribers.get(ws);
         }
 
-        let callback = (interaction: InteractionPattern, data: InteractionData) => {
+        let subscriber = (interaction: InteractionPattern, data: InteractionData) => {
             WebSocketManager.notify(ws, interaction, data);
         };
 
-        this.wsCallbacks.set(ws, callback);
-        return callback;
+        this.wsSubscribers.set(ws, subscriber);
+        return subscriber;
     }
 
     private handleError(ctx: Context, e: Error) {

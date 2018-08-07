@@ -17,7 +17,6 @@ export class TDController extends BaseController {
         router.prefix('/td');
 
         router.post('/add', this.postTD.bind(this));
-        router.get('/test', this.test.bind(this)); // TODO: Remove
         router.get('/:name', this.getTD.bind(this));
 
         router.post('/moz/add', this.postMozillaTD.bind(this));
@@ -58,31 +57,6 @@ export class TDController extends BaseController {
     public async getMozillaTD(ctx: Context) {
         const thing = await this.getThing(ctx);
         ctx.body = MozillaTDEncoder.encode(thing);
-    }
-
-    public async test(ctx: Context) {
-        let thing = this.things.getThing('counter');
-
-        if (thing === null) {
-            ctx.throw(400, 'Counter Thing does not exist');
-        }
-
-        try {
-            let test;
-            test = await thing.invokeAction('increment');
-            await thing.writeProperty('count', 10);
-
-            test = await thing.readProperty('count');
-            //thing.invokeAction('status');
-
-            ctx.body = test.data;
-        } catch(e) {
-            if (e instanceof TypeError) {
-                ctx.throw(400, e.message);
-            } else {
-                throw e;
-            }
-        }
     }
 
     private async regenerateOpenApi() {

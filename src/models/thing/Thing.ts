@@ -31,14 +31,14 @@ export class Thing {
         return property.write(data);
     }
 
-    public subscribeToProperty(name: string, callback: ISubscriber) {
+    public subscribeToProperty(name: string, subscriber: ISubscriber) {
         const property = this.getProperty(name);
-        property.subscribe(callback);
+        property.subscribe(subscriber);
     }
 
-    public unsubscribeFromProperty(name: string, callback: ISubscriber) {
+    public unsubscribeFromProperty(name: string, subscriber: ISubscriber) {
         const property = this.getProperty(name);
-        property.unsubscribe(callback);
+        property.unsubscribe(subscriber);
     }
 
     public async invokeAction(name: string, data: any = null): Promise<any> {
@@ -46,14 +46,14 @@ export class Thing {
         return action.invoke(data);
     }
 
-    public subscribeToAction(name: string, callback: ISubscriber) {
+    public subscribeToAction(name: string, subscriber: ISubscriber) {
         const action = this.getAction(name);
-        action.subscribe(callback);
+        action.subscribe(subscriber);
     }
 
-    public unsubscribeFromAction(name: string, callback: ISubscriber) {
+    public unsubscribeFromAction(name: string, subscriber: ISubscriber) {
         const action = this.getAction(name);
-        action.unsubscribe(callback);
+        action.unsubscribe(subscriber);
     }
 
     public async getEventData(name: string, newerThan: number = 0, limit: number = 0): Promise<any> {
@@ -61,20 +61,20 @@ export class Thing {
         return event.getData(newerThan, limit);
     }
 
-    public subscribeToEvent(name: string, callback: ISubscriber) {
+    public subscribeToEvent(name: string, subscriber: ISubscriber) {
         const event = this.getEvent(name);
-        event.subscribe(callback);
+        event.subscribe(subscriber);
     }
 
-    public unsubscribeFromEvent(name: string, callback: ISubscriber) {
+    public unsubscribeFromEvent(name: string, subscriber: ISubscriber) {
         const event = this.getEvent(name);
-        event.unsubscribe(callback);
+        event.unsubscribe(subscriber);
     }
 
-    public subscribe(callback: ISubscriber) {
+    public subscribe(subscriber: ISubscriber) {
         for (let interaction of this.interactions) {
             try {
-                interaction.subscribe(callback);
+                interaction.subscribe(subscriber);
             } catch (e) {
                 if (e instanceof InteractionError === false) {
                     throw e;
@@ -83,10 +83,10 @@ export class Thing {
         }
     }
 
-    public unsubscribe(callback: ISubscriber) {
+    public unsubscribe(subscriber: ISubscriber) {
         for (let interaction of this.interactions) {
             try {
-                interaction.unsubscribe(callback);
+                interaction.unsubscribe(subscriber);
             } catch (e) {
                 if (e instanceof InteractionError === false) {
                     throw e;
