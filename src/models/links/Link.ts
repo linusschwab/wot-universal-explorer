@@ -24,6 +24,6 @@ export abstract class Link {
     }
 
     protected isEmpty(data: any) {
-        return (data === null || Object.getOwnPropertyNames(data).length === 0);
+        return (data === null || data === '' || Object.getOwnPropertyNames(data).length === 0);
     }
 }
