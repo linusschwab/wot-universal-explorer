@@ -1,7 +1,7 @@
 {
   "name": "wot-universal-explorer",
   "description": "Universal Explorer for the Web of Things",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "author": "Linus Schwab",
   "license": "MIT",
   "repository": {
@@ -21,6 +21,7 @@
     "koa-router": "7.4.0",
     "koa-send": "4.1.3",
     "speakingurl": "14.0.1",
+    "typescript": "2.8.3",
     "ws": "5.1.1"
   },
   "devDependencies": {
@@ -34,11 +35,11 @@
     "@types/supertest": "2.0.4",
     "@types/ws": "4.0.2",
     "axios-mock-adapter": "1.15.0",
-    "codecov": "3.0.0",
+    "codecov": "3.0.4",
     "jest": "22.4.3",
     "supertest": "3.0.0",
     "ts-jest": "22.4.4",
-    "typescript": "2.8.3"
+    "ts-node": "7.0.0"
   },
   "jest": {
     "transform": {
